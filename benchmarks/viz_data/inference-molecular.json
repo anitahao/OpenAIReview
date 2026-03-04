@@ -1679,8 +1679,8 @@
         }
       ]
     },
-    "rag_local": {
-      "label": "RAG Local",
+    "local": {
+      "label": "Local",
       "metrics": {
         "num_predicted": 58,
         "num_ground_truth": 15,

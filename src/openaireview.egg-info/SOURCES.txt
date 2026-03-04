@@ -11,7 +11,7 @@ src/reviewer/cli.py
 src/reviewer/client.py
 src/reviewer/evaluate.py
 src/reviewer/method_incremental.py
-src/reviewer/method_rag.py
+src/reviewer/method_local.py
 src/reviewer/method_zero_shot.py
 src/reviewer/models.py
 src/reviewer/parsers.py

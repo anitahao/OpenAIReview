@@ -27,16 +27,22 @@ OPENROUTER_API_KEY=your_key_here
 Then review a paper and visualize results:
 
 ```bash
+# Review a local file
 openaireview review paper.pdf
+
+# Or review directly from an arXiv URL
+openaireview review https://arxiv.org/html/2310.06825
+
+# Visualize results
 openaireview serve
 # Open http://localhost:8080
 ```
 
 ## CLI Reference
 
-### `openaireview review <file>`
+### `openaireview review <file_or_url>`
 
-Review an academic paper for technical and logical issues.
+Review an academic paper for technical and logical issues. Accepts a local file path or an arXiv URL.
 
 | Option | Default | Description |
 |---|---|---|
@@ -54,12 +60,13 @@ Start a local visualization server to browse review results.
 | `--results-dir` | `./review_results` | Directory containing result JSON files |
 | `--port` | `8080` | Server port |
 
-## Supported File Formats
+## Supported Input Formats
 
 - **PDF** (`.pdf`) — text extraction via PyMuPDF
 - **DOCX** (`.docx`) — via python-docx
 - **LaTeX** (`.tex`) — plain text with title extraction from `\title{}`
 - **Text/Markdown** (`.txt`, `.md`) — plain text
+- **arXiv HTML** — fetch and parse directly from `https://arxiv.org/html/<id>` or `https://arxiv.org/abs/<id>`
 
 ## Environment Variables
 

@@ -10,11 +10,11 @@ Requires-Dist: python-dotenv>=1.2.1
 Requires-Dist: tiktoken>=0.12.0
 Requires-Dist: pymupdf>=1.24.0
 Requires-Dist: python-docx>=1.1.0
+Requires-Dist: beautifulsoup4>=4.12.0
+Requires-Dist: lxml>=5.0.0
 Provides-Extra: dev
-Requires-Dist: beautifulsoup4>=4.14.3; extra == "dev"
-Requires-Dist: lxml>=6.0.2; extra == "dev"
 
-# OpenAI Review
+# OpenAIReview
 
 AI-powered academic paper reviewer that detects technical and logical errors using LLMs.
 
@@ -28,29 +28,42 @@ pip install -e .
 
 ## Quick Start
 
-```bash
-# Set your API key
-export OPENROUTER_API_KEY=your_key_here
+First, set your OpenRouter API key (get one at [openrouter.ai/keys](https://openrouter.ai/keys)):
 
-# Review a paper
+```bash
+export OPENROUTER_API_KEY=your_key_here
+```
+
+Or create a `.env` file in your working directory:
+
+```
+OPENROUTER_API_KEY=your_key_here
+```
+
+Then review a paper and visualize results:
+
+```bash
+# Review a local file
 openaireview review paper.pdf
 
-# View results in browser
+# Or review directly from an arXiv URL
+openaireview review https://arxiv.org/html/2310.06825
+
+# Visualize results
 openaireview serve
 # Open http://localhost:8080
 ```
 
 ## CLI Reference
 
-### `openaireview review <file>`
+### `openaireview review <file_or_url>`
 
-Review an academic paper for technical and logical issues.
+Review an academic paper for technical and logical issues. Accepts a local file path or an arXiv URL.
 
 | Option | Default | Description |
 |---|---|---|
-| `--method` | `incremental` | Review method: `zero_shot`, `rag_local`, `incremental`, `incremental_full` |
-| `--large-model` | `anthropic/claude-opus-4-5` | Model for deep analysis |
-| `--small-model` | `anthropic/claude-haiku-4-5` | Model for filtering/summarization |
+| `--method` | `incremental` | Review method: `zero_shot`, `local`, `incremental`, `incremental_full` |
+| `--model` | `anthropic/claude-opus-4-5` | Model to use |
 | `--output-dir` | `./review_results` | Directory for output JSON files |
 | `--name` | (from filename) | Paper slug name |
 
@@ -63,27 +76,27 @@ Start a local visualization server to browse review results.
 | `--results-dir` | `./review_results` | Directory containing result JSON files |
 | `--port` | `8080` | Server port |
 
-## Supported File Formats
+## Supported Input Formats
 
 - **PDF** (`.pdf`) — text extraction via PyMuPDF
 - **DOCX** (`.docx`) — via python-docx
 - **LaTeX** (`.tex`) — plain text with title extraction from `\title{}`
 - **Text/Markdown** (`.txt`, `.md`) — plain text
+- **arXiv HTML** — fetch and parse directly from `https://arxiv.org/html/<id>` or `https://arxiv.org/abs/<id>`
 
 ## Environment Variables
 
 | Variable | Default | Description |
 |---|---|---|
 | `OPENROUTER_API_KEY` | (required) | Your OpenRouter API key |
-| `LARGE_MODEL` | `anthropic/claude-opus-4-5` | Default large model |
-| `SMALL_MODEL` | `anthropic/claude-haiku-4-5` | Default small model |
+| `MODEL` | `anthropic/claude-opus-4-5` | Default model |
 
-See `.env.example` for a template.
+These can be set as environment variables or in a `.env` file. See `.env.example` for a template.
 
 ## Review Methods
 
 - **zero_shot** — single prompt asking the model to find all issues
-- **rag_local** — small model filters paragraphs, large model deep-checks each with window context
+- **local** — deep-checks each chunk with surrounding window context (no filtering)
 - **incremental** — sequential processing with running summary, then consolidation
 - **incremental_full** — same as incremental but returns all comments before consolidation
 

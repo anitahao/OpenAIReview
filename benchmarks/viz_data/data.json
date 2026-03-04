@@ -1834,8 +1834,8 @@
             }
           ]
         },
-        "rag_local": {
-          "label": "RAG Local",
+        "local": {
+          "label": "Local",
           "metrics": {
             "num_predicted": 19,
             "num_ground_truth": 15,
@@ -1861,7 +1861,7 @@
           "overall_feedback": "## High-Level Feedback\n\nThis is a highly influential and well-crafted paper that makes a substantial methodological contribution to computational inference in population genetics. The writing is exceptionally clear in motivating the problem: the authors lucidly explain why full likelihood-based inference is both important and computationally challenging, situating their contribution precisely within the landscape of existing approaches (Griffiths-Tavar\u00e9 importance sampling and Felsenstein-school MCMC). The key intellectual insight\u2014characterizing the optimal importance sampling proposal distribution via time-reversal of genealogical processes and then developing a practicable approximation to it\u2014is elegantly framed, and the claimed efficiency gains of \"several orders of magnitude\" over existing IS methods, if substantiated in the later sections, would represent a major advance. The paper also demonstrates commendable scientific balance in honestly acknowledging that MCMC methods retain advantages in certain (\"less constrained\") problem settings rather than overclaiming universal superiority. One potential concern from the introduction alone is that the paper promises a great deal\u2014new methodology, comparisons with both IS and MCMC competitors across multiple genetic systems, diagnostics discussion, and general insights about when IS versus MCMC is preferable\u2014which risks either superficial treatment of some topics or an unwieldy paper length. Additionally, while the abstract and introduction effectively convey the high-level narrative, the precise meaning of key qualitative distinctions (e.g., \"constrained\" versus \"unconstrained\" genetic structures) is deferred, which may leave readers uncertain about the scope of applicability until well into the paper. The historical contextualization is thorough and appropriate, though the connection to Edwards (1970) and Whittle (1970), while intellectually interesting, could be more concisely handled to maintain focus on the core contribution.",
           "comments": [
             {
-              "id": "rag_local_0",
+              "id": "local_0",
               "title": "Incorrect simplification of numerator",
               "quote": "\\pi_{\\theta}\\left(A_{n} \\mid \\mathcal{H}\\right) \\frac{P_{\\theta}(\\mathcal{H})}{P_{\\theta}\\left(\\mathcal{H} \\mid A_{n}\\right)}=\\frac{P_{\\theta}\\left(\\mathcal{H} \\cap A_{n}\\right)}{P_{\\theta}\\left(\\mathcal{H} \\mid A_{n}\\right)}",
               "explanation": "The numerator \u03c0_\u03b8(A_n | H) \u00b7 P_\u03b8(H) equals P_\u03b8(A_n \u2229 H) only if \u03c0_\u03b8(A_n | H) = P_\u03b8(A_n | H). Throughout the paper, \u03c0_\u03b8(A_n | H) denotes the probability of the data given the ancestry H (a emission/observation probability), while P_\u03b8(H) is the prior on ancestries. Their product is the joint P_\u03b8(A_n, H) = P_\u03b8(A_n | H) \u00b7 P_\u03b8(H) only if \u03c0_\u03b8(A_n | H) is the same object as P_\u03b8(A_n | H). The notation switch from \u03c0 to P in forming P_\u03b8(H \u2229 A_n) is at minimum a notational inconsistency, though the intended mathematical content (joint = likelihood \u00d7 prior) is standard.",
@@ -1869,7 +1869,7 @@
               "paragraph_index": 51
             },
             {
-              "id": "rag_local_1",
+              "id": "local_1",
               "title": "Result should equal L(\u03b8) for every H, yielding zero variance, but the third equality is not fully justified",
               "quote": "\\frac{P_{\\theta}\\left(\\mathcal{H} \\cap A_{n}\\right)}{P_{\\theta}\\left(\\mathcal{H} \\mid A_{n}\\right)}=\\pi_{\\theta}\\left(A_{n}\\right)",
               "explanation": "By Bayes' theorem, P_\u03b8(H | A_n) = P_\u03b8(H \u2229 A_n) / P_\u03b8(A_n), so P_\u03b8(H \u2229 A_n) / P_\u03b8(H | A_n) = P_\u03b8(A_n). This step is correct in substance. However, the paper uses \u03c0_\u03b8(A_n) = L(\u03b8) here, while earlier L(\u03b8) was defined via an integral involving \u03c0_\u03b8(A_n | H) (a conditional probability notation using \u03c0) and P_\u03b8(H). The identification \u03c0_\u03b8(A_n) = P_\u03b8(A_n) is never explicitly stated, which is a minor notational inconsistency.",
@@ -1877,7 +1877,7 @@
               "paragraph_index": 51
             },
             {
-              "id": "rag_local_2",
+              "id": "local_2",
               "title": "Inconsistent subscript: n-1 used instead of k-1",
               "quote": "\\pi\\left(\\alpha_{1}, \\ldots, \\alpha_{n-1}, \\beta\\right)",
               "explanation": "The passage uses the subscript 'n-1' in both the numerator and denominator of the first line, but the surrounding context (paras 68\u201369) consistently uses 'k' for the number of ancestral lineages and indexes the configuration as (\u03b1\u2081, \u2026, \u03b1_{k-1}, \u00b7). The subscript should be k-1, not n-1.",
@@ -1885,7 +1885,7 @@
               "paragraph_index": 73
             },
             {
-              "id": "rag_local_3",
+              "id": "local_3",
               "title": "Left-hand side is a conditional probability but written as a ratio incorrectly structured",
               "quote": "\\sum_{\\beta} P\\left\\{\\Upsilon_{\\mathrm{c}} \\cap A_{k}(t-\\delta) \\left.=\\left(\\alpha_{1}, \\ldots, \\alpha_{k-2}, \\alpha, \\beta\\right) \\cap A_{k}(t)=\\left(\\alpha_{1}, \\ldots, \\alpha_{k-2}, \\alpha, \\alpha\\right)\\right\\}\\\\P\\left\\{A_{k}(t)=\\left(\\alpha_{1}, \\ldots, \\alpha_{k-2}, \\alpha, \\alpha\\right)\\right\\}",
               "explanation": "The left-hand side appears to be intended as a conditional probability (the joint probability divided by the probability of the conditioning event), but the division sign or fraction bar is missing between the two probability expressions. As typeset, the second line looks like a separate factor being multiplied rather than a denominator. It should be a fraction with the joint probability in the numerator and P{A_k(t)=...} in the denominator.",
@@ -1893,7 +1893,7 @@
               "paragraph_index": 76
             },
             {
-              "id": "rag_local_4",
+              "id": "local_4",
               "title": "Sum over \u03b2 in the numerator should collapse, not remain as written",
               "quote": "=\\frac{\\sum_{\\beta} P\\left\\{A_{k}(t-\\delta)=\\left(\\alpha_{1}, \\ldots, \\alpha_{k-2}, \\alpha, \\beta\\right)\\right\\} \\delta}{P\\left\\{A_{k}(t)=\\left(\\alpha_{1}, \\ldots, \\alpha_{k-2}, \\alpha, \\alpha\\right)\\right\\}}+o(\\delta)",
               "explanation": "The sum over \u03b2 of P{A_k(t-\u03b4) = (\u03b1\u2081,...,\u03b1_{k-2}, \u03b1, \u03b2)} equals the marginal probability P{the first k-1 components are (\u03b1\u2081,...,\u03b1_{k-2}, \u03b1)}, which by exchangeability equals \u03c0(\u03b1\u2081,...,\u03b1_{k-2}, \u03b1). The simplification to \u03b4/\u03c0(\u03b1|A_k - \u03b1) then requires that this marginal divided by \u03c0(\u03b1\u2081,...,\u03b1_{k-2}, \u03b1, \u03b1) gives 1/\u03c0(\u03b1|A_k - \u03b1). This is consistent. However, the factor \u03b4 appears incorrectly placed: the coalescence rate for a specific pair looking down should contribute a factor of 1 (the look-down rate per pair), but the \u03b4 factor in the numerator seems to come from the probability of the event in time interval \u03b4. The expression is dimensionally consistent but the intermediate step obscures where the coalescence rate factor comes from, and the placement of \u03b4 multiplying the sum (rather than being part of the conditional transition probability) is not clearly justified from the preceding steps.",
@@ -1901,7 +1901,7 @@
               "paragraph_index": 76
             },
             {
-              "id": "rag_local_5",
+              "id": "local_5",
               "title": "Incorrect placement of exponent on matrix product",
               "quote": "(\\lambda_{n} P)_{\\alpha \\beta}^{m}",
               "explanation": "The notation $(\\lambda_{n} P)_{\\alpha \\beta}^{m}$ is ambiguous/incorrect. It should be $(\\lambda_{n} P)^{m}_{\\alpha \\beta}$, i.e., the $m$-th power of the matrix $\\lambda_n P$, then taking the $(\\alpha,\\beta)$ entry. As written, the exponent $m$ appears as a superscript on the $(\\alpha,\\beta)$ component, which could be read as raising the scalar entry to the $m$-th power rather than taking the $(\\alpha,\\beta)$ entry of the matrix power. This is a notational issue that is inconsistent with standard convention used elsewhere in the paper (e.g., $(P^m)_{\\alpha\\beta}$ in the first line).",
@@ -1909,7 +1909,7 @@
               "paragraph_index": 101
             },
             {
-              "id": "rag_local_6",
+              "id": "local_6",
               "title": "Incorrect ratio factor for long vs. short run",
               "quote": "the longer run should result in standard errors which are smaller by a factor of $\\sqrt{ } 500 \\approx 22$",
               "explanation": "\u221a500 \u2248 22.36, which is correct numerically. However, the factor of 500 implies the long run uses 500 times as many samples as the short run, i.e., 10,000,000 samples vs. 20,000. From the context (para 128), the authors ran 1 million samples in their own long run, not 10 million. If the long run used 1,000,000 samples and the short run used 20,000, the ratio would be 50, giving \u221a50 \u2248 7. If the long run used 10,000,000 samples (500 \u00d7 20,000), then \u221a500 \u2248 22 is correct, but this is not clearly established in the surrounding text. The paper mentions 1 million samples taking 72 hours for Q_GT, but the Q_SD long run length is referenced only via Table 1. Without seeing Table 1, the factor of 500 may or may not be correct, but it is at least potentially inconsistent with the 1 million sample run mentioned in para 128.",
@@ -1917,7 +1917,7 @@
               "paragraph_index": 136
             },
             {
-              "id": "rag_local_7",
+              "id": "local_7",
               "title": "Inconsistent capitalization of probability function",
               "quote": "P\\left(H_{j} \\mid H_{j-1}^{\\prime}\\right)",
               "explanation": "The transition probability is written with an uppercase 'P' here, but in the surrounding context (para 216, 217, 218) it is also referred to with both uppercase 'P' and lowercase 'p'. More importantly, the lowercase 'p' is used throughout for the sampling probability p(\u00b7), so using uppercase 'P' for the conditional transition probability is intentional. However, in para 217 the same quantity is written as 'P(H_j | H_{j-1}')' with uppercase P, while in para 218 it switches to lowercase 'p(H_j | H_{j-1}')'. This is a notation inconsistency across the passages rather than an error in this specific equation.",
@@ -1925,7 +1925,7 @@
               "paragraph_index": 221
             },
             {
-              "id": "rag_local_8",
+              "id": "local_8",
               "title": "Incorrect index range in the product of f factors",
               "quote": "p\\left(H_{0}\\right)=E_{q}\\left\\{f\\left(H_{0}\\right) f\\left(H_{-1}\\right) \\ldots f\\left(H_{-m}\\right)\\right\\}",
               "explanation": "From the recursion in para 219, p(H_j) = f(H_j) * sum q(...) p(H_{j-1}'), unrolling from j=0 down to absorption at -m (where p(H_{-m}) is known and equals 1 for the single-ancestor state) gives p(H_0) = E_q{ f(H_0) f(H_{-1}) ... f(H_{-m+1}) * p(H_{-m}) }. If p(H_{-m})=1, the product should be f(H_0) f(H_{-1}) ... f(H_{-m+1}), not including f(H_{-m}). Including f(H_{-m}) amounts to one extra application of the recursion beyond the absorption point. This is consistent with para 223, where the forward-path numerator contains transitions p(H_0|H_{-1})...p(H_{-m+1}|H_{-m}) p(H_{-m}), i.e., m transition factors times p(H_{-m}), not m+1 factors.",
@@ -1933,7 +1933,7 @@
               "paragraph_index": 226
             },
             {
-              "id": "rag_local_9",
+              "id": "local_9",
               "title": "Misplaced factorial notation",
               "quote": "m^{i!}",
               "explanation": "The factorial should apply to m^i, so the correct notation is (m^i)! or m^i!. As written, 'm^{i!}' suggests raising m to the power i!, rather than taking the factorial of m^i. The denominator should be written as (m^{i})! to be unambiguous.",
@@ -1941,7 +1941,7 @@
               "paragraph_index": 261
             },
             {
-              "id": "rag_local_10",
+              "id": "local_10",
               "title": "Incorrect conditional posterior density formula (missing normalization)",
               "quote": "\\pi\\left(\\theta \\mid \\mathcal{H}^{i}, A_{n}\\right)=\\frac{T^{i}}{2} \\frac{\\left(T^{i} \\theta / 2\\right)^{m^{i}} \\exp\\left(-T^{i} \\theta / 2\\right)}{m^{i!}}",
               "explanation": "Given the genealogy H^i with total branch length T^i and m^i mutations, the number of mutations is Poisson with parameter T^i \u03b8/2. Under a uniform (improper) prior on \u03b8, the conditional posterior \u03c0(\u03b8 | H^i, A_n) is a Gamma distribution: Gamma(m^i + 1, T^i/2). The correct density is (T^i/2)^{m^i+1} \u03b8^{m^i} exp(-T^i \u03b8/2) / (m^i)!. The formula as written has the prefactor T^i/2 multiplied by (T^i \u03b8/2)^{m^i}, which gives (T^i/2)^{m^i+1} \u03b8^{m^i}, matching the correct Gamma shape. So the overall structure is actually consistent with a Gamma(m^i+1, T^i/2) density, provided the factorial is read as (m^i)!. The only clear typographical error is the factorial placement.",
@@ -1949,7 +1949,7 @@
               "paragraph_index": 261
             },
             {
-              "id": "rag_local_11",
+              "id": "local_11",
               "title": "Variable n used with conflicting meanings",
               "quote": "\\hat{\\pi}\\left(\\theta \\mid A_{n}\\right)=\\frac{1}{n} \\sum^{n} \\pi\\left(\\theta \\mid \\mathcal{H}^{i}, A_{n}\\right)",
               "explanation": "The variable n is used both as the number of MCMC samples (in the sum 1/n and the upper limit of summation) and as the sample size indexing the allelic data A_n. These are different quantities: A_n refers to the observed genetic data from n sampled individuals, whereas the sum should be over the number of MCMC iterations/samples (which, per para 258, is the number of sampled genealogies from 10^7 iterations thinned every 500). A different symbol (e.g., N or K) should be used for the number of MCMC samples to avoid ambiguity.",
@@ -1957,7 +1957,7 @@
               "paragraph_index": 263
             },
             {
-              "id": "rag_local_12",
+              "id": "local_12",
               "title": "Missing index variable in summation",
               "quote": "\\sum^{n} \\pi\\left(\\theta \\mid \\mathcal{H}^{i}, A_{n}\\right)",
               "explanation": "The summation is written as \\sum^{n} without specifying the index variable and its lower bound. It should be written as \\sum_{i=1}^{n} to clearly indicate summation over the MCMC samples indexed by i.",
@@ -1965,7 +1965,7 @@
               "paragraph_index": 263
             },
             {
-              "id": "rag_local_13",
+              "id": "local_13",
               "title": "Incorrect index in numerator of recursive weight factor",
               "quote": "w_{-(t-1)} \\frac{p_{\\theta}\\left(H_{-(t-1)} \\mid H_{-1}\\right)}{q_{0}\\left(H_{-t} \\mid H_{-(t-1)}\\right)}",
               "explanation": "In the recursive decomposition, the new factor in the numerator should be p_\u03b8(H_{-(t-1)} | H_{-t}), representing the transition probability from H_{-t} to H_{-(t-1)}. Instead, it is written as p_\u03b8(H_{-(t-1)} | H_{-1}), which conditions on H_{-1} rather than H_{-t}. This is inconsistent with the full product in the numerator on the left-hand side, where each factor is p_\u03b8(H_{-(k-1)} | H_{-k}).",
@@ -1973,7 +1973,7 @@
               "paragraph_index": 285
             },
             {
-              "id": "rag_local_14",
+              "id": "local_14",
               "title": "Incorrect subscript in final weight formula",
               "quote": "$w=w_{-m} p_{\\theta}\\left(H_{-m}\\right) p_{\\theta}\\left(\\left|H_{1}\\right|=n+1\\right)$",
               "explanation": "The term $p_{\\theta}(|H_1|=n+1)$ uses subscript 1 (positive), but in the coalescent framework described here, time indices are negative (going backwards). This should likely be $|H_{-1}|=n+1$ or similar, consistent with the negative-time indexing used throughout the paper (e.g., $H_{-1}, H_{-t}$, etc.).",
@@ -1981,7 +1981,7 @@
               "paragraph_index": 286
             },
             {
-              "id": "rag_local_15",
+              "id": "local_15",
               "title": "Inconsistency in recursive weight formula (para 277) referenced by final weight",
               "quote": "$w_{-t}=\\frac{p_{\\theta}\\left(H_{-(t-1)} \\mid H_{-t}\\right) \\ldots p_{\\theta}\\left(H_{0} \\mid H_{-1}\\right)}{q_{0}\\left(H_{-t} \\mid H_{-(t-1)}\\right) \\ldots q_{0}\\left(H_{-1} \\mid H_{0}\\right)} \\equiv w_{-(t-1)} \\frac{p_{\\theta}\\left(H_{-(t-1)} \\mid H_{-1}\\right)}{q_{0}\\left(H_{-t} \\mid H_{-(t-1)}\\right)}$",
               "explanation": "In the recursive decomposition on the right-hand side, the numerator of the incremental ratio should be $p_{\\theta}(H_{-(t-1)} \\mid H_{-t})$ (the transition from $H_{-t}$ to $H_{-(t-1)}$), but it is written as $p_{\\theta}(H_{-(t-1)} \\mid H_{-1})$, which is inconsistent with the left-hand side product and is almost certainly a typo.",
@@ -1989,7 +1989,7 @@
               "paragraph_index": 285
             },
             {
-              "id": "rag_local_16",
+              "id": "local_16",
               "title": "Incorrect identification of the normalizing constant in (b)",
               "quote": "$L\\left(\\theta \\mid Y_{\\text{obs}}\\right)$ is the normalizing constant of $p\\left(Y_{\\text{mis}} \\mid Y_{\\text{obs}}, \\theta\\right)$",
               "explanation": "From the identity L(\u03b8|Y_obs) = \u222b p(Y_mis, Y_obs|\u03b8) \u03bc(dY_mis), the likelihood L(\u03b8|Y_obs) is the normalizing constant that converts the unnormalized density p(Y_mis, Y_obs|\u03b8) (as a function of Y_mis) into the normalized conditional density p(Y_mis|Y_obs, \u03b8). That is, p(Y_mis|Y_obs, \u03b8) = p(Y_mis, Y_obs|\u03b8) / L(\u03b8|Y_obs). So L(\u03b8|Y_obs) is indeed the normalizing constant of the unnormalized density p(Y_mis, Y_obs|\u03b8), not 'the normalizing constant of p(Y_mis|Y_obs, \u03b8)'. The density p(Y_mis|Y_obs, \u03b8) is already normalized (it integrates to 1). The statement as written is misleading/incorrect: it says L is the normalizing constant 'of' the normalized density rather than 'of' the unnormalized density.",
@@ -1997,7 +1997,7 @@
               "paragraph_index": 263
             },
             {
-              "id": "rag_local_17",
+              "id": "local_17",
               "title": "Incorrect denominator in importance weight",
               "quote": "\\frac{P_{\\theta}\\left(\\mathcal{H}^{(i)}\\right)}{Q_{\\theta_{0}}\\left(\\mathcal{H}^{(i)}\\right)}",
               "explanation": "The samples are drawn from the mixture Q (defined in the preceding paragraph, expression (37)), not from Q_{\\theta_0}. The importance weight should be P_{\\theta}(\\mathcal{H}^{(i)}) / Q(\\mathcal{H}^{(i)}), consistent with the definition w_{\\theta}(\\mathcal{H}) = P_{\\theta}(\\mathcal{H}) / Q(\\mathcal{H}). The subsequent estimator in para 326 similarly uses Q_{\\theta_0} in the denominator, suggesting this may be a systematic notational issue, but it is inconsistent with the mixture sampling proposal Q described in para 322.",
@@ -2005,7 +2005,7 @@
               "paragraph_index": 54
             },
             {
-              "id": "rag_local_18",
+              "id": "local_18",
               "title": "Incorrect variance reduction factor",
               "quote": "Its asymptotic variance is $\\left(1-\\rho_{\\theta}^{2}\\right)^{-1}$ times smaller",
               "explanation": "The standard result for variance reduction via a control variate is that the variance is multiplied by the factor (1 - \\rho^2), i.e., it is (1 - \\rho^2) times the original variance. Saying it is (1 - \\rho^2)^{-1} times *smaller* is confusing/incorrect; it should be (1 - \\rho^2)^{-1} times smaller only if interpreted as the original variance divided by (1-\\rho^2)^{-1}, which gives (1-\\rho^2) times the original. The phrasing '(1-\\rho^2)^{-1} times smaller' would more naturally mean dividing by (1-\\rho^2)^{-1}, but the intended meaning is likely that the variance is reduced by the factor (1-\\rho^2). The correct statement is that the asymptotic variance is (1-\\rho^2) times that of expression (12), or equivalently (1-\\rho^2)^{-1} times *larger* efficiency.",
@@ -3962,8 +3962,8 @@
             }
           ]
         },
-        "rag_local": {
-          "label": "RAG Local",
+        "local": {
+          "label": "Local",
           "metrics": {
             "num_predicted": 23,
             "num_ground_truth": 19,
@@ -3989,7 +3989,7 @@
           "overall_feedback": "## High-Level Feedback\n\nThis is a landmark tutorial and classification paper by Forney that provides a unifying framework\u2014coset codes\u2014for understanding virtually all known constructive coding techniques for band-limited channels, including lattice codes and trellis-coded modulation. The paper's principal strength lies in its conceptual clarity and synthesis: by recognizing that the encoding process can be decomposed into a lattice partition \u039b/\u039b\u2032 and a binary encoder C that selects coset sequences, Forney elegantly decouples the fundamental coding gain (a geometric property) from constellation shaping, enabling systematic comparison across disparate code families. The writing is exceptionally clear for a paper of this technical depth, and the historical contextualization\u2014from Shannon's capacity results through the Barnes-Wall and Leech lattices to Ungerboeck's trellis-coded modulation\u2014is both informative and well-structured, giving the reader a strong sense of how the field evolved and why a unifying framework was needed. The paper's most significant contribution is arguably taxonomic: by classifying codes according to purely geometric parameters (fundamental coding gain, error coefficient, decoding complexity, constellation expansion factor), it enables principled design trade-offs and reveals structural similarities between schemes that were previously treated as unrelated. One potential concern, based on the portion reviewed, is that the restriction to \"lattice-type\" coset codes (with only a brief mention of phase-modulated variants) may limit the framework's generality, and the paper would benefit from a more explicit discussion of what classes of good codes, if any, fall outside this framework and why. Additionally, while the three-step encoding decomposition is powerful, the claim that constellation shaping is \"peripheral\" deserves more nuance, as shaping gains can contribute meaningfully (on the order of 1.53 dB) and interact with code structure in ways that may not be fully separable in practice. Overall, this is an exceptionally well-crafted paper that has rightly become a foundational reference in the field.",
           "comments": [
             {
-              "id": "rag_local_0",
+              "id": "local_0",
               "title": "Fundamental volume incorrectly equated to 2^{r(C)}",
               "quote": "the fundamental volume $V(\\mathbb{C})$ per $N$ dimensions, which is equal to $2^{r(\\mathbb{C})}$",
               "explanation": "The fundamental volume V(C) of a coset code is not simply equal to 2^{r(C)}. The fundamental volume of the code equals the fundamental volume of the sublattice \u039b', which is V(\u039b') = |\u039b/\u039b'| \u00b7 V(\u039b). The quantity 2^{r(C)} represents the constellation expansion factor (the ratio V(C)/V(\u039b) or similar), not the fundamental volume itself. The coding gain formula \u03b3(C) = d\u00b2_min(C) / V(C)^{2/N} involves V(C) as the actual volume of the lattice, and the normalization by the uncoded reference introduces the redundancy. The statement as written conflates the volume with the expansion ratio.",
@@ -3997,7 +3997,7 @@
               "paragraph_index": 16
             },
             {
-              "id": "rag_local_1",
+              "id": "local_1",
               "title": "Incorrect coset representative for odd Gaussian integers",
               "quote": "both odd (in $\\boldsymbol{\\phi} \\boldsymbol{G}+1$)",
               "explanation": "The odd coset of the Gaussian integers modulo \u03c6 should be written as \u03c6G + 1 (using the scalar \u03c6, not the bold vector notation \u03c6G + 1). However, the more substantive issue is notational inconsistency: throughout the passage, \u03c6 is used in bold (\\boldsymbol{\\phi}) in '\u03c6G' suggesting it is a matrix/vector, but \u03c6 is actually a scalar (1+i). This is a minor notation inconsistency, but the coset description itself is correct in substance.",
@@ -4005,7 +4005,7 @@
               "paragraph_index": 156
             },
             {
-              "id": "rag_local_2",
+              "id": "local_2",
               "title": "Inconsistent boldface on y in dual lattice definition",
               "quote": "the set of all Gaussian integer $N$-tuples $y$ that are orthogonal to all vectors $\\boldsymbol{x} \\in \\Lambda$",
               "explanation": "The variable y is not boldfaced ($y$ instead of $\\boldsymbol{y}$), even though it represents an N-tuple (vector), while x is correctly boldfaced as $\\boldsymbol{x}$. This is a notation inconsistency.",
@@ -4013,7 +4013,7 @@
               "paragraph_index": 152
             },
             {
-              "id": "rag_local_3",
+              "id": "local_3",
               "title": "Inconsistent boldface notation for G",
               "quote": "since $\\phi^{\\mu} G^{N}$ is the lattice of all vectors orthogonal to all vectors in $\\boldsymbol{G}^{N}$ modulo $\\phi^{\\mu}$",
               "explanation": "The first occurrence of G^N in this clause is written as plain 'G^N' (without boldface), while everywhere else in the passage (and throughout the paper) it is written as bold '\\boldsymbol{G}^{N}'. This is a notation inconsistency.",
@@ -4021,7 +4021,7 @@
               "paragraph_index": 153
             },
             {
-              "id": "rag_local_4",
+              "id": "local_4",
               "title": "Notation inconsistency in combinatorial coefficient subscript",
               "quote": "where $C_{n_{j}}$ is the combinatorial coefficient $(n!) /[(j!)((n-j)!)]$",
               "explanation": "The subscript notation changes between the sum and the definition. In the sum it is written as $C_{nj}$ (single-level subscript), but in the definition it appears as $C_{n_{j}}$ (with j as a sub-subscript of n). These should be typeset consistently, both as $C_{nj}$ or equivalently $C_{n,j}$.",
@@ -4029,7 +4029,7 @@
               "paragraph_index": 161
             },
             {
-              "id": "rag_local_5",
+              "id": "local_5",
               "title": "Incorrect subscript on checkerboard lattice $D_N$",
               "quote": "is the \"checkerboard lattice\" $D_{N}$, with code formula $D_{N}=\\phi \\boldsymbol{G}^{N}+ \\mathrm{RM}(n-1, n)=\\phi \\boldsymbol{G}^{N}+(N, N-1,2)$",
               "explanation": "The checkerboard lattice should be $D_{2N}$, not $D_N$. The lattice $\\Lambda(n-1,n)$ is a $2^n$-dimensional complex lattice, hence $2N$-dimensional as a real lattice. From Table I, $(n-1,n) = (1,2)$ gives $D_8$ with $2N=8$, and $(2,3)$ gives $D_{16}$ with $2N=16$, confirming the subscript should be $2N$.",
@@ -4037,7 +4037,7 @@
               "paragraph_index": 168
             },
             {
-              "id": "rag_local_6",
+              "id": "local_6",
               "title": "Incorrect dual of \u039b(0,n)",
               "quote": "\\Lambda(0, n)^{\\perp}= \\Lambda(n)",
               "explanation": "From the dual formula in para 169, \u039b(0,n)^\u22a5 has depth n (the exponent on the leading \u03c6 is n\u22120 = n), which matches the Barnes-Wall lattice \u039b(n) = \u039b(0,n) itself (since \u039b(0,n) is self-dual for the appropriate normalization). However, the notation \u039b(n) is ambiguous here. Looking at the formula more carefully: \u039b(0,n) uses codes RM(0,n),...,RM(n\u22121,n) with scaling \u03c6^n,...,\u03c6, while \u039b(0,n)^\u22a5 uses codes RM(n\u22121,n),...,RM(0,n) with scaling \u03c6^n,...,\u03c6^0. Since RM(j,n) is the dual of RM(n\u22121\u2212j,n), the dual lattice \u039b(0,n)^\u22a5 is actually \u039b(0,n) itself (the Barnes-Wall lattice is self-dual up to scaling). Writing \u039b(0,n)^\u22a5 = \u039b(n) is potentially correct if \u039b(n) denotes the Barnes-Wall lattice, but this is a notational issue rather than a clear error. This claim appears consistent with known properties.",
@@ -4045,7 +4045,7 @@
               "paragraph_index": 172
             },
             {
-              "id": "rag_local_7",
+              "id": "local_7",
               "title": "Incorrect claim about dual of \u039b(n\u22121,n)",
               "quote": "\\Lambda(n-1, n)^{\\perp}, n \\geq 1, is the dual $D_{N}^{\\perp}$ of the checkerboard lattice $D_{N}$",
               "explanation": "From Table I, \u039b(n\u22121,n) = D_{2N} (the checkerboard lattice in 2N real dimensions), where 2N = 2\u00b72^n. Its dual should be D_{2N}^\u22a5. But the passage writes D_N^\u22a5 with N = 2^n, which would be the dual of the checkerboard lattice in N real dimensions, not 2N. Since these are 2N-dimensional real lattices (N complex dimensions), the correct notation should be D_{2N}^\u22a5. However, examining the table more carefully, the column labeled 2N gives the real dimension, and the lattice \u039b(n\u22121,n) for n=1 is D_4 (2N=4, N=2), which is consistent with N = 2^n = 2 being the complex dimension and 2N = 4 being the real dimension. The subscript on D in the table matches 2N (e.g., D_4, D_8, D_16, D_32), so writing D_N with N = 2^n is incorrect \u2014 it should be D_{2N} or equivalently D_{2^{n+1}}.",
@@ -4053,7 +4053,7 @@
               "paragraph_index": 155
             },
             {
-              "id": "rag_local_8",
+              "id": "local_8",
               "title": "Incorrect endpoint of dual partition chain",
               "quote": "$\\boldsymbol{Z}^{2N} \\simeq \\Lambda(n, n)^{\\perp} / \\Lambda(n-1, n)^{\\perp} / \\cdots / \\Lambda(0, n)^{\\perp} = \\Lambda(0, n)$",
               "explanation": "The chain starts at Z^{2N} and ends at \u039b(0,n)^\u22a5, not at \u039b(0,n). Since \u039b(0,n) is the densest lattice in the Barnes-Wall family (the Barnes-Wall lattice itself), its dual \u039b(0,n)^\u22a5 is generally different from \u039b(0,n). The final equality should read \u039b(0,n)^\u22a5, not \u039b(0,n). Alternatively, the chain endpoint is simply the last element \u039b(0,n)^\u22a5 and the extra '= \u039b(0,n)' is erroneous.",
@@ -4061,7 +4061,7 @@
               "paragraph_index": 167
             },
             {
-              "id": "rag_local_9",
+              "id": "local_9",
               "title": "Incorrect starting point of second dual partition chain",
               "quote": "$\\Lambda(0, n) = \\Lambda(0, n)^{\\perp} / \\phi \\Lambda(1, n)^{\\perp} / \\cdots / \\phi^{n} \\Lambda(n, n)^{\\perp} = \\phi^{n} G^{N} \\simeq R^{n} Z^{2N}$",
               "explanation": "This chain starts at \u039b(0,n)^\u22a5 (the first element listed) and should therefore be labeled as starting from \u039b(0,n)^\u22a5, not \u039b(0,n). Writing \u039b(0,n) = \u039b(0,n)^\u22a5/... asserts that \u039b(0,n) equals \u039b(0,n)^\u22a5, which is not generally true. This error is consistent with the previous one \u2014 both stem from incorrectly equating \u039b(0,n) with \u039b(0,n)^\u22a5.",
@@ -4069,7 +4069,7 @@
               "paragraph_index": 156
             },
             {
-              "id": "rag_local_10",
+              "id": "local_10",
               "title": "Incorrect definition of minimum norm for distance-invariant codes",
               "quote": "then $d_{\\text{min}}^{2}(\\mathbb{C})$ is the minimum squared distance from the all-zero code sequence to any other code sequence, i.e., the minimum norm of any code sequence",
               "explanation": "The phrase 'the minimum norm of any code sequence' is imprecise/incorrect. It should be 'the minimum norm of any nonzero code sequence.' The all-zero code sequence has norm 0, so the minimum norm of 'any code sequence' would trivially be 0. The intended meaning is the minimum norm over all nonzero code sequences.",
@@ -4077,7 +4077,7 @@
               "paragraph_index": 261
             },
             {
-              "id": "rag_local_11",
+              "id": "local_11",
               "title": "Incorrect argument in \u03ba: should involve the partition lattice, not just \u039b'",
               "quote": "\u03ba(\\mathbb{C})=\\kappa(C)+\\kappa\\left(\\Lambda^{\\prime}\\right)",
               "explanation": "The normalized informativity \u03ba of the trellis code should be the sum of \u03ba(C) and the normalized informativity of the partition \u039b/\u039b' (which equals \u03ba(\u039b') \u2212 \u03ba(\u039b) or equivalently the log of |\u039b/\u039b'| normalized). Writing \u03ba(\u039b') alone is inconsistent with the framework described in para 208, which states that the trellis code parameters are sums of the corresponding quantities for the code C and the partition \u039b/\u039b'. The informativity of the partition \u039b/\u039b' is not simply \u03ba(\u039b').",
@@ -4085,7 +4085,7 @@
               "paragraph_index": 208
             },
             {
-              "id": "rag_local_12",
+              "id": "local_12",
               "title": "Incorrect condition: should require \u039b (not \u039b') to be a mod-2 lattice",
               "quote": "If $\\Lambda^{\\prime}$ is a mod-2 lattice",
               "explanation": "The lemma states the condition on \u039b' (the sublattice), but for the proof technique to work \u2014 reducing the partition \u039b/\u039b' to Z^N/2Z^N via Lemma 5 \u2014 it is the superlattice \u039b that needs to be a mod-2 lattice (i.e., \u039b \u2286 Z^N with 2Z^N \u2286 \u039b'). The surrounding text in para 221 speaks of 'a partition of mod-2 lattices,' meaning both \u039b and \u039b' are mod-2 lattices with the partition having 2-depth m=1. Stating the condition only on \u039b' is insufficient and inconsistent with the proof sketch, which invokes the partition Z^N/2Z^N and requires \u039b to be a mod-2 lattice.",
@@ -4093,7 +4093,7 @@
               "paragraph_index": 224
             },
             {
-              "id": "rag_local_13",
+              "id": "local_13",
               "title": "Minimum squared distance formula should use minimum free distance of C', not Hamming distance",
               "quote": "$d_{\\text{min}}^{2}(\\mathbb{C})=\\min \\left[4, d_{H}\\left(C^{\\prime}\\right)\\right]$",
               "explanation": "The notation d_H(C') suggests the Hamming distance (or free Hamming distance) of the convolutional code C'. Since each differing bit position in a binary codeword of C' corresponds to a squared Euclidean distance of 1 (the minimum squared distance in Z^N between points in different cosets of 2Z^N is 1), the minimum squared Euclidean distance contributed by codeword differences through C' equals d_free(C') (the free distance). Meanwhile d_min^2(2Z^N) = 4. So the formula d_min^2 = min[4, d_H(C')] is dimensionally and conceptually correct only if d_H(C') denotes the free Hamming distance of C'. However, this is potentially misleading or erroneous because for convolutional codes the standard quantity is the free distance d_free, and the notation d_H typically denotes a single-word Hamming weight/distance rather than the free distance of a convolutional code. The proof sketch in para 223 confirms the intended meaning but the notation is at minimum inconsistent with standard usage.",
@@ -4101,7 +4101,7 @@
               "paragraph_index": 137
             },
             {
-              "id": "rag_local_14",
+              "id": "local_14",
               "title": "Ambiguous or incorrect antecedent for 'last three codes'",
               "quote": "The last three codes appear to be equivalent to the aforementioned translation of Wei's $\\boldsymbol{Z}^{8} / E_{8}$ codes.",
               "explanation": "The passage lists three items: (1) Ungerboeck-type codes based on partitions Z/4Z, Z\u00b2/2Z\u00b2, and Z\u00b2/2RZ\u00b2; (2) the GCS-type code based on Z\u2074/2Z\u2074; (3) codes using the hexagonal lattice A\u2082. That gives three items, but the first item itself encompasses multiple partition types. Saying 'the last three codes' most naturally refers to the last three items in the list, but the GCS-type Z\u2074/2Z\u2074 code was already described as a previously known construction (not equivalent to a translation of Wei's Z\u2078/E\u2088 codes in the usual sense), and the A\u2082-based codes are two-dimensional hexagonal codes that are not naturally equivalent to Wei's Z\u2078/E\u2088 codes either. It appears the author may have meant 'the last three codes' to refer to the three Ungerboeck-type partition codes (Z/4Z, Z\u00b2/2Z\u00b2, Z\u00b2/2RZ\u00b2), which can be seen as dimensional translations of Wei's codes, but the sentence as written points to the wrong antecedent, creating a logical error.",
@@ -4109,7 +4109,7 @@
               "paragraph_index": 252
             },
             {
-              "id": "rag_local_15",
+              "id": "local_15",
               "title": "Typographical error in lattice partition notation",
               "quote": "$\\boldsymbol{Z}^{2} / \\boldsymbol{4}^{2}$",
               "explanation": "The partition should be written as $\\boldsymbol{Z}^{2} / 4\\boldsymbol{Z}^{2}$, consistent with the notation used throughout the paper (e.g., in Table X and para 251). Writing $\\boldsymbol{4}^{2}$ instead of $4\\boldsymbol{Z}^{2}$ is a typographical error that omits the lattice symbol $\\boldsymbol{Z}$.",
@@ -4117,7 +4117,7 @@
               "paragraph_index": 254
             },
             {
-              "id": "rag_local_16",
+              "id": "local_16",
               "title": "Incorrect variable name for encoder output bits",
               "quote": "the encoder output is the combination of the $k$ current and $k$ previous bits, or $b$ bits altogether",
               "explanation": "The encoder outputs k current bits combined with k previous bits, giving 2k bits total. The text says '$b$ bits altogether' but should say '$2k$ bits altogether'. The variable $b$ is not defined in this context and appears to be a typo for $2k$.",
@@ -4125,7 +4125,7 @@
               "paragraph_index": 260
             },
             {
-              "id": "rag_local_17",
+              "id": "local_17",
               "title": "Inconsistent notation for the code: C vs blackboard-bold C",
               "quote": "thus $d_{\\min}^{2}(\\mathbb{C})=d_{\\min}^{2}\\left(\\Lambda^{\\prime}\\right)$",
               "explanation": "The code is denoted with blackboard-bold $\\mathbb{C}$ here, which is the standard notation for the complex numbers, not for a code. Elsewhere in the paper (e.g., para 259) the same symbol $\\mathbb{C}$ is used, so this may be a consistent OCR or typesetting issue where a calligraphic or bold C was intended, but it is a notation concern.",
@@ -4133,7 +4133,7 @@
               "paragraph_index": 208
             },
             {
-              "id": "rag_local_18",
+              "id": "local_18",
               "title": "Incorrect weight specification for $N_\\Lambda$",
               "quote": "$N_{\\Lambda}$ is the number of points of weight $d_{\\min}^{2}(\\Lambda)$ in any nonzero coset of $\\Lambda^{\\prime}$",
               "explanation": "The quantity $N_\\Lambda$ should be the number of points of minimum weight (i.e., weight $d_{\\min}^{2}(\\Lambda')$) in any nonzero coset of $\\Lambda'$, not points of weight $d_{\\min}^{2}(\\Lambda)$. Since $d_{\\min}^{2}(\\Lambda') = 2d_{\\min}^{2}(\\Lambda)$, the minimum-weight vectors in a nonzero coset of $\\Lambda'$ have squared norm $d_{\\min}^{2}(\\Lambda')$, not $d_{\\min}^{2}(\\Lambda)$. The notation $N_\\Lambda$ (subscript $\\Lambda$) is also misleading since it refers to cosets of $\\Lambda'$, not to $\\Lambda$ itself. In context, $N_\\Lambda$ counts nearest neighbors at the inter-coset minimum distance, which equals $d_{\\min}^{2}(\\Lambda') = 2d_{\\min}^{2}(\\Lambda)$, not $d_{\\min}^{2}(\\Lambda)$.",
@@ -4141,7 +4141,7 @@
               "paragraph_index": 262
             },
             {
-              "id": "rag_local_19",
+              "id": "local_19",
               "title": "Contradictory minimum distance claim",
               "quote": "Because the distance between paths is at least $d_{\\text{min}}^{2}(\\Lambda)$ when they diverge, $d_{\\text{min}}^{2}(\\Lambda)$ when they merge, and $d_{\\text{min}}^{2}(\\Lambda)$ in some other time unit, the distance between distinct paths is at least $3d_{\\text{min}}^{2}(\\Lambda)$. Thus $d_{\\text{min}}^{2}(\\mathbb{C}) =d_{\\text{min}}^{2}\\left(\\Lambda^{\\prime}\\right)=2d_{\\text{min}}^{2}(\\Lambda)$",
               "explanation": "The passage first argues that the distance between distinct paths is at least 3d\u00b2_min(\u039b), but then concludes that d\u00b2_min(C) = d\u00b2_min(\u039b') = 2d\u00b2_min(\u039b). Since 3d\u00b2_min(\u039b) > 2d\u00b2_min(\u039b), the inter-path distance (\u2265 3d\u00b2_min(\u039b)) cannot be the limiting minimum distance. The overall code minimum distance is indeed 2d\u00b2_min(\u039b) (the intra-coset distance within \u039b'), so the conclusion is correct, but the logical flow is poorly stated: the passage should explicitly state that d\u00b2_min(C) is the minimum of the intra-coset distance 2d\u00b2_min(\u039b) and the inter-path distance 3d\u00b2_min(\u039b), yielding 2d\u00b2_min(\u039b). As written, the word 'Thus' suggests that d\u00b2_min(C) = 2d\u00b2_min(\u039b) follows from the 3d\u00b2_min(\u039b) bound, which is a non sequitur.",
@@ -4149,7 +4149,7 @@
               "paragraph_index": null
             },
             {
-              "id": "rag_local_20",
+              "id": "local_20",
               "title": "Incorrect description of output bits: 2k representing a mod-2 sum",
               "quote": "$k$ representing the inputs one time unit earlier, and $2k$ representing the mod- 2 sum of the current inputs with those two time units earlier",
               "explanation": "For a rate-1/2 encoder with k information bits and 2k output bits, the natural split is k bits from one source and k bits from another, totaling 2k. The passage says 'k representing the inputs one time unit earlier, and 2k representing the mod-2 sum...', which would give k + 2k = 3k output bits rather than 2k. The second group should be k bits (not 2k), representing the mod-2 sum of the current inputs with those two time units earlier.",
@@ -4157,7 +4157,7 @@
               "paragraph_index": 143
             },
             {
-              "id": "rag_local_21",
+              "id": "local_21",
               "title": "Inconsistent minimum distance claim for Class VII codes",
               "quote": "two distinct paths differ by at least $d_{\\text{min}}^{2}(\\Lambda^{\\prime})$ where they diverge and $d_{\\text{min}}^{2}(\\Lambda)$ where they merge, so that $d_{\\min}^{2}(\\mathbb{C})=3 d_{\\min}^{2}(\\Lambda)$",
               "explanation": "The divergence contributes at least d\u00b2_min(\u039b') = 2d\u00b2_min(\u039b) and the merge contributes at least d\u00b2_min(\u039b), giving a total lower bound of 3d\u00b2_min(\u039b). However, the passage then states d\u00b2_min(C) = 3d\u00b2_min(\u039b), which would mean the code's minimum distance equals this path-based lower bound rather than being constrained by d\u00b2_min(\u039b'') = 4d\u00b2_min(\u039b) from the partition. This is actually consistent if parallel transitions (same-state transitions) contribute d\u00b2_min(\u039b') = 2d\u00b2_min(\u039b) and the path-divergence bound is 3d\u00b2_min(\u039b), so the overall minimum is 2d\u00b2_min(\u039b). The stated value of 3d\u00b2_min(\u039b) appears to neglect parallel transitions at the coset level of \u039b'/\u039b''. Since the encoder selects cosets of \u039b'' within \u039b', parallel transitions at the second level can produce distance d\u00b2_min(\u039b') = 2d\u00b2_min(\u039b), which is less than 3d\u00b2_min(\u039b). However, this depends on the specific encoder structure (Class VII vs Class III), so this may or may not be an error depending on details not fully shown. Given the analogy to Class III is explicitly stated, and Class III codes use single-level partitions, the claim is plausible within the paper's framework.",
@@ -4165,7 +4165,7 @@
               "paragraph_index": 280
             },
             {
-              "id": "rag_local_22",
+              "id": "local_22",
               "title": "Path distance lower bound of 5d\u00b2_min(\u039b) contradicts stated code minimum distance of 4d\u00b2_min(\u039b)",
               "quote": "so that the minimum squared distance between distinct paths is at least $5 d_{\\text{min}}^{2}(\\Lambda)$. Hence $d_{\\text{min}}^{2}(\\mathbb{C})= d_{\\text{min}}^{2}(\\Lambda^{\\prime\\prime})=4 d_{\\text{min}}^{2}(\\Lambda)$",
               "explanation": "The passage establishes that diverging paths have minimum squared distance at least 5d\u00b2_min(\u039b), but then concludes d\u00b2_min(C) = 4d\u00b2_min(\u039b). This means parallel transitions (paths that do not diverge, i.e., transitions from the same state to the same state) must contribute d\u00b2_min(\u039b'') = 4d\u00b2_min(\u039b), which is the binding constraint. While this is logically consistent (the overall minimum distance is the minimum over both parallel transitions and diverging paths), the word 'Hence' is misleading \u2014 the conclusion d\u00b2_min(C) = 4d\u00b2_min(\u039b) does not follow from the 5d\u00b2_min(\u039b) bound on diverging paths. It follows from the parallel transition distance being 4d\u00b2_min(\u039b), which is not explicitly stated in this passage. The logical connector 'Hence' incorrectly suggests the conclusion is derived from the preceding bound.",
@@ -5781,8 +5781,8 @@
             }
           ]
         },
-        "rag_local": {
-          "label": "RAG Local",
+        "local": {
+          "label": "Local",
           "metrics": {
             "num_predicted": 17,
             "num_ground_truth": 6,
@@ -5808,7 +5808,7 @@
           "overall_feedback": "This paper makes a valuable and elegant theoretical contribution to the literature on optimal policy design in network games. The core idea\u2014decomposing interventions into the eigenvector basis of the interaction matrix to exploit orthogonality and the multiplicative structure of equilibrium responses\u2014is both technically clean and economically intuitive, yielding sharp characterizations that connect the nature of strategic spillovers (complements vs. substitutes) to the spectral properties of the network. The writing is generally clear, and the paper does a good job of building intuition for why complementarities favor interventions aligned with top eigenvectors (capturing global, diffusive network structure) while substitutes favor bottom eigenvectors (capturing local, bipartite-like structure). However, several significant concerns merit attention. First, the framework relies heavily on the linear-quadratic structure of payoffs and the assumption that the interaction matrix is symmetric, which together deliver the clean spectral decomposition; the paper would benefit from a more thorough discussion of how robust the insights are to asymmetric interactions, nonlinear best responses, or heterogeneous cost structures, since many empirically relevant networks feature directed links and asymmetric influence. Second, while the large-budget simplicity results (Propositions 1 and 2) are striking, their practical relevance depends on how large \"large enough\" is in realistic settings\u2014some numerical illustrations or calibrations would substantially strengthen the paper's applied value. Third, the stochastic extension, while a natural and welcome addition, appears to assume the planner knows the full network structure but not individual-level returns; in many policy-relevant contexts, the network itself is imperfectly observed, and addressing this form of uncertainty would significantly broaden applicability. Finally, the connection to the existing literature on key player identification and optimal seeding in networks could be drawn more precisely, clarifying when and why the eigenvector-based approach yields qualitatively different policy prescriptions than targeting based on simpler centrality measures such as degree or betweenness.",
           "comments": [
             {
-              "id": "rag_local_0",
+              "id": "local_0",
               "title": "Variable defined in terms of itself",
               "quote": "$b_{i}=\\left[\\tau-b_{i}\\right] / 2$",
               "explanation": "The change of variables defines $b_i$ in terms of itself, which is circular. Based on the context (where $\\tilde{b}_i$ is the base level of the public good), this should read $b_i = [\\tau - \\tilde{b}_i] / 2$.",
@@ -5816,7 +5816,7 @@
               "paragraph_index": 40
             },
             {
-              "id": "rag_local_1",
+              "id": "local_1",
               "title": "Inconsistent notation: bold beta in matrix expression",
               "quote": "$[\\boldsymbol{I}-\\boldsymbol{\\beta} \\boldsymbol{\\Lambda}]^{-1}$",
               "explanation": "The scalar parameter \u03b2 is typeset in bold (\\boldsymbol{\\beta}) in the matrix expression, suggesting it is a vector or matrix. Throughout the paper (e.g., in para 51 and the amplification factor discussion), \u03b2 is a scalar and should not be bolded. The correct notation, consistent with para 51, is [I - \u03b2 \u039b]^{-1}.",
@@ -5824,7 +5824,7 @@
               "paragraph_index": 55
             },
             {
-              "id": "rag_local_2",
+              "id": "local_2",
               "title": "Incorrect claim that correlation tends to 0 for all \u2113 \u2260 1",
               "quote": "As a result, if $C \\rightarrow \\infty$, then $\\rho\\left(\\boldsymbol{y}^{*}, \\boldsymbol{u}^{\\ell}(\\boldsymbol{G})\\right) \\rightarrow$ 0 for all $\\ell \\neq 1$.",
               "explanation": "The fact that $x_{\\ell}^{*} \\rightarrow \\frac{\\alpha_{\\ell}}{\\alpha_{1}-\\alpha_{\\ell}}$ (a finite constant) for $\\ell \\neq 1$ does not by itself imply that $\\rho(\\boldsymbol{y}^{*}, \\boldsymbol{u}^{\\ell}(\\boldsymbol{G})) \\rightarrow 0$. From the formula in para 150, $\\rho(\\boldsymbol{y}^{*}, \\boldsymbol{u}^{\\ell}(\\boldsymbol{G})) = \\frac{\\|\\hat{\\boldsymbol{b}}\\|}{\\sqrt{C}} \\rho(\\hat{\\boldsymbol{b}}, \\boldsymbol{u}^{\\ell}(\\boldsymbol{G})) x_{\\ell}^{*}$. The conclusion requires that $\\frac{x_{\\ell}^{*}}{\\sqrt{C}} \\rightarrow 0$ for $\\ell \\neq 1$, which is true since $x_{\\ell}^{*}$ stays finite while $\\sqrt{C} \\rightarrow \\infty$. However, the passage presents the reasoning as if the finiteness of the limit of $x_{\\ell}^{*}$ alone is the reason, without explicitly invoking the $1/\\sqrt{C}$ factor. The stated logical chain ('This implies... As a result...') is incomplete, though the final conclusion is correct when the full formula is considered.",
@@ -5832,7 +5832,7 @@
               "paragraph_index": 156
             },
             {
-              "id": "rag_local_3",
+              "id": "local_3",
               "title": "Insufficient justification for dropping all \u2113 \u2260 1 terms",
               "quote": "\\lim _{C \\rightarrow \\infty} \\sum_{\\ell=1}^{n}\\left(\\|\\hat{\\boldsymbol{b}}\\| \\rho\\left(\\hat{\\boldsymbol{b}}, \\boldsymbol{u}^{\\ell}(\\boldsymbol{G})\\right) \\frac{x_{\\ell}^{*}}{\\sqrt{C}}\\right)^{2}=\\lim _{C \\rightarrow \\infty}\\left(\\|\\hat{\\boldsymbol{b}}\\| \\rho\\left(\\hat{\\boldsymbol{b}}, \\boldsymbol{u}^{1}(\\boldsymbol{G})\\right) \\frac{x_{1}^{*}}{\\sqrt{C}}\\right)^{2}=1,",
               "explanation": "The justification given in para 154 is that x_\u2113* \u2192 \u03b1_\u2113/(\u03b1_1 \u2212 \u03b1_\u2113) for \u2113 \u2260 1, i.e., x_\u2113* converges to a finite constant. But x_1* = w\u03b1_1/(\u03bc \u2212 w\u03b1_1) diverges as C \u2192 \u221e (since \u03bc \u2192 w\u03b1_1). The claim that the \u2113 \u2260 1 terms vanish requires showing that (x_\u2113*)\u00b2/C \u2192 0 for \u2113 \u2260 1, which is true since x_\u2113* stays bounded while C \u2192 \u221e. However, the stated reason ('because x_\u2113* \u2192 \u03b1_\u2113/(\u03b1_1 \u2212 \u03b1_\u2113)') is incomplete \u2014 it should explicitly note that the finite limit of x_\u2113* combined with division by \u221aC drives those terms to zero. This is a reasoning gap rather than an outright error, but the justification as written is imprecise.",
@@ -5840,7 +5840,7 @@
               "paragraph_index": 158
             },
             {
-              "id": "rag_local_4",
+              "id": "local_4",
               "title": "Garbled notation for \u03b2 < 0",
               "quote": "The proof for the case of $\\betax3C0$",
               "explanation": "This appears to be a rendering/encoding error. The text '$\\betax3C0$' should read '\u03b2 < 0' (i.e., strategic substitutes). The Unicode character U+003C ('<') seems to have been corrupted into 'x3C'.",
@@ -5848,7 +5848,7 @@
               "paragraph_index": null
             },
             {
-              "id": "rag_local_5",
+              "id": "local_5",
               "title": "Incomplete justification for dropping \u2113 \u2260 1 terms in the limit",
               "quote": "where the first equality follows because $x_{\\ell}^{*} \\rightarrow \\frac{\\alpha_{\\ell}}{\\alpha_{1}-\\alpha_{\\ell}}$ for all $\\ell \\neq 1$",
               "explanation": "The fact that x_\u2113* converges to a finite constant for \u2113 \u2260 1 is necessary but not sufficient by itself; one must also note that these finite limits are divided by \u221aC \u2192 \u221e, so that (x_\u2113*/\u221aC)\u00b2 \u2192 0 for \u2113 \u2260 1. The stated reason is incomplete: the key point is that x_\u2113* remains bounded while \u221aC \u2192 \u221e, making those terms vanish.",
@@ -5856,7 +5856,7 @@
               "paragraph_index": 159
             },
             {
-              "id": "rag_local_6",
+              "id": "local_6",
               "title": "Typo in numerator factor: spurious asterisk on \u03b1\u2082",
               "quote": "\\leq 1+\\frac{2 \\alpha_{1}-\\alpha_{2}^{*}}{\\alpha_{1}} \\frac{\\|\\hat{\\boldsymbol{b}}\\|^{2}}{C}\\left(\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}\\right)^{2}",
               "explanation": "The factor in the numerator is written as (2\u03b1\u2081 \u2212 \u03b1\u2082*), where the asterisk on \u03b1\u2082 is erroneous. From the supporting calculation in para 162, the numerator of the bound is (2\u03b1\u2081 \u2212 \u03b1\u2082), not (2\u03b1\u2081 \u2212 \u03b1\u2082*). The superscript * is a notation error (\u03b1\u2082* is not defined and is not the eigenvalue \u03b1\u2082).",
@@ -5864,7 +5864,7 @@
               "paragraph_index": 165
             },
             {
-              "id": "rag_local_7",
+              "id": "local_7",
               "title": "First inequality numerator uses wrong summation index",
               "quote": "=\\frac{\\hat{b}_{1}^{2} \\alpha_{1} x_{1}^{*}\\left(x_{1}^{*}+2\\right)+\\sum_{\\ell=1}^{n} \\alpha_{\\ell} \\hat{b}_{\\ell}^{2}}{D}+\\frac{\\sum_{\\ell=2}^{n} \\hat{b}_{\\ell}^{2} \\alpha_{\\ell} x_{\\ell}^{*}\\left(x_{\\ell}^{*}+2\\right)}{D}",
               "explanation": "The first fraction's numerator contains \u2211_{\u2113=1}^{n} \u03b1_\u2113 b\u0302_\u2113\u00b2 with b\u0302_\u2113 (optimal coefficients), but D is defined with \u2211_{\u2113=1}^{n} \u03b1_\u2113 \\underline{\\hat{b}}_\u2113\u00b2 (simple-policy coefficients). For the subsequent inequality (\u2264 1) to hold, one needs the first fraction's numerator to be \u2264 D, which requires comparing optimal and simple-policy quantities. The notation switches between b\u0302_\u2113 and \\underline{\\hat{b}}_\u2113 without justification, making the claimed inequality \u2264 1 non-obvious or the notation inconsistent.",
@@ -5872,7 +5872,7 @@
               "paragraph_index": 165
             },
             {
-              "id": "rag_local_8",
+              "id": "local_8",
               "title": "Denominator replacement drops positive terms without justification in display",
               "quote": "\\leq 1+\\frac{\\sum_{\\ell=2}^{n} \\hat{b}_{\\ell}^{2} \\alpha_{\\ell} x_{\\ell}^{*}\\left(x_{\\ell}^{*}+2\\right)}{\\hat{b}_{1}^{2} \\alpha_{1} \\tilde{x}_{1}^{2}}",
               "explanation": "D = \\underline{\\hat{b}}_1^2 \u03b1_1 x\u0303_1(x\u0303_1+2) + \u2211 \u03b1_\u2113 \\underline{\\hat{b}}_\u2113\u00b2, which equals \\underline{\\hat{b}}_1^2 \u03b1_1 x\u0303_1\u00b2 + 2\\underline{\\hat{b}}_1^2 \u03b1_1 x\u0303_1 + \u2211 \u03b1_\u2113 \\underline{\\hat{b}}_\u2113\u00b2. Replacing D by just \\hat{b}_1^2 \u03b1_1 x\u0303_1\u00b2 (dropping positive terms) is valid for making the fraction larger, but the notation switches from \\underline{\\hat{b}}_1 to \\hat{b}_1, which are different quantities (simple vs. optimal policy coefficients).",
@@ -5880,7 +5880,7 @@
               "paragraph_index": 165
             },
             {
-              "id": "rag_local_9",
+              "id": "local_9",
               "title": "Missing normalization factor in the 'iff' condition",
               "quote": "\\left(\\frac{w \\alpha_{1}}{\\mu-w \\alpha_{1}}\\right)^{2} \\hat{b}_{1}^{2}-C(1-\\epsilon) \\geq 0",
               "explanation": "The correlation \u03c1 is defined as the cosine (normalized dot product), so \u03c1 = (1/\u221aC) \u00b7 [w \u03b1\u2081/(\u03bc - w \u03b1\u2081)] \u00b7 b\u0302\u2081 / \u2016\u0394b*\u2016. Squaring the inequality \u03c1 \u2265 \u221a(1\u2212\u03b5) should give [(w \u03b1\u2081/(\u03bc\u2212w \u03b1\u2081))\u00b2 b\u0302\u2081\u00b2] / [C \u00b7 \u2016\u0394b*\u2016\u00b2] \u2265 (1\u2212\u03b5). The displayed 'iff' condition omits the \u2016\u0394b*\u2016\u00b2 denominator (or equivalently treats \u03c1 as an unnormalized dot product rather than a true correlation). If \u03c1 is literally the cosine of the angle between \u0394b* and u\u00b9, then the equivalence as written is incorrect because it replaces \u2016\u0394b*\u2016\u00b2 with C.",
@@ -5888,7 +5888,7 @@
               "paragraph_index": 177
             },
             {
-              "id": "rag_local_10",
+              "id": "local_10",
               "title": "Notation inconsistency: b\u0302\u2081 vs b\u0302\u2081 with underline",
               "quote": "\\frac{1}{\\sqrt{C}} \\frac{w \\alpha_{1}}{\\mu-w \\alpha_{1}} \\hat{b}_{1}",
               "explanation": "In para 171 the quantity appearing is \\hat{\\underline{b}}_1 (the component of b in the eigenbasis, defined via b\u0332 = U\u1d40b), but in para 172 the underline is dropped and it is written as \\hat{b}_1. These are different objects: \\hat{b}_1 is a component of the original vector b\u0302, while \\hat{\\underline{b}}_1 is a component of U\u1d40\\hat{b}. The notation should be consistent with para 171.",
@@ -5896,7 +5896,7 @@
               "paragraph_index": 177
             },
             {
-              "id": "rag_local_11",
+              "id": "local_11",
               "title": "Incorrect implication: factor of 2 dropped without justification",
               "quote": "C>\\frac{2\\|\\hat{\\boldsymbol{b}}\\|^{2}}{\\epsilon}\\left(\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}\\right)^{2} \\Longrightarrow \\epsilon C>\\|\\hat{\\boldsymbol{b}}\\|^{2}\\left(\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}\\right)^{2}",
               "explanation": "Multiplying both sides of the hypothesis by \u03b5 gives \u03b5C > 2\u2016b\u0302\u2016\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2, which is strictly stronger than the stated conclusion \u03b5C > \u2016b\u0302\u2016\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2. The implication is technically valid (the conclusion follows), but presenting it as the direct consequence obscures the factor of 2. More importantly, the intermediate step used later (para 177) appears to need C(1\u2212\u03b5) < C \u2212 \u2016b\u0302\u2016\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2, which actually requires only \u03b5C > \u2016b\u0302\u2016\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2. So while the implication is not wrong, the derivation is misleading: the natural single-step consequence of multiplying by \u03b5 retains the factor 2, and the authors silently weaken the bound. This is not an error per se but a lossy step that could confuse readers; however, the implication arrow is still logically correct.",
@@ -5904,7 +5904,7 @@
               "paragraph_index": 168
             },
             {
-              "id": "rag_local_12",
+              "id": "local_12",
               "title": "Corrupted inequality expression",
               "quote": "C(1-\\epsilon)x3CC-\\|\\hat{\\boldsymbol{b}}\\|^{2}\\left(\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}\\right)^{2} .",
               "explanation": "The expression contains garbled text 'x3CC' which should be a 'less than' symbol (<). Based on the context of para 176 (which establishes that \u03b5C > ||b\u0302||\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2), the intended statement is C(1\u2212\u03b5) < C \u2212 ||b\u0302||\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2, which follows by rearranging \u03b5C > ||b\u0302||\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2 to C \u2212 ||b\u0302||\u00b2(\u03b1\u2082/(\u03b1\u2081\u2212\u03b1\u2082))\u00b2 > C \u2212 \u03b5C = C(1\u2212\u03b5). The rendering corruption obscures the inequality direction.",
@@ -5912,7 +5912,7 @@
               "paragraph_index": 183
             },
             {
-              "id": "rag_local_13",
+              "id": "local_13",
               "title": "Incorrect direction of final inequality",
               "quote": "\\frac{\\alpha_{\\ell}}{\\alpha_{1}-\\alpha_{\\ell}}x3C\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}",
               "explanation": "For \u2113 > 1, since \u03b1\u2082 \u2265 \u03b1\u2113 and \u03b1\u2081 - \u03b1\u2082 \u2264 \u03b1\u2081 - \u03b1\u2113, the fraction \u03b1\u2113/(\u03b1\u2081 - \u03b1\u2113) is less than or equal to \u03b1\u2082/(\u03b1\u2081 - \u03b1\u2082), not greater. The inequality sign should be \u2264 (i.e., the 'x3C' which appears to encode '<' is actually correct here). However, examining the context: the passage needs (w\u03b1\u2113/(\u03bc - w\u03b1\u2113))\u00b2 < (\u03b1\u2082/(\u03b1\u2081 - \u03b1\u2082))\u00b2 for the final positivity argument. The first inequality (w\u03b1\u2113/(\u03bc - w\u03b1\u2113) < w\u03b1\u2113/(w\u03b1\u2081 - w\u03b1\u2113)) uses \u03bc > w\u03b1\u2081, which is correct. The last inequality should also be \u2264 rather than <, since \u03b1\u2113/(\u03b1\u2081 - \u03b1\u2113) \u2264 \u03b1\u2082/(\u03b1\u2081 - \u03b1\u2082) for \u2113 \u2265 2. The 'x3C' tokens appear to be corrupted renderings of '<', and both inequality directions are actually correct for the argument. No substantive error is present.",
@@ -5920,7 +5920,7 @@
               "paragraph_index": 179
             },
             {
-              "id": "rag_local_14",
+              "id": "local_14",
               "title": "Corrupted inequality symbols rendered as 'x3C'",
               "quote": "\\frac{w \\alpha_{\\ell}}{\\mu-w \\alpha_{\\ell}}x3C\\frac{w \\alpha_{\\ell}}{w \\alpha_{1}-w \\alpha_{\\ell}}=\\frac{\\alpha_{\\ell}}{\\alpha_{1}-\\alpha_{\\ell}}x3C\\frac{\\alpha_{2}}{\\alpha_{1}-\\alpha_{2}}",
               "explanation": "The tokens 'x3C' appear twice and are corrupted representations of the '<' symbol (Unicode U+003C). They should each read '<' (or '\\leq'). This is a formatting/encoding error rather than a mathematical one, but it renders the displayed formula incorrect as written.",
@@ -5928,7 +5928,7 @@
               "paragraph_index": 186
             },
             {
-              "id": "rag_local_15",
+              "id": "local_15",
               "title": "Incorrect decomposition of squared norm",
               "quote": "$\\left\\|\\frac{1}{n} \\hat{\\boldsymbol{b}}\\right\\|^{2}$ is equal to the sum of $\\left(\\frac{1}{n} \\sum_{i \\in \\mathcal{N}} \\hat{b}_{i}\\right)^{2}$ (the squared mean of the entries of $\\boldsymbol{b}$) and the sum of squared deviations of the entries of the vector $\\hat{\\boldsymbol{b}}$ from their mean.",
               "explanation": "The identity $\\|\\frac{1}{n}\\hat{\\boldsymbol{b}}\\|^2 = \\frac{1}{n^2}\\sum_i \\hat{b}_i^2$. By the bias-variance decomposition, $\\frac{1}{n}\\sum_i \\hat{b}_i^2 = \\left(\\frac{1}{n}\\sum_i \\hat{b}_i\\right)^2 + \\frac{1}{n}\\sum_i (\\hat{b}_i - \\bar{b})^2$, so $\\|\\frac{1}{n}\\hat{\\boldsymbol{b}}\\|^2 = \\frac{1}{n}\\left[\\left(\\frac{1}{n}\\sum_i \\hat{b}_i\\right)^2 + \\frac{1}{n}\\sum_i(\\hat{b}_i-\\bar{b})^2\\right]$. The stated decomposition omits the factor of $1/n$ (or equivalently $1/n^2$) needed to reconcile the squared norm $\\|\\frac{1}{n}\\hat{\\boldsymbol{b}}\\|^2$ with the variance decomposition. As written, the right-hand side equals $\\frac{1}{n}\\sum_i \\hat{b}_i^2$, not $\\frac{1}{n^2}\\sum_i \\hat{b}_i^2 = \\|\\frac{1}{n}\\hat{\\boldsymbol{b}}\\|^2$. The claim also says 'sum of squared deviations' rather than 'mean of squared deviations' (i.e., variance), which further mismatches the scaling.",
@@ -5936,7 +5936,7 @@
               "paragraph_index": 207
             },
             {
-              "id": "rag_local_16",
+              "id": "local_16",
               "title": "Garbled Unicode for inequality symbol",
               "quote": "wx3C0",
               "explanation": "The string 'wx3C0' appears to be a corrupted rendering of a Unicode character. Based on the hex code x3C (which is '<') and the trailing '0', this should read 'w < 0' (i.e., the parameter w is less than zero). This is a encoding/typesetting error that renders the condition unintelligible.",
@@ -7642,8 +7642,8 @@
             }
           ]
         },
-        "rag_local": {
-          "label": "RAG Local",
+        "local": {
+          "label": "Local",
           "metrics": {
             "num_predicted": 36,
             "num_ground_truth": 12,
@@ -7669,7 +7669,7 @@
           "overall_feedback": "This paper presents a rigorous and influential theoretical contribution to computational neuroscience by analytically solving the mean-field theory of a sparsely connected network of excitatory and inhibitory binary units, demonstrating the emergence of a \"balanced state\" in which excitatory and inhibitory currents dynamically cancel to produce irregular, approximately Poissonian firing statistics consistent with cortical observations. The writing is generally clear and the abstract effectively conveys the key results\u2014linearization of population responses, rapid tracking of time-dependent inputs, weak spatial correlations that vanish with network size, and chaotic sensitivity to initial conditions\u2014establishing a compelling contrast with synchronized chaotic states in densely connected networks. The introduction does a commendable job situating the work within the broader debate about the origins of cortical irregularity, clearly distinguishing the proposed mechanism from alternatives involving correlated inputs, synaptic stochasticity, or external noise. However, several issues merit attention: the model's reliance on simple binary units, while analytically tractable, raises questions about the generalizability of the results to more biophysically realistic spiking neurons with graded membrane dynamics and conductance-based synapses, and the paper would benefit from a more explicit discussion of this limitation and how the balanced state framework might extend or break down under such conditions. Additionally, while the claim that the theory is \"exact in the limit of large network size\" is powerful, the practical relevance for finite-sized cortical circuits\u2014where the number of connections per neuron, though large, is not infinite\u2014deserves more careful treatment, particularly regarding finite-size corrections to the vanishing cross-correlations and the robustness of the balanced state to structural heterogeneities beyond random sparse connectivity. The paper could also more thoroughly address the biological plausibility of the assumed parameter regime (synaptic strengths much larger than threshold) and engage more critically with the experimental evidence for or against the specific quantitative predictions (e.g., the power-law tail in firing rate distributions and the precise scaling of correlations with network size).",
           "comments": [
             {
-              "id": "rag_local_0",
+              "id": "local_0",
               "title": "Typographical error: missing space in 'abroad'",
               "quote": "also with abroad inhomogeneity in the average rates of individual neurons",
               "explanation": "The word 'abroad' should be 'a broad' (two words). This is a typographical/formatting error where the space between 'a' and 'broad' is missing.",
@@ -7677,7 +7677,7 @@
               "paragraph_index": 7
             },
             {
-              "id": "rag_local_1",
+              "id": "local_1",
               "title": "Inconsistency in connection probability notation",
               "quote": "A cell is connected, on the average, to K other cells, and K is large.",
               "explanation": "In paragraph 10, the connection probability is defined as K/N_k (where k is the postsynaptic population index), meaning each neuron receives on average K connections from each presynaptic population separately (K excitatory and K inhibitory). Thus a cell is connected to approximately 2K other cells on average, not K. The statement 'connected to K other cells' is imprecise given the model definition, though it could be interpreted as K per population.",
@@ -7685,7 +7685,7 @@
               "paragraph_index": 7
             },
             {
-              "id": "rag_local_2",
+              "id": "local_2",
               "title": "Inconsistency between synapse strength and coefficient order",
               "quote": "the strength of individual synapses is of order $1 / \\sqrt{\\mathrm{K}}$, that is, the coefficients $\\mathrm{J}_{\\mathrm{kl}}$ are of order unity",
               "explanation": "From the definition of the local field in para 13, the synaptic weight for a single synapse is $J_{kl}^{ij}$, which scales as $J_{kl}/\\sqrt{K}$ (since $J_{kl}$ is order unity and the $1/\\sqrt{K}$ factor is built into the coupling). However, the sentence uses 'that is' to equate the claim that individual synapse strengths are of order $1/\\sqrt{K}$ with the claim that $J_{kl}$ are of order unity. This is only a valid equivalence if the synaptic weights are defined as $J_{kl}/\\sqrt{K}$, but this factorization is not shown in the local field equation (para 13), where the coupling coefficients appear simply as $J_{kl}^{ij}$. The logical connective 'that is' is thus misleading or incorrect without the explicit $1/\\sqrt{K}$ scaling in the definition of $J_{kl}^{ij}$ in terms of $J_{kl}$. The paper likely intends $J_{kl}^{ij} = J_{kl}/\\sqrt{K}$ but this decomposition has not been stated at this point, making the 'that is' a non-sequitur as written.",
@@ -7693,7 +7693,7 @@
               "paragraph_index": 16
             },
             {
-              "id": "rag_local_3",
+              "id": "local_3",
               "title": "Inconsistent notation for external input coupling coefficients",
               "quote": "\\mathrm{u}_{\\mathrm{E}}=\\left(\\mathrm{Em}_{0}+\\mathrm{m}_{\\mathrm{E}}-\\mathrm{J}_{\\mathrm{E}} \\mathrm{~m}_{\\mathrm{I}}\\right) \\sqrt{\\mathrm{K}}-\\theta_{\\mathrm{E}}",
               "explanation": "The coefficients multiplying m_0 are written as bare 'E' and 'I' in the two equations, but the inhibitory synaptic weights onto E and I populations are written as J_E and J_I respectively. By analogy and standard notation in such models, the external input coefficients should be written as J_E0 (or similar subscripted notation) and J_I0, not simply 'E' and 'I'. Using 'E' and 'I' without subscript formatting is inconsistent with the rest of the notation and could be confused with population labels or sizes rather than synaptic weight parameters.",
@@ -7701,7 +7701,7 @@
               "paragraph_index": 37
             },
             {
-              "id": "rag_local_4",
+              "id": "local_4",
               "title": "Missing external input contribution to variance",
               "quote": "\\alpha_{\\mathrm{k}}=\\mathrm{m}_{\\mathrm{E}}+\\mathrm{J}_{\\mathrm{k}}^{2} \\mathrm{~m}_{\\mathrm{I}}.",
               "explanation": "The variance of the input should include contributions from all presynaptic populations, including the external input. Each excitatory synapse contributes a variance term proportional to m_E (since synaptic weights scale as 1/\u221aK and there are K connections, giving a finite contribution), and similarly for inhibitory synapses with weight J_k, giving J_k\u00b2 m_I. However, the external input population (with coupling strength E_k or I_k for the two populations) should also contribute a term to the variance (e.g., something like E_k\u00b2 m_0 or I_k\u00b2 m_0). Its absence suggests either the external input is treated as non-fluctuating (deterministic), which should be stated, or this is an omission. Additionally, the excitatory recurrent contribution should arguably be J_{kE}\u00b2 m_E rather than simply m_E, but since the excitatory-to-excitatory and excitatory-to-inhibitory weights are normalized to 1/\u221aK (i.e., J_{kE}=1), this simplification is consistent with the mean-field equations in para 34 where the coefficient of m_E is 1.",
@@ -7709,7 +7709,7 @@
               "paragraph_index": 38
             },
             {
-              "id": "rag_local_5",
+              "id": "local_5",
               "title": "Incorrect expression for the second moment of J\u00b7\u03c3",
               "quote": "$\\left[\\left(\\mathrm{J}_{\\mathrm{kl}}^{\\mathrm{ij}} \\sigma_{\\mathrm{l}}^{\\mathrm{j}}(\\mathrm{t})\\right)^{2}\\right]=\\mathrm{J}_{\\mathrm{kl}}^{2} \\mathrm{~m}_{\\mathrm{l}} / \\mathrm{N}$",
               "explanation": "Each synapse J_kl^{ij} is drawn independently with probability K/N of being nonzero and, when nonzero, has magnitude J_kl/\u221aK. Thus E[(J_kl^{ij})^2] = (K/N)\u00b7(J_kl^2/K) = J_kl^2/N. Meanwhile E[(\u03c3_l^j)^2] = E[\u03c3_l^j] = m_l for binary {0,1} neurons. So the second moment of the product, summed over j (N_l terms), gives ~ J_kl^2 m_l, not J_kl^2 m_l / N. The factor 1/N is already absorbed by the per-synapse variance; after summing over N_l ~ N presynaptic neurons the result should be of order J_kl^2 m_l (i.e., O(1)), not J_kl^2 m_l / N. The expression as written appears to be missing the sum over j or has an extraneous 1/N factor.",
@@ -7717,7 +7717,7 @@
               "paragraph_index": 43
             },
             {
-              "id": "rag_local_6",
+              "id": "local_6",
               "title": "Incorrect or inconsistent expression for the squared mean of J\u00b7\u03c3",
               "quote": "$\\left[\\left(\\mathrm{J}_{\\mathrm{kl}}^{\\mathrm{ij}} \\sigma_{\\mathrm{l}}^{\\mathrm{j}}(\\mathrm{t})\\right)\\right]^{2}=\\mathrm{J}_{\\mathrm{kl}}^{2} \\mathrm{~m}_{\\mathrm{l}}^{2} \\mathrm{~K} / \\mathrm{N}^{2}$",
               "explanation": "The mean of a single term J_kl^{ij} \u03c3_l^j is E[J_kl^{ij}]\u00b7E[\u03c3_l^j] = (J_kl \u221aK / N)\u00b7m_l, so its square is J_kl^2 K m_l^2 / N^2. This is correct for a single (j, j') = (j, j) term. However, the variance in equation 3.12 involves a double sum over j and j', so the total squared-mean contribution (the cross terms) should scale as J_kl^2 K m_l^2 / N^2 \u00d7 N_l^2 ~ J_kl^2 K m_l^2, which is actually O(K) and not obviously negligible\u2014it is the same order as the mean-field input squared. The claim that this is 'negligible' without further context is inconsistent with the scaling, unless the \u03b4 operation is meant to subtract the full mean input (in which case the per-term expression is not the relevant quantity). The presentation conflates single-term and summed expressions.",
@@ -7725,7 +7725,7 @@
               "paragraph_index": 43
             },
             {
-              "id": "rag_local_7",
+              "id": "local_7",
               "title": "Incorrect direction of inequality for balanced solution",
               "quote": "\\frac{\\mathrm{E}}{\\mathrm{I}}x3C\\frac{\\mathrm{J}_{\\mathrm{E}}}{\\mathrm{~J}_{\\mathrm{I}}}x3C1 .",
               "explanation": "From para 44, A_E = (J_I E - J_E I)/(J_E - J_I) and A_I = (E - I)/(J_E - J_I). For both A_E and A_I to be positive, one must carefully consider the sign of the denominator (J_E - J_I). If J_E > J_I (denominator positive), then we need E > I (so E/I > 1) and J_I E > J_E I (so E/I > J_E/J_I), giving J_E/J_I < E/I, which combined with J_E > J_I > 0 means J_E/J_I > 1. This yields 1 < J_E/J_I < E/I. Alternatively, if J_E < J_I (denominator negative), then we need E < I and J_I E < J_E I, giving E/I < 1 and E/I < J_E/J_I, so E/I < J_E/J_I < 1. The paper writes E/I < J_E/J_I < 1, which corresponds only to the case J_E < J_I. However, examining para 48, the condition u_E < 0 requires E - J_E I/J_I < 0, i.e., E/I < J_E/J_I. Combined with para 49's condition J_E < 1 and J_I < 1, the regime E/I < J_E/J_I < 1 is internally consistent. But the standard convention in balanced network theory (following van Vreeswijk & Sompolinsky) is that inhibitory coupling J_I is stronger than excitatory coupling J_E in the sense that J_I > J_E (with both less than 1 in appropriate units), and the external drive ratio satisfies E/I > 1 > J_E/J_I, giving the opposite inequality direction. The condition as stated may reflect a particular parameter convention, but the use of 'x3C' (encoding '<') in both positions constrains E/I < J_E/J_I < 1, which should be verified against the sign analysis. Given the definitions, if J_I > J_E (so J_E/J_I < 1), the correct condition is indeed E/I < J_E/J_I < 1, so the formula may be consistent within this convention. No definitive error can be confirmed without more context on parameter conventions.",
@@ -7733,7 +7733,7 @@
               "paragraph_index": 55
             },
             {
-              "id": "rag_local_8",
+              "id": "local_8",
               "title": "Incorrect ratio direction in first inequality",
               "quote": "\\frac{\\mathrm{E}}{\\mathrm{I}}>\\frac{\\mathrm{J}_{\\mathrm{E}}}{\\mathrm{~J}_{\\mathrm{I}}}>1",
               "explanation": "The notation E/I here likely refers to the ratio of the number of excitatory to inhibitory synapses (or population sizes), but the constraint is stated without defining E and I as standalone quantities in this context. More importantly, from the balance equations (4.3, 4.4) and the requirement that the gain factors A_k be positive (so that m_k > 0 for m_0 > 0), the standard balanced-network derivation yields J_E/J_I > E/I (not E/I > J_E/J_I). The inequality appears to be reversed: to prevent the trivial solution m_E = m_I = 0 from being the only stable one and to ensure positive rates, one typically needs J_E * I > J_I * E (i.e., J_E/J_I > E/I), meaning inhibition must be sufficiently dominant. The direction as written would instead allow excitation to dominate, contradicting the inhibition-dominated balance requirement.",
@@ -7741,7 +7741,7 @@
               "paragraph_index": 49
             },
             {
-              "id": "rag_local_9",
+              "id": "local_9",
               "title": "Equality signs used where summation/addition is intended",
               "quote": "\\sum_{\\mathrm{l}=1}^{2} \\mathrm{~J}_{\\mathrm{kl}}^{2} q_{\\mathrm{I}}=\\mathrm{q}_{\\mathrm{E}}+\\mathrm{J}_{\\mathrm{k}}^{2} \\mathrm{q}_{\\mathrm{I}}=\\beta_{\\mathrm{k}}",
               "explanation": "The middle expression uses '=' between J_{kl}^2 q_l terms, but expanding the sum over l=1,2 should yield J_{k1}^2 q_1 + J_{k2}^2 q_2 = J_{kE}^2 q_E + J_{kI}^2 q_I. The first '=' sign after the sum appears to be a typo for '+', and the notation is inconsistent: it should read J_{kE}^2 q_E + J_{kI}^2 q_I rather than 'q_E + J_k^2 q_I'. As written, the first term of the expansion loses its J_{kE}^2 prefactor, and J_k^2 is not properly subscripted to indicate the inhibitory coupling J_{kI}^2.",
@@ -7749,7 +7749,7 @@
               "paragraph_index": 80
             },
             {
-              "id": "rag_local_10",
+              "id": "local_10",
               "title": "Summation index mismatch: q_l should depend on l, not be a single q_I",
               "quote": "\\sum_{\\mathrm{l}=1}^{2} \\mathrm{~J}_{\\mathrm{kl}}^{2} q_{\\mathrm{I}}",
               "explanation": "Inside the sum over l, the quantity should be q_l (varying with the summed population index l), not the fixed q_I (inhibitory only). Writing q_I makes the sum trivially factor out q_I, which contradicts the expanded form that contains both q_E and q_I.",
@@ -7757,7 +7757,7 @@
               "paragraph_index": 80
             },
             {
-              "id": "rag_local_11",
+              "id": "local_11",
               "title": "Misplaced parenthesis/bracket in variance expression",
               "quote": "[\\left(u_{\\mathrm{k}}^{\\mathrm{i}}(\\mathrm{t})-\\left\\langle u_{\\mathrm{k}}^{\\mathrm{i}}\\right\\rangle^{2}\\right)]",
               "explanation": "The squaring and bracketing are incorrectly placed. The expression should be [(u_k^i(t) - <u_k^i>)^2], i.e., the square should be outside the parenthesis enclosing the difference, not applied only to the angle bracket. As written, it reads as u_k^i(t) minus <u_k^i>^2, rather than the square of (u_k^i(t) - <u_k^i>).",
@@ -7765,7 +7765,7 @@
               "paragraph_index": 84
             },
             {
-              "id": "rag_local_12",
+              "id": "local_12",
               "title": "Missing J_{kE}^2 coefficient in the excitatory term",
               "quote": "=\\mathrm{m}_{\\mathrm{E}}-\\mathrm{q}_{\\mathrm{E}}+\\mathrm{J}_{\\mathrm{k}}^{2}\\left(\\mathrm{~m}_{\\mathrm{I}}-\\mathrm{q}_{\\mathrm{I}}\\right)",
               "explanation": "Expanding the sum over l=1,2 should give J_{kE}^2(m_E - q_E) + J_{kI}^2(m_I - q_I). The first term is written as (m_E - q_E) without its J_{kE}^2 prefactor. This is only valid if J_{kE}=1 by convention, but then the inhibitory coefficient should be written as J_{kI}^2, not J_k^2. The notation J_k^2 is inconsistent with the J_{kl}^2 notation used in the sum.",
@@ -7773,7 +7773,7 @@
               "paragraph_index": 84
             },
             {
-              "id": "rag_local_13",
+              "id": "local_13",
               "title": "Typographical error: digit 0 instead of Big-O notation",
               "quote": "\\mathrm{q}_{\\mathrm{k}}=\\mathrm{m}_{\\mathrm{k}}^{2}+0\\left(\\mathrm{~m}_{\\mathrm{k}}^{3}\\left|\\log \\mathrm{~m}_{\\mathrm{k}}\\right|\\right)",
               "explanation": "The remainder term uses the digit '0' instead of the capital letter 'O' for standard Big-O (Landau) notation. It should be O(m_k^3 |log m_k|), not 0(m_k^3 |log m_k|).",
@@ -7781,7 +7781,7 @@
               "paragraph_index": 95
             },
             {
-              "id": "rag_local_14",
+              "id": "local_14",
               "title": "Malformed autocorrelation expression for inhibitory input",
               "quote": "$\\mathrm{q}_{\\mathrm{E}}(\\tau)-\\mathrm{q}_{\\mathrm{E}}\\left(\\mathrm{J}_{\\mathrm{E}}^{2}\\left(\\mathrm{q}_{\\mathrm{I}}(\\tau)-\\mathrm{q}_{\\mathrm{I}}\\right)\\right)$",
               "explanation": "The expression appears to have misplaced parentheses or formatting errors. The time-delayed autocorrelation of the total excitatory input should be $q_E(\\tau) - q_E$ and that of the total inhibitory input should be $J_E^2(q_I(\\tau) - q_I)$. As written, $q_E$ appears to take $J_E^2(q_I(\\tau)-q_I)$ as its argument, which is nonsensical since $q_E$ without a time argument denotes the equilibrium value (a constant), not a function to be evaluated at that argument. The correct expression for the inhibitory autocorrelation is likely $J_E^2(q_I(\\tau) - q_I)$, presented separately or with proper punctuation/parenthesization.",
@@ -7789,7 +7789,7 @@
               "paragraph_index": 105
             },
             {
-              "id": "rag_local_15",
+              "id": "local_15",
               "title": "Encoding error: '\u03c4 < \u03c4_L' rendered as '\u03c4x3C \u03c4_L'",
               "quote": "if $\\taux3C\\tau_{\\mathrm{L}}$",
               "explanation": "The text '\u03c4x3C \u03c4_L' is a garbled rendering of '\u03c4 < \u03c4_L' (x3C is the hex code for '<'). This is a transcription/encoding artifact rather than a substantive mathematical error, but it renders the condition unreadable.",
@@ -7797,7 +7797,7 @@
               "paragraph_index": 189
             },
             {
-              "id": "rag_local_16",
+              "id": "local_16",
               "title": "Inconsistent use of \u0394\u00b2 vs \u0394 inside the square root",
               "quote": "\\mathrm{m}_{\\mathrm{k}}=\\mathrm{H}\\left(\\frac{-\\mathrm{u}_{\\mathrm{k}}}{\\sqrt{\\alpha_{\\mathrm{k}}+\\Delta^{2}}}\\right)",
               "explanation": "The threshold distribution introduces a variance \u0394 (not \u0394\u00b2) as stated in para 129: 'the other is induced by the thresholds and has a variance \u0394.' When two independent gaussian variances are combined, the total variance is their sum, so the denominator should be \u221a(\u03b1\u2096 + \u0394). This is confirmed by the low-rate limit in para 133, where neglecting \u03b1\u2096 gives m\u2096 \u2248 H(\u2212u\u2096 / \u0394), consistent with \u221a(\u03b1\u2096 + \u0394) \u2192 \u221a\u0394 = \u221a\u0394, not \u221a(\u0394\u00b2) = \u0394. Writing \u0394\u00b2 under the square root would yield \u0394 in the limit, which matches para 133 numerically, but contradicts the explicit statement in para 129 that the variance is \u0394 (not \u0394\u00b2). Additionally, para 131 uses \u221a(\u0394 + \u03b2\u2096) (not \u221a(\u0394\u00b2 + \u03b2\u2096)), further confirming the variance is \u0394. Thus the passage should read \u221a(\u03b1\u2096 + \u0394) instead of \u221a(\u03b1\u2096 + \u0394\u00b2).",
@@ -7805,7 +7805,7 @@
               "paragraph_index": 36
             },
             {
-              "id": "rag_local_17",
+              "id": "local_17",
               "title": "Inconsistent use of \u0394\u00b2 vs \u0394 inside square root",
               "quote": "\\sqrt{\\Delta+\\beta_{\\mathrm{k}}}",
               "explanation": "In para 130, the variance contribution from the threshold distribution appears as \u0394\u00b2 (i.e., \u03b1_k + \u0394\u00b2). For consistency, the term under the square root in the q_k expression should be \u0394\u00b2 + \u03b2_k rather than \u0394 + \u03b2_k. This is because \u0394\u00b2 is the variance of the threshold distribution (as used in the m_k equation), so the combined variance of the threshold-induced and connectivity-induced temporal components should involve \u0394\u00b2 + \u03b2_k, not \u0394 + \u03b2_k.",
@@ -7813,7 +7813,7 @@
               "paragraph_index": 134
             },
             {
-              "id": "rag_local_18",
+              "id": "local_18",
               "title": "Garbled range condition due to encoding errors",
               "quote": "m_{-}x3Cmx3Cm_{+}",
               "explanation": "The range condition for the density should read 'm_{-} < m < m_{+}', but the less-than signs have been corrupted into the literal strings 'x3C' (the hex code for '<'). As printed, the expression is nonsensical. This is a typographical/encoding error rather than a substantive mathematical mistake, but it renders the stated domain of validity of the formula unreadable.",
@@ -7821,7 +7821,7 @@
               "paragraph_index": null
             },
             {
-              "id": "rag_local_19",
+              "id": "local_19",
               "title": "Sign error in the argument of the square root: should be log(1/m) instead of log(m)",
               "quote": "\\sqrt{2 \\log (\\mathrm{~m})}",
               "explanation": "The function h(m) is defined such that for small m (rates near 0), h(m) is large and positive (since h is related to the inverse normal CDF or a similar threshold function, and from para 145, e^{h\u00b2(m)/2} must be well-defined). For m between 0 and 1, log(m) is negative, so \u221a(2 log(m)) is not real-valued. The correct expression should involve \u221a(2 log(1/m)) or equivalently \u221a(-2 log(m)), which is real and positive for 0 < m < 1. This is consistent with the asymptotic expansion of h(m) for small m, where h(m) ~ \u221a(2 ln(1/m)).",
@@ -7829,7 +7829,7 @@
               "paragraph_index": 153
             },
             {
-              "id": "rag_local_20",
+              "id": "local_20",
               "title": "Incorrect variable in distance formula: m_k should be q_k",
               "quote": "\\mathrm{D}_{\\mathrm{k}}(\\mathrm{t})=2\\left(\\mathrm{~m}_{\\mathrm{k}}-\\mathrm{Q}_{\\mathrm{k}}(\\mathrm{t})\\right)",
               "explanation": "The distance D_k(t) between two trajectories should be expressed as D_k(t) = 2(q_k - Q_k(t)), where q_k is the self-overlap (equal-time autocorrelation) of a single network at equilibrium. Using m_k (the mean activity) is inconsistent: when the two trajectories coincide, Q_k(t) should equal q_k so that D_k = 0, but with m_k this would require Q_k = m_k which is not the correct overlap at zero distance. The quantity q_k (defined earlier as the equilibrium autocorrelation/self-overlap) is the appropriate reference. This is likely a typographical error confusing m_k with q_k.",
@@ -7837,7 +7837,7 @@
               "paragraph_index": 163
             },
             {
-              "id": "rag_local_21",
+              "id": "local_21",
               "title": "Missing J_kE squared factor in the expanded form",
               "quote": "\\mathrm{Q}_\\mathrm{E}(\\mathrm{t})+\\mathrm{J}_{\\mathrm{k}}^{2} \\mathrm{Q}_{\\mathrm{I}}(\\mathrm{t})",
               "explanation": "Expanding the sum over l=1,2 gives (J_{k1})^2 Q_1(t) + (J_{k2})^2 Q_2(t) = J_{kE}^2 Q_E(t) + J_{kI}^2 Q_I(t). The first term should carry a factor J_{kE}^2 (i.e., (J_{kE})^2), but it is written as just Q_E(t) without any coupling coefficient squared. This is inconsistent with the sum unless J_{kE}=1 for all k, which is not generally the case and contradicts the analogous definition of \u03b1_k used elsewhere in the paper.",
@@ -7845,7 +7845,7 @@
               "paragraph_index": 71
             },
             {
-              "id": "rag_local_22",
+              "id": "local_22",
               "title": "Incorrect claim that growing solution exists when D_k(0)=0",
               "quote": "Since $\\alpha_{\\mathrm{k}}-\\gamma_{\\mathrm{k}} \\propto \\mathrm{D}_{\\mathrm{k}}$, equation 8.9 has a growing solution even if $\\mathrm{D}_{\\mathrm{k}}(0)= 0$",
               "explanation": "If \u03b1_k - \u03b3_k is proportional to D_k, then the right-hand side of equation 8.9 is proportional to \u221aD_k (since \u221a(\u03b1_k - \u03b3_k) ~ \u221aD_k). This gives dD_k/dt ~ \u221aD_k, which indeed has a solution D_k(t) ~ t\u00b2 that can grow from D_k(0)=0. However, the claim about the Lyapunov exponent being infinite requires more care. The Lyapunov exponent is defined as lim_{t\u21920} (1/t) ln(D_k(t)/D_k(0)). For D_k(t) ~ (\u221aD_k(0) + ct)\u00b2 with D_k(0)\u21920, the ratio D_k(t)/D_k(0) diverges, giving an infinite Lyapunov exponent. So the reasoning is essentially correct but the statement that there is a 'growing solution even if D_k(0)=0' is misleading \u2014 D_k=0 is technically a fixed point of dD/dt = c\u221aD; the key point is that the solution starting from any D_k(0)>0 grows at a rate independent of D_k(0) for small D_k(0), which is what makes \u03bb_L infinite. The phrasing conflates two distinct points.",
@@ -7853,7 +7853,7 @@
               "paragraph_index": 172
             },
             {
-              "id": "rag_local_23",
+              "id": "local_23",
               "title": "Missing external input contribution to variance",
               "quote": "\\alpha_{\\mathrm{k}}^{\\infty}(\\mathrm{t})=\\sum_{\\mathrm{l}=1,2}\\left(\\mathrm{~J}_{\\mathrm{kl}}\\right)^{2} \\mathrm{~m}_{\\mathrm{l}}^{\\infty}(\\mathrm{t})",
               "explanation": "The variance of the input (\u03b1) should include the contribution from the external population. The sum should include l=0, i.e., a term (J_{k0})^2 m_0(t), since the external Poisson inputs also contribute to the fluctuations in the total synaptic input to population k. The formula as written only sums over the recurrent populations l=1,2 and omits the feedforward variance term.",
@@ -7861,7 +7861,7 @@
               "paragraph_index": 180
             },
             {
-              "id": "rag_local_24",
+              "id": "local_24",
               "title": "Incorrect leading-order equation includes sub-leading correction terms",
               "quote": "\\tau_{\\mathrm{k}} \\frac{\\mathrm{dm}_{\\mathrm{k}}^{\\infty}(\\mathrm{t})}{\\mathrm{dt}}=-\\mathrm{m}_{\\mathrm{k}}^{\\infty}(\\mathrm{t})+\\mathrm{H}\\left(-\\frac{\\mathrm{u}_{\\mathrm{k}}^{\\infty}(\\mathrm{t})+\\sum_{\\mathrm{l}} \\mathrm{~J}_{\\mathrm{kl}} \\mathrm{~m}_{\\mathrm{l}}^{1}(\\mathrm{t})}{\\sqrt{\\alpha_{\\mathrm{k}}^{\\infty}(\\mathrm{t})}}\\right), \\mathrm{k}=1.2 .",
               "explanation": "The text states this is the equation 'to leading order in K,' yet the argument of H contains m_l^1(t), which is a 1/\u221aK correction term (see para 178). At strict leading order (K\u2192\u221e), the m^1 terms should not appear; the argument should involve only the leading-order quantities (m_l^\u221e). The m^1 terms belong in the next-order (sub-leading) equation, which is indeed equation 9.7 in para 181. This equation as written conflates the leading-order and sub-leading contributions.",
@@ -7869,7 +7869,7 @@
               "paragraph_index": 186
             },
             {
-              "id": "rag_local_25",
+              "id": "local_25",
               "title": "Period used instead of comma in index list",
               "quote": "\\mathrm{k}=1.2 .",
               "explanation": "The index specification should read 'k=1,2' (with a comma separating the indices), as correctly done in para 181. Here a period is used ('k=1.2.'), which is a typographical/notation error.",
@@ -7877,7 +7877,7 @@
               "paragraph_index": 186
             },
             {
-              "id": "rag_local_26",
+              "id": "local_26",
               "title": "Incorrect left-hand side: should involve m_k^\u221e not m_0",
               "quote": "A_{k}\\left(\\tau_{k} \\frac{\\mathrm{dm}_{0}(\\mathrm{t})}{\\mathrm{dt}}+\\mathrm{m}_{0}(\\mathrm{t})\\right)",
               "explanation": "From equation in para 180, the leading-order equation gives \u03c4_k dm_k^\u221e/dt = -m_k^\u221e + H(...), so rearranging yields m_k^\u221e + \u03c4_k dm_k^\u221e/dt = H(...). Since m_k^\u221e tracks the instantaneous mean-field solution, one expects m_k^\u221e = A_k m_0 (a linear relation), so that A_k(\u03c4_k dm_0/dt + m_0) would appear on the left-hand side. However, this substitution m_k^\u221e = A_k m_0 is not stated or derived in the text, making the jump from para 180 to para 181 unjustified as written. The equation should either retain m_k^\u221e on the left-hand side (consistent with para 180) or explicitly state the relation m_k^\u221e = A_k m_0 before substituting.",
@@ -7885,7 +7885,7 @@
               "paragraph_index": 187
             },
             {
-              "id": "rag_local_27",
+              "id": "local_27",
               "title": "Corrupted inequality symbols rendering the expression unreadable/incorrect",
               "quote": "0x3C\\mathrm{m}_{0}+\\tau_{\\mathrm{k}} \\frac{\\mathrm{dm}_{0}}{\\mathrm{dt}}x3C1 / \\mathrm{A}_{\\mathrm{k}}",
               "explanation": "The less-than signs '<' have been corrupted into the strings 'x3C' (which is the hex code for '<'). The intended expression is 0 < m_0 + \u03c4_k dm_0/dt < 1/A_k. This is a rendering/encoding error rather than a mathematical derivation error, but as printed the formula is malformed.",
@@ -7893,7 +7893,7 @@
               "paragraph_index": 189
             },
             {
-              "id": "rag_local_28",
+              "id": "local_28",
               "title": "Incorrect bounds for the rate of change of network activity",
               "quote": "-\\mathrm{m}_{\\mathrm{k}}x3C\\tau_{\\mathrm{k}} \\frac{\\mathrm{dm}_{\\mathrm{k}}}{\\mathrm{dt}}x3C1-\\mathrm{m}_{\\mathrm{k}}",
               "explanation": "The inequality should have the time constant \u03c4_k in the denominator, not as a multiplicative factor. From the microscopic dynamics, when all updated cells go active, dm_k/dt = (1 - m_k)/\u03c4_k, and when all go passive, dm_k/dt = -m_k/\u03c4_k. Thus the correct bound is -m_k/\u03c4_k < dm_k/dt < (1 - m_k)/\u03c4_k, i.e., \u03c4_k should divide the right-hand and left-hand sides rather than multiply dm_k/dt. Equivalently, the displayed equation has \u03c4_k on the wrong side of the inequality.",
@@ -7901,7 +7901,7 @@
               "paragraph_index": 194
             },
             {
-              "id": "rag_local_29",
+              "id": "local_29",
               "title": "OCR artifact in J_EI subscript",
               "quote": "\\mathrm{JeI}_{\\mathrm{EI}}",
               "explanation": "The coefficient of m_I^1 in the first equation appears as 'JeI_EI' which is a garbled rendering. Based on the consistent notation used throughout the paper (e.g., J_kE, J_kI in para 193, and J_IE, J_II in the second equation), this should simply be J_EI.",
@@ -7909,7 +7909,7 @@
               "paragraph_index": 201
             },
             {
-              "id": "rag_local_30",
+              "id": "local_30",
               "title": "OCR artifact in J_II subscript",
               "quote": "\\mathrm{JII}_{\\mathrm{II}}-1",
               "explanation": "The coefficient of m_I^1 in the second equation appears as 'JII_II - 1' which is a garbled rendering. By analogy with the first equation's (J_EE - 1) and the paper's notation, this should be (J_II - 1).",
@@ -7917,7 +7917,7 @@
               "paragraph_index": 201
             },
             {
-              "id": "rag_local_31",
+              "id": "local_31",
               "title": "Standard deviation formula is wrong",
               "quote": "The standard deviations $\\sigma\\left(\\mathrm{n}_{\\mathrm{E}}\\right)$ and $\\sigma\\left(\\mathrm{n}_{\\mathrm{I}}\\right)$ are given by $\\sigma\\left(\\mathrm{n}_{\\mathrm{k}}\\right)=\\mathrm{m}_{\\mathrm{k}} \\mathrm{K}$.",
               "explanation": "The distribution p_l(n) is Poisson with parameter m_k K. The standard deviation of a Poisson distribution with parameter \u03bb is \u221a\u03bb, so \u03c3(n_k) = \u221a(m_k K), not m_k K. The expression m_k K is the mean (and also the variance), not the standard deviation.",
@@ -7925,7 +7925,7 @@
               "paragraph_index": 234
             },
             {
-              "id": "rag_local_32",
+              "id": "local_32",
               "title": "Incorrect normalization of the distribution R_k(t)",
               "quote": "$\\mathrm{R}_{\\mathrm{k}}(\\mathrm{t})=\\mathrm{te}^{-\\mathrm{t} / \\tau_{\\mathrm{k}}} / \\tau_{\\mathrm{k}}^{2}$",
               "explanation": "To obtain the result in para 251, one needs the integral \u222b\u2080^\u221e R_k(\u03c4)/\u03c4 \u00b7 (indicator that t'<\u03c4) d\u03c4 to yield (1/\u03c4_k)e^{-t'/\u03c4_k}. Starting from equation (para 249), exchanging the order of integration gives m_k(t) = \u222b\u2080^\u221e dt' F_k(...) \u222b_{t'}^\u221e d\u03c4 R_k(\u03c4)/\u03c4. For R_k(\u03c4) = \u03c4 e^{-\u03c4/\u03c4_k}/\u03c4_k\u00b2, we get \u222b_{t'}^\u221e (\u03c4/\u03c4_k\u00b2) e^{-\u03c4/\u03c4_k} (1/\u03c4) d\u03c4 = \u222b_{t'}^\u221e e^{-\u03c4/\u03c4_k}/\u03c4_k\u00b2 d\u03c4 = e^{-t'/\u03c4_k}/\u03c4_k, which matches para 251. However, \u222b\u2080^\u221e R_k(\u03c4) d\u03c4 = \u222b\u2080^\u221e \u03c4 e^{-\u03c4/\u03c4_k}/\u03c4_k\u00b2 d\u03c4 = \u03c4_k\u00b2/\u03c4_k\u00b2 = 1, so the normalization is actually correct. But note that in para 251 the exponential is written as e^{-t/\u03c4_k} instead of e^{-t'/\u03c4_k}, which is an error in para 251, not in this passage per se. The passage itself defining R_k is consistent.",
@@ -7933,7 +7933,7 @@
               "paragraph_index": 256
             },
             {
-              "id": "rag_local_33",
+              "id": "local_33",
               "title": "Exponential in the resulting equation uses wrong variable",
               "quote": "$\\mathrm{R}_{\\mathrm{k}}(\\mathrm{t})=\\mathrm{te}^{-\\mathrm{t} / \\tau_{\\mathrm{k}}} / \\tau_{\\mathrm{k}}^{2}$, this can be written as",
               "explanation": "The claim that substituting this R_k leads to the equation in para 251 is correct in substance, but para 251 contains e^{-t/\u03c4_k} (with variable t, the current time) instead of e^{-t'/\u03c4_k} (with the integration variable t'). Performing the derivation: after swapping integration order, the inner integral over \u03c4 from t' to \u221e of e^{-\u03c4/\u03c4_k}/\u03c4_k\u00b2 d\u03c4 yields (1/\u03c4_k)e^{-t'/\u03c4_k}, so the exponential should depend on t', not t. The passage claims equivalence to an equation that has a typo (t instead of t' in the exponent).",
@@ -7941,7 +7941,7 @@
               "paragraph_index": 256
             },
             {
-              "id": "rag_local_34",
+              "id": "local_34",
               "title": "Wrong variable in the exponential",
               "quote": "\\mathrm{e}^{-\\mathrm{t} / \\tau_{\\mathrm{k}}}",
               "explanation": "The exponential should be e^{-t'/\u03c4_k}, not e^{-t/\u03c4_k}. The integration variable is t', and this expression results from substituting R_k(\u03c4) = \u03c4 e^{-\u03c4/\u03c4_k}/\u03c4_k^2 into the double integral of para 249 and exchanging the order of integration, which yields a convolution kernel e^{-t'/\u03c4_k} in the variable t'. As written, e^{-t/\u03c4_k} is a constant with respect to the integration over t' and would factor out, giving an incorrect result. Moreover, for this equation to be equivalent to equation A.4 (a standard first-order rate equation, as stated in para 252), the kernel must be e^{-t'/\u03c4_k}.",
@@ -7949,7 +7949,7 @@
               "paragraph_index": 257
             },
             {
-              "id": "rag_local_35",
+              "id": "local_35",
               "title": "Incorrect exponential argument in equation (para 251)",
               "quote": "and this is equivalent to equation A.4.",
               "explanation": "The equation in para 251 has the exponential written as e^{-t/\u03c4_k} instead of e^{-t'/\u03c4_k}. The integration variable is t', so the exponential decay should be in t', not t. With e^{-t/\u03c4_k} the exponential is a constant with respect to the integration and the integral would not converge. The corrected equation (with e^{-t'/\u03c4_k}) would yield, upon differentiation, a first-order ODE of the form \u03c4_k dm_k/dt = -m_k + F_k, which is presumably equation A.4. Thus the claim of equivalence to equation A.4 relies on the correct form e^{-t'/\u03c4_k}, but the displayed equation contains a typographical/mathematical error.",
@@ -8521,7 +8521,7 @@
     "ground_truth",
     "zero_shot",
     "few_shot",
-    "rag_local",
+    "local",
     "rag_retrieved",
     "rag_retrieved_cot",
     "rag_top_k_filter"

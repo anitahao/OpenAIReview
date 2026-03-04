@@ -339,6 +339,8 @@ name = "openaireview"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "lxml" },
     { name = "openai" },
     { name = "pymupdf" },
     { name = "python-docx" },
@@ -346,16 +348,10 @@ dependencies = [
     { name = "tiktoken" },
 ]
 
-[package.optional-dependencies]
-dev = [
-    { name = "beautifulsoup4" },
-    { name = "lxml" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "beautifulsoup4", marker = "extra == 'dev'", specifier = ">=4.14.3" },
-    { name = "lxml", marker = "extra == 'dev'", specifier = ">=6.0.2" },
+    { name = "beautifulsoup4", specifier = ">=4.12.0" },
+    { name = "lxml", specifier = ">=5.0.0" },
     { name = "openai", specifier = ">=2.21.0" },
     { name = "pymupdf", specifier = ">=1.24.0" },
     { name = "python-docx", specifier = ">=1.1.0" },

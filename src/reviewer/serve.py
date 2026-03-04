@@ -51,6 +51,9 @@ class ReviewHandler(SimpleHTTPRequestHandler):
             for f in sorted(self.results_dir.glob("*.json")):
                 try:
                     data = json.loads(f.read_text())
+                    # Only include files that look like paper results
+                    if "paragraphs" not in data or "methods" not in data:
+                        continue
                     papers.append({
                         "slug": data.get("slug", f.stem),
                         "title": data.get("title", f.stem),

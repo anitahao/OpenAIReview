@@ -31,19 +31,27 @@ def cmd_review(args: argparse.Namespace) -> None:
     from .method_incremental import review_incremental
     from .method_local import review_local
     from .method_zero_shot import review_zero_shot
-    from .parsers import parse_document
+    from .parsers import is_url, parse_document
     from .utils import split_into_paragraphs
 
-    file_path = Path(args.file)
-    if not file_path.exists():
-        print(f"Error: file not found: {file_path}", file=sys.stderr)
-        sys.exit(1)
+    source = args.file
+    if is_url(source):
+        print(f"Fetching and parsing URL...")
+        title, content = parse_document(source)
+        # Derive slug from URL: use the arxiv ID or last path segment
+        default_slug = source.rstrip("/").split("/")[-1]
+    else:
+        file_path = Path(source)
+        if not file_path.exists():
+            print(f"Error: file not found: {file_path}", file=sys.stderr)
+            sys.exit(1)
+        print(f"Parsing {file_path.name}...")
+        title, content = parse_document(file_path)
+        default_slug = file_path.stem
 
-    print(f"Parsing {file_path.name}...")
-    title, content = parse_document(file_path)
     print(f"  Title: {title}")
 
-    slug = args.name or slugify(Path(file_path).stem)
+    slug = args.name or slugify(default_slug)
     paragraphs = split_into_paragraphs(content)
     print(f"  {len(paragraphs)} paragraphs")
 
@@ -145,7 +153,9 @@ def main() -> None:
     review_parser = subparsers.add_parser(
         "review", help="Review an academic paper"
     )
-    review_parser.add_argument("file", help="Path to the paper file")
+    review_parser.add_argument(
+        "file", help="Path to paper file or arXiv URL (e.g. https://arxiv.org/html/2310.06825)"
+    )
     review_parser.add_argument(
         "--method",
         choices=["zero_shot", "local", "incremental", "incremental_full"],
