@@ -6,66 +6,8 @@ from datetime import date
 
 from .client import chat
 from .models import ReviewResult
+from .prompts import DEEP_CHECK_PROMPT, OVERALL_FEEDBACK_PROMPT
 from .utils import count_tokens, locate_comment_in_document, parse_comments_from_list
-
-
-DEEP_CHECK_PROMPT = """\
-You are a thoughtful reviewer checking a passage from an academic paper. \
-Today's date is {current_date}. \
-Engage deeply with the material. For each potential issue, first try to understand the authors' \
-intent and check whether your concern is resolved by context before flagging it.
-
-FULL PAPER CONTEXT (relevant sections):
-{context}
-
----
-
-PASSAGE TO CHECK:
-{passage}
-
----
-
-Check for:
-1. Mathematical / formula errors: wrong formulas, sign errors, missing factors, incorrect derivations, subscript or index errors
-2. Notation inconsistencies: symbols used in a way that contradicts their earlier definition
-3. Inconsistency between text and formal definitions: prose says one thing but the equation says another
-4. Parameter / numerical inconsistencies: stated values contradict what can be derived from definitions or tables elsewhere
-5. Insufficient justification: a key derivation step is skipped where the result is non-trivial
-6. Questionable claims: statements that overstate what has actually been shown
-7. Ambiguity that could mislead: flag only if a careful reader could reasonably reach an incorrect conclusion
-8. Underspecified methods: an algorithm, procedure, or modification is described too vaguely for a reader to reproduce — key choices, boundary conditions, or parameter settings are left implicit
-
-For each issue, write like a careful reader thinking aloud. Describe what initially confused or \
-concerned you, what you checked to resolve it, and what specifically remains problematic. \
-Acknowledge what the authors got right before noting the issue. Reference standard results \
-or conventions in the field when relevant.
-
-Be lenient with:
-- Introductory and overview sections, which intentionally simplify or gloss over details
-- Forward references — symbols or claims that may be defined or justified later in the paper
-- Informal prose that paraphrases a formal result without repeating every qualifier
-
-Do NOT flag:
-- Formatting, typesetting, or capitalization issues
-- References to equations or sections not shown in the context (they exist elsewhere)
-- Incomplete text at passage boundaries
-- Trivial observations that any reader in the field would immediately resolve
-
-Return ONLY a JSON array (can be []). Each item:
-- "title": concise title of the issue
-- "quote": the exact verbatim text (preserving LaTeX)
-- "explanation": deep reasoning — what you initially thought, whether context resolves it, and what specifically remains problematic
-- "type": "technical" or "logical"
-"""
-
-OVERALL_FEEDBACK_PROMPT = """\
-You are an expert academic reviewer. Based on the beginning of the paper below, \
-write one paragraph of high-level feedback on the paper's quality, clarity, \
-and most significant issues.
-
-PAPER (first 8000 characters):
-{paper_start}
-"""
 
 
 def split_into_paragraphs(text: str, min_chars: int = 100) -> list[str]:
