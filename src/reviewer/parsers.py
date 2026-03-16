@@ -73,9 +73,11 @@ def parse_document(
         pdf_path = path
         if max_pages:
             pdf_path = _truncate_pdf_pages(path, max_pages)
-        title, text, engine = _parse_pdf(pdf_path, ocr=ocr, figures_dir=figures_dir)
-        if pdf_path != path:
-            pdf_path.unlink(missing_ok=True)
+        try:
+            title, text, engine = _parse_pdf(pdf_path, ocr=ocr, figures_dir=figures_dir)
+        finally:
+            if pdf_path != path:
+                pdf_path.unlink(missing_ok=True)
         # Post-process OCR output: fix notation errors
         from .ocr_postprocess import fix_ocr_notation
         text, corrections = fix_ocr_notation(text)
