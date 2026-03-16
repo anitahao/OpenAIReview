@@ -53,6 +53,9 @@ def cmd_review(args: argparse.Namespace) -> None:
     source = args.file
     ocr = getattr(args, "ocr", None)
     max_pages = getattr(args, "max_pages", None)
+    if max_pages and not (not is_url(source) and Path(source).suffix.lower() == ".pdf"):
+        print("  Warning: --max-pages only applies to local PDF files, ignoring")
+        max_pages = None
     if is_url(source):
         print(f"Fetching and parsing URL...")
         title, content, was_ocr = parse_document(source, ocr=ocr, max_pages=max_pages)
