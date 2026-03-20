@@ -240,7 +240,7 @@ def review_progressive(
     skipped = 0
 
     for idx in range(len(passages)):
-        para_indices, passage_text = passages[idx]
+        _, passage_text = passages[idx]
 
         # Step 0: Optional pre-filter
         if skip_nontechnical:
@@ -294,12 +294,21 @@ def review_progressive(
                 try:
                     items = json.loads(arr_match.group(0))
                     new_comments = parse_comments_from_list(items)
-                    # Locate each comment within the passage's paragraphs
-                    passage_paras = [paragraphs[i] for i in para_indices]
+                    # Locate each comment within passage + context window paragraphs.
+                    # The model sees neighboring passages via get_window_context,
+                    # so it may quote from them.
+                    before = window_size + 2
+                    after = max(1, window_size - 1)
+                    win_start = max(0, idx - before)
+                    win_end = min(len(passages), idx + after + 1)
+                    window_para_indices = []
+                    for wi in range(win_start, win_end):
+                        window_para_indices.extend(passages[wi][0])
+                    window_paras = [paragraphs[i] for i in window_para_indices]
                     for c in new_comments:
-                        located = locate_comment_in_document(c.quote, passage_paras)
-                        if located is not None and located < len(para_indices):
-                            c.paragraph_index = para_indices[located]
+                        located = locate_comment_in_document(c.quote, window_paras)
+                        if located is not None and located < len(window_para_indices):
+                            c.paragraph_index = window_para_indices[located]
                         else:
                             c.paragraph_index = None
                     all_comments.extend(new_comments)

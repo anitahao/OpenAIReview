@@ -125,11 +125,19 @@ def review_local(
                 try:
                     items = json.loads(arr_match.group(0))
                     new_comments = parse_comments_from_list(items)
-                    chunk_paras = [paragraphs[i] for i in para_indices]
+                    # Match against chunk + context window paragraphs.
+                    before = window_size + 2
+                    after = max(1, window_size - 1)
+                    win_start = max(0, chunk_idx - before)
+                    win_end = min(len(chunks), chunk_idx + after + 1)
+                    window_para_indices = []
+                    for wi in range(win_start, win_end):
+                        window_para_indices.extend(chunks[wi][0])
+                    window_paras = [paragraphs[i] for i in window_para_indices]
                     for c in new_comments:
-                        located = locate_comment_in_document(c.quote, chunk_paras)
-                        if located is not None and located < len(para_indices):
-                            c.paragraph_index = para_indices[located]
+                        located = locate_comment_in_document(c.quote, window_paras)
+                        if located is not None and located < len(window_para_indices):
+                            c.paragraph_index = window_para_indices[located]
                         else:
                             c.paragraph_index = None
                     all_comments.extend(new_comments)
