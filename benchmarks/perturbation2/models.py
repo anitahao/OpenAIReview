@@ -9,7 +9,6 @@ class SpanType(str, Enum):
     EQUATION_DISPLAY = "equation_display"   # $$...$$ or \[...\]
     EQUATION_INLINE = "equation_inline"     # $...$ or \(...\)
     EQUATION_NAMED = "equation_named"       # align, equation, gather, multline, cases
-    NUMERIC = "numeric"                     # "0.67 hours", "p < 0.05", "N = 631,389"
 
 
 class ErrorCategory(str, Enum):
@@ -41,7 +40,6 @@ class Perturbation:
     original: str                      # exact text to find (from span store)
     perturbed: str                     # replacement text
     why_wrong: str                     # explanation of why this breaks internal consistency
-    support_span_ids: list[str] = field(default_factory=list)  # other spans that prove it's wrong
 
 
 @dataclass
@@ -51,8 +49,5 @@ class PerturbationResult:
     n_detected: int
     recall: float
     n_total_comments: int
-    n_false_positives: int
-    false_positive_rate: float
-    detected: list[str]                # perturbation_ids
-    missed: list[str]                  # perturbation_ids
-    by_category: dict[str, dict]       # category -> {injected, detected, recall}
+    detected: list[str]                # perturbation_ids where step 1 + step 2 passed
+    missed: list[str]                  # perturbation_ids where detection failed

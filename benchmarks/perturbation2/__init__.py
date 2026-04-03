@@ -4,7 +4,7 @@ Pipeline: extract candidates → generate perturbations → validate → inject 
 """
 
 from .extract import extract_candidates
-from .generate import generate_from_candidates
+from .generate import generate_stage1
 from .inject import inject_perturbations
 from .models import (
     CandidateSpan,
@@ -14,12 +14,12 @@ from .models import (
     SpanType,
 )
 from .score import score_review
-from .validate import validate_perturbations
+from .validate import validate_perturbations_stage1
 
 __all__ = [
     "extract_candidates",
-    "generate_from_candidates",
-    "validate_perturbations",
+    "generate_stage1",
+    "validate_perturbations_stage1",
     "inject_perturbations",
     "score_review",
     "CandidateSpan",

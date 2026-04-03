@@ -205,9 +205,9 @@ def cmd_perturb(args: argparse.Namespace) -> None:
         sys.path.insert(0, str(_BENCHMARKS_DIR))
     from perturbation2 import (
         extract_candidates,
-        generate_from_candidates,
+        generate_stage1,
         inject_perturbations,
-        validate_perturbations,
+        validate_perturbations_stage1,
     )
 
     source = args.file
@@ -239,9 +239,9 @@ def cmd_perturb(args: argparse.Namespace) -> None:
 
     reasoning = getattr(args, "reasoning_effort", None)
 
-    # Stage 1: LLM picks from candidates
-    print("\nStage 1: Generating perturbations from candidates...")
-    perturbations = generate_from_candidates(
+    # Stage 1: Generate perturbations
+    print(f"\nGenerating perturbations (method: {args.generate})...")
+    perturbations = generate_stage1(
         candidates,
         model=args.model,
         n_per_category=args.n_per_category,
@@ -250,7 +250,7 @@ def cmd_perturb(args: argparse.Namespace) -> None:
 
     # Validate
     print(f"\nValidating {len(perturbations)} perturbations...")
-    valid, rejected = validate_perturbations(perturbations, content, candidates)
+    valid, rejected = validate_perturbations_stage1(perturbations, content)
     print(f"  Valid: {len(valid)}, Rejected: {len(rejected)}")
     for p, reason in rejected:
         print(f"    REJECTED {p.perturbation_id}: {reason[:80]}")
@@ -280,7 +280,6 @@ def cmd_perturb(args: argparse.Namespace) -> None:
                 "original": p.original,
                 "perturbed": p.perturbed,
                 "why_wrong": p.why_wrong,
-                "support_span_ids": p.support_span_ids,
             }
             for p in applied
         ],
@@ -334,7 +333,6 @@ def cmd_score(args: argparse.Namespace) -> None:
             original=p["original"],
             perturbed=p["perturbed"],
             why_wrong=p["why_wrong"],
-            support_span_ids=p.get("support_span_ids", []),
         ))
 
     # Extract comments from review JSON (handles viz format)
@@ -349,11 +347,7 @@ def cmd_score(args: argparse.Namespace) -> None:
 
     print(f"Scoring {len(comments)} comments against {len(perturbations)} perturbations...")
 
-    # Load clean paper for fuzzy matching if available
-    clean_path = manifest_path.parent / manifest_path.name.replace("_perturbations.json", "_clean.md")
-    paper_text = clean_path.read_text() if clean_path.exists() else ""
-
-    result = score_review(perturbations, comments, paper_text)
+    result = score_review(perturbations, comments, model=args.model)
 
     print(f"\n{'='*50}")
     print(f"PERTURBATION BENCHMARK RESULTS")
@@ -363,14 +357,6 @@ def cmd_score(args: argparse.Namespace) -> None:
     print(f"Perturbations detected: {result.n_detected}")
     print(f"Recall: {result.recall:.1%}")
     print(f"Total comments: {result.n_total_comments}")
-    print(f"False positives: {result.n_false_positives}")
-    print(f"False positive rate: {result.false_positive_rate:.1%}")
-
-    if result.by_category:
-        print(f"\nBy category:")
-        for cat, stats in result.by_category.items():
-            print(f"  {cat}: {stats['detected']}/{stats['injected']} "
-                  f"(recall={stats['recall']:.0%})")
 
     if result.missed:
         print(f"\nMissed perturbations:")
@@ -380,19 +366,17 @@ def cmd_score(args: argparse.Namespace) -> None:
             print(f"  [{p.category.value}] {pid}: {p.original[:60]}... -> {p.perturbed[:60]}...")
 
     # Save results
-    output_path = manifest_path.parent / manifest_path.name.replace(
-        "_perturbations.json", "_score.json"
-    )
+    score_filename = manifest_path.name.replace("_perturbations.json", "_score.json")
+    output_dir = Path(args.output_dir) if args.output_dir else manifest_path.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / score_filename
     score_data = {
         "n_injected": result.n_injected,
         "n_detected": result.n_detected,
         "recall": result.recall,
         "n_total_comments": result.n_total_comments,
-        "n_false_positives": result.n_false_positives,
-        "false_positive_rate": result.false_positive_rate,
         "detected": result.detected,
         "missed": result.missed,
-        "by_category": result.by_category,
     }
     output_path.write_text(json.dumps(score_data, indent=2))
     print(f"\nResults saved to: {output_path}")
@@ -577,6 +561,10 @@ def main() -> None:
         help="Directory for output files (default: ./perturbation_results)",
     )
     perturb_parser.add_argument(
+        "--generate", choices=["llm", "rules"], default="llm",
+        help="Perturbation generation method (default: llm)",
+    )
+    perturb_parser.add_argument(
         "--reasoning-effort",
         choices=["none", "low", "medium", "high"],
         default=None,
@@ -591,6 +579,14 @@ def main() -> None:
     )
     score_parser.add_argument(
         "review", help="Path to review results JSON"
+    )
+    score_parser.add_argument(
+        "--model", default="anthropic/claude-haiku-4-5-20251001",
+        help="Model to use for explanation matching (default: claude-haiku)",
+    )
+    score_parser.add_argument(
+        "--output-dir", default=None,
+        help="Directory to save score JSON (default: same directory as manifest)",
     )
     # install-skill subcommand
     install_parser = subparsers.add_parser(

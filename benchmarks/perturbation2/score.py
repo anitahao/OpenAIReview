@@ -1,100 +1,55 @@
-"""Score a reviewer's comments against injected perturbations.
+from .models import Perturbation, PerturbationResult
+from reviewer.client import chat
 
-Detection matching: a reviewer comment "detects" a perturbation if:
-1. It quotes or references text near the perturbed span (fuzzy match), OR
-2. Its explanation describes the same error the perturbation introduces.
 
-We use both quote-overlap and semantic similarity (via the LLM) for robust matching.
+def score_review(perturbations: list[Perturbation], review_comments: list[dict], model: str) -> PerturbationResult:
+    n_injected = len(perturbations)
+    n_total_comments = len(review_comments)
+
+    n_detected = 0
+    detected = []
+
+    for p in perturbations:
+        for comment in review_comments:
+            if _substring_match(comment.get('quote', ''), p.perturbed) and _explanation_match(comment.get('explanation', ''), p.why_wrong, model):
+                n_detected += 1
+                detected.append(p.perturbation_id)
+                break 
+
+    missed = []
+    for p in perturbations:
+        if p.perturbation_id not in detected:
+            missed.append(p.perturbation_id)
+
+    recall = n_detected / n_injected if n_injected > 0 else 0.0
+
+    return PerturbationResult(n_injected=n_injected, n_detected=n_detected, recall=recall, n_total_comments=n_total_comments, detected=detected, missed=missed)
+
+
+def _substring_match(quote, perturbed) -> bool:
+    return perturbed.lower() in quote.lower()
+
+
+PROMPT = """
+Given a reference description of an injected error and a reviewer's explanation, rate how well the reviewer identified the error.
+
+Reply with only a single integer (1-5):
+1 = reviewer does not mention the perturbed element at all
+2 = reviewer mentions the region but identifies a completely different problem
+3 = reviewer identifies the correct element (symbol/value/operator) as suspicious or wrong
+4 = reviewer identifies the correct element and states what it should be
+5 = reviewer fully explains the error and its impact on the paper
+
+Reference description: {why_wrong}
+Reviewer explanation: {explanation}
 """
 
-from difflib import SequenceMatcher
-
-from .models import ErrorCategory, Perturbation, PerturbationResult
-
-
-def score_review(
-    perturbations: list[Perturbation],
-    review_comments: list[dict],
-    paper_text: str,
-) -> PerturbationResult:
-    """Score reviewer comments against injected perturbations via fuzzy matching."""
-    matches = _fuzzy_match(perturbations, review_comments, paper_text)
-
-    detected_ids = set(matches.values())
-    missed_ids = [p.perturbation_id for p in perturbations if p.perturbation_id not in detected_ids]
-
-    # Count false positives: comments that didn't match any perturbation
-    matched_comment_indices = set(matches.keys())
-    n_false_positives = len(review_comments) - len(matched_comment_indices)
-
-    # Per-category breakdown
-    by_category: dict[str, dict] = {}
-    for cat in ErrorCategory:
-        cat_perturbations = [p for p in perturbations if p.category == cat]
-        if not cat_perturbations:
-            continue
-        cat_detected = [p for p in cat_perturbations if p.perturbation_id in detected_ids]
-        by_category[cat.value] = {
-            "injected": len(cat_perturbations),
-            "detected": len(cat_detected),
-            "recall": len(cat_detected) / len(cat_perturbations) if cat_perturbations else 0,
-        }
-
-    n_detected = len(detected_ids)
-    return PerturbationResult(
-        n_injected=len(perturbations),
-        n_detected=n_detected,
-        recall=n_detected / len(perturbations) if perturbations else 0,
-        n_total_comments=len(review_comments),
-        n_false_positives=n_false_positives,
-        false_positive_rate=n_false_positives / len(review_comments) if review_comments else 0,
-        detected=list(detected_ids),
-        missed=missed_ids,
-        by_category=by_category,
+def _explanation_match(explanation, why_wrong, model) -> bool:
+    prompt = PROMPT.format(explanation=explanation, why_wrong=why_wrong)
+    response, usage = chat(
+        messages=[{"role": "user", "content": prompt}],
+        model=model,
+        max_tokens=8192,
     )
 
-
-def _fuzzy_match(
-    perturbations: list[Perturbation],
-    comments: list[dict],
-    paper_text: str,
-    threshold: float = 0.5,
-) -> dict[int, str]:
-    """Match comments to perturbations via quote overlap.
-
-    Returns {comment_index: perturbation_id} for matched pairs.
-    """
-    matches: dict[int, str] = {}
-
-    for i, comment in enumerate(comments):
-        quote = comment.get("quote", "")
-        explanation = comment.get("explanation", "")
-        comment_text = f"{quote} {explanation}"
-
-        best_score = 0.0
-        best_pid = None
-
-        for p in perturbations:
-            # Check overlap with the original text region
-            score = SequenceMatcher(None, comment_text.lower(), p.original.lower()).ratio()
-
-            # Also check if the comment mentions the perturbed value
-            if p.perturbed.lower() in comment_text.lower():
-                score = max(score, 0.6)
-
-            # Check if the why_wrong reasoning overlaps with the comment
-            why_score = SequenceMatcher(
-                None, explanation.lower(), p.why_wrong.lower()
-            ).ratio()
-            score = max(score, why_score)
-
-            if score > best_score:
-                best_score = score
-                best_pid = p.perturbation_id
-
-        if best_score >= threshold and best_pid is not None:
-            matches[i] = best_pid
-
-    return matches
-
-
+    return int(response) >= 3

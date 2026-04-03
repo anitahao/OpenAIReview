@@ -1,7 +1,6 @@
 """Deterministic span extraction from academic papers.
 
-Identifies candidate spans for perturbation: equations, numeric values,
-definitions, assumptions, claims, cross-references, and conditions.
+Identifies candidate spans for perturbation: display, inline, and named equations.
 Each span is tagged with its type and compatible error categories.
 """
 
@@ -24,9 +23,9 @@ def extract_candidates(text: str) -> list[CandidateSpan]:
             continue
 
         # Extract spans of each type
-        for extractor in _EXTRACTORS:
+        for extractor in _EXTRACTORS: # CAN return overlapping spans (diff categories) -> check in validate_perturbations_stage1
             for span_type, match_text, match_offset in extractor(para_text):
-                context = _get_context(para_text, match_offset, window=200)
+                context = _get_context(para_text, match_offset, match_len=len(match_text), window=200)
                 categories = _compatible_categories(span_type)
 
                 candidates.append(CandidateSpan(
@@ -41,20 +40,6 @@ def extract_candidates(text: str) -> list[CandidateSpan]:
                 span_counter += 1
 
     return candidates
-
-
-def add_line_numbers(text: str) -> str:
-    """Add [L001] prefixes to each paragraph for LLM free-form proposals."""
-    paragraphs = text.split("\n\n")
-    numbered = []
-    for i, para in enumerate(paragraphs):
-        numbered.append(f"[L{i+1:03d}] {para}")
-    return "\n\n".join(numbered)
-
-
-def strip_line_numbers(text: str) -> str:
-    """Remove [L001] prefixes."""
-    return re.sub(r"\[L\d{3}\] ", "", text)
 
 
 # ---------------------------------------------------------------------------
@@ -96,7 +81,7 @@ def _extract_inline_equations(para: str):
         r"(?<!\$)\$(?!\$)(.+?)\$(?!\$)",
         r"\\\((.+?)\\\)",
     ]:
-        for m in re.finditer(pattern, para):
+        for m in re.finditer(pattern, para, re.DOTALL):
             inner = m.group(1)
             # Skip dollar amounts and trivially short content
             if re.match(r"^[\d,.\s]+$", inner):
@@ -121,30 +106,10 @@ def _extract_named_equations(para: str):
             yield SpanType.EQUATION_NAMED, m.group(0), m.start()
 
 
-def _extract_numeric_values(para: str):
-    """Find numeric claims: values with context.
-
-    Matches patterns like "= 0.67", "N = 631,389", "p < 0.05", "2.4%",
-    but captures the surrounding clause for context.
-    """
-    # Numeric with comparison operator
-    for m in re.finditer(
-        r"(?:\b\w+\s*)?[=<>≤≥≈]\s*-?[\d,]+\.?\d*%?\b", para
-    ):
-        text = m.group(0).strip()
-        if len(text) > 3:  # skip trivially short matches
-            yield SpanType.NUMERIC, text, m.start()
-
-    # Standalone percentages and large numbers in context
-    for m in re.finditer(r"\b\d+[\d,]*\.?\d*\s*%", para):
-        yield SpanType.NUMERIC, m.group(0), m.start()
-
-
 _EXTRACTORS = [
     _extract_display_equations,
     _extract_inline_equations,
     _extract_named_equations,
-    _extract_numeric_values,
 ]
 
 
@@ -152,10 +117,13 @@ _EXTRACTORS = [
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _get_context(para: str, offset: int, window: int = 200) -> str:
-    """Get surrounding context for a match within a paragraph."""
+def _get_context(para: str, offset: int, match_len: int = 0, window: int = 200) -> str:
+    """Get surrounding context for a match within a paragraph.
+
+    Ensures the full matched text plus `window` chars on each side are included.
+    """
     start = max(0, offset - window)
-    end = min(len(para), offset + window)
+    end = min(len(para), offset + match_len + window)
     return para[start:end]
 
 
@@ -166,6 +134,7 @@ def _compatible_categories(span_type: SpanType) -> list[ErrorCategory]:
             ErrorCategory.OPERATOR_OR_SIGN,
             ErrorCategory.SYMBOL_BINDING,
             ErrorCategory.INDEX_OR_SUBSCRIPT,
+            ErrorCategory.NUMERIC_PARAMETER,
         ],
         SpanType.EQUATION_INLINE: [
             ErrorCategory.OPERATOR_OR_SIGN,
@@ -177,9 +146,6 @@ def _compatible_categories(span_type: SpanType) -> list[ErrorCategory]:
             ErrorCategory.OPERATOR_OR_SIGN,
             ErrorCategory.SYMBOL_BINDING,
             ErrorCategory.INDEX_OR_SUBSCRIPT,
-            ErrorCategory.NUMERIC_PARAMETER,
-        ],
-        SpanType.NUMERIC: [
             ErrorCategory.NUMERIC_PARAMETER,
         ]
     }
