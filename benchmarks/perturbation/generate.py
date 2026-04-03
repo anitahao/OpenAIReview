@@ -8,7 +8,7 @@ import json
 import re
 from difflib import SequenceMatcher
 
-from ..client import chat
+from reviewer.client import chat
 from .models import (
     CandidateSpan,
     Difficulty,
