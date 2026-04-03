@@ -15,6 +15,7 @@ except ImportError:
 
 
 DEFAULT_MODEL = os.environ.get("MODEL", "anthropic/claude-opus-4-6")
+_BENCHMARKS_DIR = Path(__file__).parent.parent.parent / "benchmarks"
 OCR_DISCLAIMER = "This document was extracted by OCR engine and could contain mistakes."
 
 def slugify(name: str) -> str:
@@ -200,7 +201,9 @@ def _build_paper_json(
 def cmd_perturb(args: argparse.Namespace) -> None:
     """Generate seeded perturbations for a paper."""
     from .parsers import is_url, parse_document
-    from .perturbation2 import (
+    if str(_BENCHMARKS_DIR) not in sys.path:
+        sys.path.insert(0, str(_BENCHMARKS_DIR))
+    from perturbation2 import (
         extract_candidates,
         generate_from_candidates,
         inject_perturbations,
@@ -303,8 +306,10 @@ def cmd_perturb(args: argparse.Namespace) -> None:
 
 def cmd_score(args: argparse.Namespace) -> None:
     """Score a review against injected perturbations."""
-    from .perturbation2.models import ErrorCategory, Perturbation
-    from .perturbation2.score import score_review
+    if str(_BENCHMARKS_DIR) not in sys.path:
+        sys.path.insert(0, str(_BENCHMARKS_DIR))
+    from perturbation2.models import ErrorCategory, Perturbation
+    from perturbation2.score import score_review
 
     manifest_path = Path(args.manifest)
     review_path = Path(args.review)

@@ -7,7 +7,7 @@ Stage 2: LLM proposes free-form errors the extraction missed (validated by fuzzy
 import json
 import re
 
-from ..client import chat
+from reviewer.client import chat
 from .models import (
     CandidateSpan,
     ErrorCategory,
