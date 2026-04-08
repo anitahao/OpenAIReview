@@ -13,8 +13,8 @@ Results layout:
         <method>/
           paper_001/
             review/
-            <score-method>/
-              score/
+            score/
+              <score-method>/
           paper_002/
             ...
 """
@@ -185,7 +185,7 @@ def score(papers: list[dict]) -> None:
             for review_method in REVIEW_METHODS:
                 review_dir = RESULTS_DIR / model_slug(model) / ERROR_TYPE / review_method / paper_label / "review"
 
-                score_dir = RESULTS_DIR / model_slug(model) / ERROR_TYPE / review_method / paper_label / SCORE_METHOD / "score"
+                score_dir = RESULTS_DIR / model_slug(model) / ERROR_TYPE / review_method / paper_label / "score" / SCORE_METHOD
                 score_dir.mkdir(parents=True, exist_ok=True)
 
                 review_json = max(review_dir.glob("*.json"), key=lambda p: p.stat().st_mtime, default=None)
