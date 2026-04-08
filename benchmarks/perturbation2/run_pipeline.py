@@ -23,6 +23,7 @@ import re
 import json
 import subprocess
 from pathlib import Path
+import argparse
 
 from datasets import load_dataset
 
@@ -30,22 +31,24 @@ from datasets import load_dataset
 # Config — edit these as needed
 # ---------------------------------------------------------------------------
 
+"""I'll make these cmdline arguments in a bit (easy fix)"""
 MAX_PAPERS = 2
 
 ERROR_TYPE = "all"  # "surface" or "formal"
-SCORE_METHOD = "llm" # llm, fuzzy, semantic
+SCORE_METHOD = "semantic" # llm, fuzzy, semantic
 
-PERTURB_MODEL = "anthropic/claude-opus-4-6"  # only used when GENERATE_METHOD = "llm"
+PERTURB_MODEL = "google/gemini-2.0-flash-001"  # only used when GENERATE_METHOD = "llm"
 
 REVIEW_MODELS = [
     # "google/gemini-3.1-pro-preview",
-    "anthropic/claude-opus-4-6",
+    # "anthropic/claude-opus-4-6",
     # "anthropic/claude-sonnet-4-6",
     # "openai/gpt-4o",
     # "google/gemini-2.5-pro",
+    "google/gemini-2.0-flash-001"
 ]
 
-SCORE_MODEL = "anthropic/claude-opus-4-6" # only used when VALIDATE_METHOD = "llm"
+SCORE_MODEL = "google/gemini-2.0-flash-001" # only used when VALIDATE_METHOD = "llm"
 
 REVIEW_METHODS = [
     "zero_shot",

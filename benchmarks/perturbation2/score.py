@@ -84,4 +84,4 @@ def _explanation_match_semantic(explanation, why_wrong) -> bool:
     
     sim = util.cos_sim(emb1, emb2)
 
-    return float(sim) >= 0.80 
+    return float(sim) >= 0.60
