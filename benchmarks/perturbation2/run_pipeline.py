@@ -34,8 +34,8 @@ from datasets import load_dataset
 """I'll make these cmdline arguments in a bit (easy fix)"""
 MAX_PAPERS = 2
 
-ERROR_TYPE = "all"  # "surface" or "formal"
-SCORE_METHOD = "semantic" # llm, fuzzy, semantic
+ERROR_TYPE = "surface"  # "surface" or "formal"
+SCORE_METHOD = "llm" # llm, fuzzy, semantic
 
 PERTURB_MODEL = "google/gemini-2.0-flash-001"  # only used when GENERATE_METHOD = "llm"
 

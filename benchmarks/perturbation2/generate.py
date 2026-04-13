@@ -42,27 +42,33 @@ but not so obvious they are immediately apparent."""
 SURFACE_PROMPT = r"""
 You are creating seeded errors in academic math papers to benchmark LLM reviewers.
 
-Generate {n_per_error} perturbations for each of the following (if possible):
+Your task:
+Select a subset of candidates and generate EXACTLY {n_per_error} perturbations for EACH of the following errors:
 - operator_or_sign: flip an operator or sign (e.g. + becomes -, \leq becomes \geq, \cup becomes \cap)
 - symbol_binding: replace a symbol with a similar but wrong one (e.g. \alpha becomes \beta, \mu becomes \sigma)
 - index_or_subscript: change a subscript or superscript (e.g. x_i becomes x_{{i+1}}, A^n becomes A^{{n-1}})
 - numeric_parameter: change a numeric value (e.g. 0.5 becomes 0.25, n=100 becomes n=200)
 
-RULES:
-- Make exactly one change per perturbation (minimal edit)
+You should end up with exactly {n_total} perturbations total.
+
+Do NOT generate more than ONE perturbation for each candidate. 
+
+OUTPUT FORMAT:
+For each perturbation, return:
+- span_id: the candidate's span_id (copy exactly)
+- error: one of {errors}
+- perturbed: modified LaTeX text (must differ from original)
+- why_wrong: a short explanation of how the error can be detected using ONLY the paper
+
+Return ONLY a JSON array of perturbation objects. No commentary.
+
+STRICT REQUIREMENTS:
+- Do NOT generate more than ONE perturbation for each candidate
 - The perturbed text must be valid LaTeX
-- The error must be detectable from the paper text alone (no external knowledge needed)
+- The error must be verifiable from the paper text alone (no external knowledge)
 
 CANDIDATES:
 {candidates_json}
-
-For each perturbation, return:
-- span_id: which candidate to perturb
-- error: one of {errors}
-- perturbed: the replacement text (must differ from original)
-- why_wrong: how a reader can verify this is wrong using only the paper
-
-Return ONLY a JSON array of perturbation objects. No commentary.
 """
 
 FORMAL_PROMPT = r"""
@@ -129,6 +135,7 @@ def generate_perturbations_by_type(error_type: str,
 
     formatted_prompt = prompt.format(
         n_per_error=n_per_error,
+        n_total=n_per_error * len(errors),
         candidates_json=candidates_json,
         errors=", ".join(c.value for c in errors),
     )
