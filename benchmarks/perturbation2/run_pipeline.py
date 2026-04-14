@@ -1,57 +1,77 @@
 #!/usr/bin/env python3
 """Run perturb → review → score on proof-pile arxiv papers.
 
+Config is loaded from a YAML file (see configs/default.yaml). To run a
+variant, copy default.yaml, edit, and point at the new file — committed
+configs serve as the experiment log.
+
+Usage:
+  python run_pipeline.py configs/default.yaml
+
 Results layout:
-  results/
+  <results-dir>/
+    config.yaml                       # resolved config used for the run
     perturb/
-      paper_001/
-      paper_002/
-      ...
-    <review-model>/
-      <method>/
+      <error-type>/
         paper_001/
-          review/
-          score/
         paper_002/
-          ...
+        ...
+    <review-model>/
+      <error-type>/
+        <method>/
+          paper_001/
+            review/
+            score/
+              <score-method>/
+          paper_002/
+            ...
 """
 
 import re
 import json
-import os
+import argparse
 import subprocess
-import tempfile
+from dataclasses import MISSING, dataclass, field, asdict, fields
 from pathlib import Path
 
+import yaml
 from datasets import load_dataset
 
+
 # ---------------------------------------------------------------------------
-# Config — edit these as needed
+# Config
 # ---------------------------------------------------------------------------
 
-MAX_PAPERS = 2
+@dataclass
+class Config:
+    max_papers: int = 2
+    length: str = field(default="short", metadata={"choices": ["short", "medium", "long"]})
+    error_type: str = field(default="all", metadata={"choices": ["surface", "formal", "all"]})
+    score_method: str = field(default="llm", metadata={"choices": ["llm", "fuzzy", "semantic"]})
+    perturb_model: str = "google/gemini-3-flash-preview"
+    score_model: str = "google/gemini-3-flash-preview"
+    review_models: list[str] = field(default_factory=lambda: ["google/gemini-3-flash-preview"])
+    review_methods: list[str] = field(default_factory=lambda: ["zero_shot", "local", "progressive"])
+    results_dir: str = "results"
 
-GENERATE_METHOD = "llm"  # "rules" or "llm"
 
-PERTURB_MODEL = "google/gemini-3.1-pro-preview"  # only used when GENERATE_METHOD = "llm"
+def load_config(path: Path) -> Config:
+    with path.open() as f:
+        data = yaml.safe_load(f) or {}
+    valid_keys = {f.name for f in fields(Config)}
+    unknown = set(data) - valid_keys
+    if unknown:
+        raise ValueError(f"Unknown config keys in {path}: {sorted(unknown)}")
+    for f in fields(Config):
+        choices = f.metadata.get("choices")
+        if choices is None or f.name not in data:
+            continue
+        if data[f.name] not in choices:
+            raise ValueError(
+                f"{path}: {f.name}={data[f.name]!r} not in choices {choices}"
+            )
+    return Config(**data)
 
-REVIEW_MODELS = [
-    "google/gemini-3.1-pro-preview",
-    # "anthropic/claude-opus-4-6",
-    # "anthropic/claude-sonnet-4-6",
-    # "openai/gpt-4o",
-    # "google/gemini-2.5-pro",
-]
-
-SCORE_MODEL = "google/gemini-3.1-pro-preview" 
-
-REVIEW_METHODS = [
-    "zero_shot",
-    "local",
-    "progressive",
-]
-
-RESULTS_DIR = Path("results")
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -73,116 +93,221 @@ def run(cmd: list[str]) -> int:
     return subprocess.run(cmd).returncode
 
 
+def load_papers(cfg: Config) -> list[dict]:
+    print("Loading proof-pile dataset (streaming)...")
+    ds = load_dataset(
+        "hoskinson-center/proof-pile",
+        split="train",
+        streaming=True,
+        trust_remote_code=True,
+    )
+
+    papers_short: list[dict] = []
+    papers_medium: list[dict] = []
+    papers_long: list[dict] = []
+
+    if cfg.length == "short":
+        target = papers_short
+    elif cfg.length == "medium":
+        target = papers_medium
+    else:
+        target = papers_long
+
+    inspected = 0
+    for paper in ds:
+        meta = json.loads(paper["meta"]) if isinstance(paper["meta"], str) else paper["meta"]
+        if meta.get("config", "") != "arxiv":
+            continue
+        inspected += 1
+        n = paper_length(paper)
+        if 2000 < n <= 7000:
+            papers_short.append(paper)
+        elif 7000 < n <= 17000:
+            papers_medium.append(paper)
+        else:
+            papers_long.append(paper)
+        if len(target) >= cfg.max_papers:
+            break
+
+    print(
+        f"Inspected {inspected} arxiv papers "
+        f"(short={len(papers_short)}, medium={len(papers_medium)}, long={len(papers_long)})"
+    )
+    print(f"Collected {len(target)} arxiv papers for length={cfg.length}\n")
+    return target
+
+
+# ---------------------------------------------------------------------------
+# Pipeline stages
+# ---------------------------------------------------------------------------
+
+def perturb(papers: list[dict], cfg: Config) -> None:
+    """Generate seeded perturbations for each paper."""
+    results_dir = Path(cfg.results_dir)
+    results_dir.mkdir(exist_ok=True)
+
+    for i, paper in enumerate(papers, start=1):
+        paper_label = f"paper_{i:03d}"
+        perturb_dir = results_dir / "perturb" / cfg.error_type / paper_label
+        perturb_dir.mkdir(parents=True, exist_ok=True)
+
+        print(f"{'='*60}")
+        print(f"Paper {i:03d}/{len(papers)}  ({paper_length(paper):,} words)")
+        print(f"{'='*60}")
+
+        tmp_path = perturb_dir / f"paper_{i:03d}.md"
+        tmp_path.write_text(paper["text"])
+
+        print(f"\n  [1] Perturb  (model: {model_slug(cfg.perturb_model)})")
+        rc = run(["openaireview", "perturb", str(tmp_path),
+                  "--error_type", cfg.error_type,
+                  "--output-dir", str(perturb_dir),
+                  "--model", cfg.perturb_model])
+        if rc != 0:
+            print(f"  perturb failed (exit {rc}), skipping paper")
+
+
+def review(papers: list[dict], cfg: Config) -> None:
+    """Review each corrupted paper with every (model, method) combination."""
+    results_dir = Path(cfg.results_dir)
+
+    for i, paper in enumerate(papers, start=1):
+        paper_label = f"paper_{i:03d}"
+        perturb_dir = results_dir / "perturb" / cfg.error_type / paper_label
+
+        corrupted = max(perturb_dir.glob("*_corrupted.md"),
+                        key=lambda p: p.stat().st_mtime, default=None)
+        if not corrupted:
+            print(f"  No corrupted paper found for {cfg.error_type}/{paper_label}, skipping")
+            continue
+
+        print(f"{'='*60}")
+        print(f"Paper {i:03d}/{len(papers)}  ({paper_length(paper):,} words)")
+        print(f"{'='*60}")
+
+        for model in cfg.review_models:
+            for method in cfg.review_methods:
+                review_dir = results_dir / model_slug(model) / cfg.error_type / method / paper_label / "review"
+                review_dir.mkdir(parents=True, exist_ok=True)
+
+                print(f"\n  [2] Review  ({model_slug(model)} / {cfg.error_type} / {method})")
+                rc = run(["openaireview", "review", str(corrupted),
+                          "--method", method,
+                          "--output-dir", str(review_dir),
+                          "--model", model])
+                if rc != 0:
+                    print(f"  review failed (exit {rc}), skipping")
+
+
+def score(papers: list[dict], cfg: Config) -> None:
+    """Score each review against its perturbation manifest."""
+    results_dir = Path(cfg.results_dir)
+
+    for i, paper in enumerate(papers, start=1):
+        paper_label = f"paper_{i:03d}"
+        perturb_dir = results_dir / "perturb" / cfg.error_type / paper_label
+
+        manifest = max(perturb_dir.glob("*_perturbations.json"),
+                       key=lambda p: p.stat().st_mtime, default=None)
+        if not manifest:
+            print(f"  No manifest found for {cfg.error_type}/{paper_label}, skipping")
+            continue
+
+        print(f"{'='*60}")
+        print(f"Paper {i:03d}/{len(papers)}  ({paper_length(paper):,} words)")
+        print(f"{'='*60}")
+
+        for model in cfg.review_models:
+            for review_method in cfg.review_methods:
+                review_dir = results_dir / model_slug(model) / cfg.error_type / review_method / paper_label / "review"
+                score_dir = results_dir / model_slug(model) / cfg.error_type / review_method / paper_label / "score" / cfg.score_method
+                score_dir.mkdir(parents=True, exist_ok=True)
+
+                review_json = max(review_dir.glob("*.json"),
+                                  key=lambda p: p.stat().st_mtime, default=None)
+                if not review_json:
+                    print(f"  No review found for {model_slug(model)}/{cfg.error_type}/{review_method}/{paper_label}, skipping")
+                    continue
+
+                print(f"\n  [3] Score   ({model_slug(model)} / {cfg.error_type} / {review_method} / {cfg.score_method})")
+                rc = run(["openaireview", "score", str(manifest), str(review_json),
+                          "--model", cfg.score_model,
+                          "--method", cfg.score_method,
+                          "--output-dir", str(score_dir)])
+                if rc != 0:
+                    print(f"  score failed (exit {rc}), skipping")
+
+        print(f"\n  Done: {paper_label}")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
+def _schema_help() -> str:
+    """Render the Config dataclass as a YAML schema for --help."""
+    lines = ["config schema (set these in the YAML file):", ""]
+    for f in fields(Config):
+        if f.default is not MISSING:
+            default = f.default
+        elif f.default_factory is not MISSING:  # type: ignore[misc]
+            default = f.default_factory()
+        else:
+            default = "<required>"
+        type_name = getattr(f.type, "__name__", str(f.type))
+        line = f"  {f.name}: {type_name} = {default!r}"
+        choices = f.metadata.get("choices")
+        if choices:
+            line += f"  (choices: {' | '.join(choices)})"
+        lines.append(line)
+    lines.append("")
+    lines.append("see configs/default.yaml for an annotated example.")
+    return "\n".join(lines)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run perturb → review → score pipeline",
+        epilog=_schema_help(),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("config", type=Path, help="Path to YAML config file")
+    parser.add_argument(
+        "--stages",
+        type=str,
+        default="perturb,review,score",
+        help="Comma-separated subset of stages to run: perturb,review,score (default: all)",
+    )
+    args = parser.parse_args()
+    valid = {"perturb", "review", "score"}
+    args.stages = [s.strip() for s in args.stages.split(",") if s.strip()]
+    invalid = set(args.stages) - valid
+    if invalid:
+        parser.error(f"--stages: unknown stage(s) {sorted(invalid)}; valid: {sorted(valid)}")
+    return args
+
+
 def main() -> None:
-    print("Loading proof-pile dataset (streaming)...")
-    ds = load_dataset("hoskinson-center/proof-pile", split="train", streaming=True)
+    args = parse_args()
+    cfg = load_config(args.config)
 
-    papers_short = [] # 2k-7k
-    papers_medium = [] # 7k-17k
-    papers_long = [] # > 17k
+    results_dir = Path(cfg.results_dir)
+    results_dir.mkdir(exist_ok=True)
+    resolved = asdict(cfg)
+    with (results_dir / "config.yaml").open("w") as f:
+        yaml.safe_dump(resolved, f, sort_keys=False)
+    print("Resolved config:")
+    print(yaml.safe_dump(resolved, sort_keys=False))
 
-    papers_all = []
-    for paper in ds:
-        meta = json.loads(paper["meta"]) if isinstance(paper["meta"], str) else paper["meta"]
-        if meta.get("config", "") == "arxiv":
-            papers_all.append(paper)
-
-            # group by length 
-            if paper_length(paper) > 2000 and paper_length(paper) <= 7000:
-                papers_short.append(paper)
-            elif paper_length(paper) > 7000 and paper_length(paper) <= 17000: 
-                papers_medium.append(paper)
-            else:
-                papers_long.append(paper)
-
-            if len(papers_all) >= MAX_PAPERS:
-                break
-
-    print(f"Collected {len(papers_short)} arxiv papers\n")
-
-    RESULTS_DIR.mkdir(exist_ok=True)
-
-    papers = papers_short # CHANGE ACCORDING TO PREFERENCES
-
-    for i, paper in enumerate(papers, start=1):
-        paper_label = f"paper_{i:03d}"
-        perturb_dir = RESULTS_DIR / "perturb" / paper_label
-        perturb_dir.mkdir(parents=True, exist_ok=True)
-
-        print(f"{'='*60}")
-        print(f"Paper {i:03d}/{MAX_PAPERS}  ({paper_length(paper):,} words)")
-        print(f"{'='*60}")
-
-        # Write paper text to a temp file
-        tmp = tempfile.NamedTemporaryFile(
-            mode="w", suffix=".md", prefix=f"paper_{i:03d}_", delete=False
-        )
-        tmp.write(paper["text"])
-        tmp.close()
-        tmp_path = Path(tmp.name)
-
-        try:
-            # ------------------------------------------------------------------
-            # Step 1: Perturb (once per paper)
-            # ------------------------------------------------------------------
-            print(f"\n  [1] Perturb  (model: {model_slug(PERTURB_MODEL)})")
-            rc = run(["openaireview", "perturb", str(tmp_path),
-                      "--output-dir", str(perturb_dir),
-                      "--generate", GENERATE_METHOD,
-                      "--model", PERTURB_MODEL])
-            if rc != 0:
-                print(f"  perturb failed (exit {rc}), skipping paper")
-                continue
-
-            manifest = next(perturb_dir.glob("*_perturbations.json"), None)
-            corrupted = next(perturb_dir.glob("*_corrupted.md"), None)
-            if not manifest or not corrupted:
-                print("  perturb outputs missing, skipping paper")
-                continue
-
-            # ------------------------------------------------------------------
-            # Steps 2+3: Review + Score for every (model, method) combination
-            # ------------------------------------------------------------------
-            for model in REVIEW_MODELS:
-                for method in REVIEW_METHODS:
-                    paper_dir = RESULTS_DIR / model_slug(model) / method / paper_label
-                    review_dir = paper_dir / "review"
-                    score_dir = paper_dir / "score"
-                    review_dir.mkdir(parents=True, exist_ok=True)
-                    score_dir.mkdir(parents=True, exist_ok=True)
-
-                    print(f"\n  [2] Review  ({model_slug(model)} / {method})")
-                    rc = run(["openaireview", "review", str(corrupted),
-                              "--method", method,
-                              "--output-dir", str(review_dir),
-                              "--model", model])
-                    if rc != 0:
-                        print(f"  review failed (exit {rc}), skipping")
-                        continue
-
-                    review_json = next(review_dir.glob("*.json"), None)
-                    if not review_json:
-                        print("  review output missing, skipping")
-                        continue
-
-                    print(f"\n  [3] Score   ({model_slug(model)} / {method})")
-                    rc = run(["openaireview", "score", str(manifest), str(review_json),
-                              "--model", SCORE_MODEL,
-                              "--output-dir", str(score_dir)])
-                    if rc != 0:
-                        print(f"  score failed (exit {rc}), skipping")
-                        continue
-
-            print(f"\n  Done: {paper_label}")
-
-        finally:
-            tmp_path.unlink(missing_ok=True)
-
-    print(f"\nAll done. Results in {RESULTS_DIR}/")
+    papers = load_papers(cfg)
+    print(f"Stages to run: {', '.join(args.stages)}\n")
+    if "perturb" in args.stages:
+        perturb(papers, cfg)
+    if "review" in args.stages:
+        review(papers, cfg)
+    if "score" in args.stages:
+        score(papers, cfg)
+    print(f"\nAll done. Results in {cfg.results_dir}/")
 
 
 if __name__ == "__main__":
