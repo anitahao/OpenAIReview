@@ -12,7 +12,8 @@ _FUZZY_QUOTE_THRESHOLD = 0.75
 
 def score_review(perturbations: list[Perturbation], 
                  review_comments: list[dict], 
-                 model: str, method: str = "llm") -> PerturbationResult:
+                 model: str, 
+                 method: str = "llm") -> PerturbationResult:
     n_injected = len(perturbations)
     n_total_comments = len(review_comments)
 

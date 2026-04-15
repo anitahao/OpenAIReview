@@ -6,29 +6,8 @@ from datetime import date
 
 from .client import chat
 from .models import ReviewResult
-from .prompts import DEEP_CHECK_PROMPT, OCR_CAVEAT, OVERALL_FEEDBACK_PROMPT
-from .utils import count_tokens, locate_comments_in_window, parse_comments_from_list
-
-
-def split_into_paragraphs(text: str, min_chars: int = 100) -> list[str]:
-    """Split document into paragraphs, merging short ones with the next."""
-    raw = [p.strip() for p in text.split("\n\n") if p.strip()]
-    paragraphs: list[str] = []
-    carry = ""
-    for p in raw:
-        if carry:
-            p = carry + "\n\n" + p
-            carry = ""
-        if len(p) < min_chars:
-            carry = p
-        else:
-            paragraphs.append(p)
-    if carry:
-        if paragraphs:
-            paragraphs[-1] = paragraphs[-1] + "\n\n" + carry
-        else:
-            paragraphs.append(carry)
-    return paragraphs
+from .prompts import DEEP_CHECK_PROMPT, OCR_CAVEAT, OVERALL_FEEDBACK_PROMPT, FIELD_INFORMATION
+from .utils import count_tokens, locate_comments_in_window, parse_comments_from_list, split_into_paragraphs
 
 
 def merge_into_chunks(
@@ -66,8 +45,10 @@ def get_chunk_window_context(
     """Get surrounding passages as context (asymmetric: more before, less after)."""
     before = window + 2
     after = max(1, window - 1)
+
     start = max(0, chunk_idx - before)
     end = min(len(chunks), chunk_idx + after + 1)
+
     context_parts = []
     for i in range(start, end):
         _, text = chunks[i]
@@ -88,6 +69,21 @@ def review_local(
     ocr: bool = False,
 ) -> ReviewResult:
     """Review a paper by deep-checking each chunk with surrounding window context."""
+    # get field information
+    prompt = FIELD_INFORMATION.format(paper_start=document_content[:2000])
+    response, usage = chat(
+        messages=[{"role": "user", "content": prompt}],
+        model=model,
+        max_tokens=256,
+        reasoning_effort=reasoning_effort,
+    )
+    
+    text = re.sub(r"^```(?:json)?\s*", "", response.strip())
+    text = re.sub(r"\s*```$", "", text).strip()
+    field_result = json.loads(text)
+    field_information = f"{field_result['field']} ({field_result['subfield']}). Pay particular attention to {', '.join(field_result['pitfalls'])}"
+
+    # review 
     result = ReviewResult(
         method="local",
         paper_slug=paper_slug,
@@ -105,7 +101,7 @@ def review_local(
         context = get_chunk_window_context(chunks, chunk_idx, window=window_size)
 
         ocr_caveat = OCR_CAVEAT if ocr else ""
-        prompt = DEEP_CHECK_PROMPT.format(context=context, passage=chunk_text, current_date=date.today().isoformat(), ocr_caveat=ocr_caveat)
+        prompt = DEEP_CHECK_PROMPT.format(context=context, passage=chunk_text, field_information=field_information, current_date=date.today().isoformat(), ocr_caveat=ocr_caveat)
         response, usage = chat(
             messages=[{"role": "user", "content": prompt}],
             model=model,
@@ -139,7 +135,7 @@ def review_local(
     # Generate overall feedback
     paper_start = document_content[:8000]
     feedback_response, usage = chat(
-        messages=[{"role": "user", "content": OVERALL_FEEDBACK_PROMPT.format(paper_start=paper_start)}],
+        messages=[{"role": "user", "content": OVERALL_FEEDBACK_PROMPT.format(field_information=field_information, paper_start=paper_start)}],
         model=model,
         max_tokens=2048,
         reasoning_effort=reasoning_effort,
