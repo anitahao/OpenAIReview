@@ -21,6 +21,7 @@ from .prompts import (
     OVERALL_FEEDBACK_PROMPT,
     SUMMARY_UPDATE_PROMPT,
     SUBSTANTIAL_FILTER_PROMPT,
+    FIELD_INFORMATION
 )
 from .utils import count_tokens, locate_comments_in_window, parse_comments_from_list, split_into_paragraphs
 
@@ -199,6 +200,21 @@ def review_progressive(
 
     Returns (consolidated_result, full_result).
     """
+    # get field information
+    prompt = FIELD_INFORMATION.format(paper_start=document_content[:2000])
+    response, usage = chat(
+        messages=[{"role": "user", "content": prompt}],
+        model=model,
+        max_tokens=256,
+        reasoning_effort=reasoning_effort,
+    )
+    
+    text = re.sub(r"^```(?:json)?\s*", "", response.strip())
+    text = re.sub(r"\s*```$", "", text).strip()
+    field_result = json.loads(text)
+    field_information = f"{field_result['field']} ({field_result['subfield']}). Pay particular attention to {', '.join(field_result['pitfalls'])}"
+
+    # review 
     result = ReviewResult(
         method="progressive",
         paper_slug=paper_slug,
@@ -251,7 +267,7 @@ def review_progressive(
 
         # Step 1: Deep-check
         ocr_caveat = OCR_CAVEAT if ocr else ""
-        prompt = DEEP_CHECK_PROMPT.format(context=context, passage=passage_text, current_date=date.today().isoformat(), ocr_caveat=ocr_caveat)
+        prompt = DEEP_CHECK_PROMPT.format(context=context, passage=passage_text, field_information=field_information, current_date=date.today().isoformat(), ocr_caveat=ocr_caveat)
         response, usage = chat(
             messages=[{"role": "user", "content": prompt}],
             model=model,
@@ -302,7 +318,7 @@ def review_progressive(
     # Generate overall feedback
     paper_start = document_content[:8000]
     feedback_response, usage = chat(
-        messages=[{"role": "user", "content": OVERALL_FEEDBACK_PROMPT.format(paper_start=paper_start)}],
+        messages=[{"role": "user", "content": OVERALL_FEEDBACK_PROMPT.format(field_information=field_information, paper_start=paper_start)}],
         model=model,
         max_tokens=2048,
         reasoning_effort=reasoning_effort,

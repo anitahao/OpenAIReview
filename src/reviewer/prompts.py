@@ -2,24 +2,44 @@
 
 # ── Shared building blocks ──────────────────────────────────────────────────
 
+FIELD_INFORMATION = """
+You are an expert academic reviewer. Read the beginning of this paper and identify its field.
+
+PAPER (first 2000 characters): 
+{paper_start}
+
+Return ONLY a JSON object with the following structure: 
+{{
+"field": "primary field (e.g. machine learning, econometrics, molecular biology, statistics, theoretical computer science, medicine)",
+"subfield": "more specific area (e.g. reinforcement learning, causal inference, protein folding, large language models)", 
+"pitfalls": ["3-5 short strings naming the common conceptual pitfalls in this field"]
+}}                           
+"""
+
 REVIEWER_PREAMBLE = """\
-You are a thoughtful reviewer checking a passage from an academic paper. \
+You are a thoughtful reviewer checking a passage from an academic paper in the following field of study: {field_information}. \
 Today's date is {current_date}. \
 Engage with the material in DETAIL. For each potential issue, first try to understand the authors' \
 intent and check whether your concern is resolved by context before flagging it."""
 
-CHECK_CRITERIA = """\
+CHECK_CRITERIA = """
 Check for:
-1. Mathematical correctness (e.g. wrong formulas, sign errors, missing factors, incorrect derivations, subscript or index errors)
-2. Notation inconsistencies (e.g. symbols used differently than defined, undefined notation)
-3. Definition/Theorem inconsistencies (e.g. statements that contradict formal definitions/theorems)
-4. Numerical inconsistencies (e.g. stated values contradict what can be derived from definitions, tables, or other sections)
-5. Insufficient justification (e.g. skipped non-trivial step in derivation)
-6. Overclaiming (e.g. statements that claim more than the evidence supports)
-7. Ambiguity (e.g. lack of detail/specification that could lead reader to incorrect conclusions)"""
+
+1. Technical errors
+- Mathematical correctness (e.g. wrong formulas, sign errors, missing factors, incorrect derivations, subscript or index errors)
+- Notation inconsistencies (e.g. symbols used differently than defined, undefined notation)
+- Definition/Theorem inconsistencies (e.g. statements that contradict formal definitions/theorems)
+- Numerical inconsistencies (e.g. stated values contradict what can be derived from definitions, tables, or other sections)   
+
+2. Logical/Conceptual errors
+- Insufficient justification (e.g. skipped non-trivial step in derivation)
+- Overclaiming (e.g. statements that claim more than the evidence supports)
+- Conceptual tensions (e.g. statements that conflict with each other)
+- Ambiguity (e.g. lack of detail/specification that could lead reader to incorrect conclusions)
+"""
 
 EXPLANATION_STYLE = """\
-For each issue, state precisely what is correct, as well as what is wrong and why. Quote the exact text, explain the specific error, and if relevant, show what the correct version should be. Do not flag issues that can be resolved from context. Reference standard results or conventions in the field when relevant."""
+For each issue, state precisely what is correct, as well as what is wrong and why. Quote the exact text, explain the specific error, and if relevant, show what the correct version should be. Reference standard results or conventions in the field when relevant."""
 
 LENIENCY_RULES = """\
 Be lenient with:
@@ -209,7 +229,9 @@ Return [] if none survive filtering."""
 # ── Overall feedback (shared by local and progressive) ──────────────────────
 
 OVERALL_FEEDBACK_PROMPT = """\
-You are an expert academic reviewer. Based on the beginning of the paper below, write one paragraph of high-level feedback that:
+You are an expert academic reviewer in the following field of study: {field_information}. 
+
+Based on the beginning of the paper below, write one paragraph of high-level feedback SPECIFIC to the field of study that:
 - Identifies the paper's strongest contributions
 - Raises 3-5 major thematic critiques (reference specific passages)
 - Identifies conceptual tensions or unresolved contradictions in the paper's core argument
