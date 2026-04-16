@@ -23,6 +23,10 @@ review_results/
 
 # Perturbation output
 perturbation_results/
+
+# Jupyter
+.ipynb_checkpoints/
+
 # IDE
 .idea/
 .vscode/
