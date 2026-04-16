@@ -6,7 +6,8 @@ from sentence_transformers import SentenceTransformer, util
 
 def score_review(perturbations: list[Perturbation], 
                  review_comments: list[dict], 
-                 model: str, method: str = "llm") -> PerturbationResult:
+                 model: str, 
+                 method: str = "llm") -> PerturbationResult:
     n_injected = len(perturbations)
     n_total_comments = len(review_comments)
 
