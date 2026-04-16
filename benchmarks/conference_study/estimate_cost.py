@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """Dry-run cost estimator for the conference accept-vs-reject study.
 
-For each downloaded PDF and each of the 3 OpenRouter models, estimate the
-total USD cost of running `openaireview review --method progressive` with
-the same caps the batch runner will use (--max-pages 20 --max-tokens 20000).
+For each downloaded PDF and each model in the manifest, estimate the total
+USD cost of running `openaireview review --method progressive` with the
+same caps the batch runner will use. Reads caps from the same YAML config
+that run_study.py consumes, so the estimate matches the planned run.
 
 The progressive method, as observed in past benchmark runs, sends ~6x the
 input token count through the LLM (running summary + window context replay
@@ -11,13 +12,17 @@ across passages + final consolidation + overall feedback). Completion is
 ~0.15x input. We use those multipliers to estimate.
 
 Run:
-    python estimate_cost.py
+    python estimate_cost.py --config configs/baseline.yaml
+    python estimate_cost.py --max-pages 30              # ad-hoc
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
+
+import yaml
 
 # Resolve repo paths and import the same parser/tokenizer the CLI uses.
 HERE = Path(__file__).resolve().parent
@@ -27,9 +32,13 @@ sys.path.insert(0, str(REPO / "src"))
 from reviewer.parsers import parse_document  # noqa: E402
 from reviewer.utils import count_tokens  # noqa: E402
 
-# Match runner caps.
-MAX_PAGES = 20
-MAX_TOKENS = 20_000
+# Defaults — overridden by YAML config and/or CLI flags in main().
+DEFAULT_MAX_PAGES = 20
+DEFAULT_MAX_TOKENS = 20_000
+
+# Runtime values, populated in main().
+MAX_PAGES: int = DEFAULT_MAX_PAGES
+MAX_TOKENS: int = DEFAULT_MAX_TOKENS
 
 # Empirically observed scale factors for progressive mode.
 # (Total prompt tokens sent to LLM) / (input doc tokens) ≈ 6
@@ -52,11 +61,44 @@ def estimate_paper(pdf_path: Path) -> int:
     return min(n, MAX_TOKENS)
 
 
+def load_config(path: str) -> dict:
+    """Load a YAML run-config file. Returns {} if path is None."""
+    if not path:
+        return {}
+    cfg_path = Path(path)
+    if not cfg_path.is_absolute():
+        cfg_path = cfg_path if cfg_path.exists() else HERE / path
+    if not cfg_path.exists():
+        sys.exit(f"config file not found: {path}")
+    with cfg_path.open() as f:
+        return yaml.safe_load(f) or {}
+
+
 def main() -> None:
+    global MAX_PAGES, MAX_TOKENS
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config", help="YAML config file (same schema as run_study.py).")
+    ap.add_argument("--max-pages", type=int, default=None,
+                    help=f"Override max pages (default: {DEFAULT_MAX_PAGES}).")
+    ap.add_argument("--max-tokens", type=int, default=None,
+                    help=f"Override max tokens (default: {DEFAULT_MAX_TOKENS}).")
+    args = ap.parse_args()
+
+    cfg = load_config(args.config)
+    MAX_PAGES = args.max_pages if args.max_pages is not None \
+        else cfg.get("max_pages", DEFAULT_MAX_PAGES)
+    MAX_TOKENS = args.max_tokens if args.max_tokens is not None \
+        else cfg.get("max_tokens", DEFAULT_MAX_TOKENS)
+
     manifest = json.loads((HERE / "manifest.json").read_text())
     papers = manifest["papers"]
     models = manifest["models"]
 
+    if args.config:
+        print(f"Config: {args.config}")
+        if cfg.get("name"):
+            print(f"Experiment: {cfg['name']}")
     # Per-paper effective tokens (parse once).
     print(f"Parsing {len(papers)} PDFs (max {MAX_PAGES} pages, truncated to "
           f"{MAX_TOKENS:,} tokens)...\n")

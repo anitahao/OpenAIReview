@@ -1,0 +1,13 @@
+# Baseline run config for the ICLR accept-vs-reject study.
+# Results -> benchmarks/conference_study/results/baseline/
+# Log    -> benchmarks/conference_study/results/baseline/run_log.jsonl
+
+name: baseline
+
+# Review caps passed to the openaireview CLI.
+max_pages: 20
+max_tokens: 20000
+
+# Batch runner knobs.
+timeout_sec: 3600      # 60 min per (paper, model) subprocess
+max_per_model: 2       # concurrent runs per model

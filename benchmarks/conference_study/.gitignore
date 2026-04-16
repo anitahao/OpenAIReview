@@ -1,0 +1,3 @@
+# Papercopilot dataset cache (regeneratable via download_papers.py).
+# __pycache__/ and results/ are covered by the root .gitignore.
+.cache/

@@ -2,19 +2,23 @@
 """Batch runner for the accept-vs-reject conference study.
 
 For each (paper, model) combination in manifest.json, shell out to
-`openaireview review` in progressive mode with the standard 20-page /
-20k-token caps. Results merge into one JSON per paper under results/,
-with method keys progressive__<model> AND progressive_original__<model>
-(the CLI mod from cli.py:cmd_review writes both in a single run).
+`openaireview review` in progressive mode. Results merge into one JSON
+per paper under the results dir, with method keys progressive__<model>
+AND progressive_original__<model> (the CLI mod from cli.py:cmd_review
+writes both in a single run).
 
 Idempotent: if the result JSON already contains the expected method keys
-for a (paper, model) combo, skip it. Logs each run to results/run_log.jsonl.
+for a (paper, model) combo, skip it. Logs each run to <results>/run_log.jsonl.
+
+Run knobs (max-pages, max-tokens, timeout, parallelism, results-subdir
+name) are read from a YAML config (--config), with CLI flags overriding
+individual values.
 
 Usage:
-    python run_study.py             # full batch
-    python run_study.py --dry-run   # print what would run
-    python run_study.py --paper iclr24-acc-vit-need-registers
-    python run_study.py --model qwen/qwen3-235b-a22b-2507
+    python run_study.py --config configs/baseline.yaml
+    python run_study.py --config configs/baseline.yaml --dry-run
+    python run_study.py --config configs/baseline.yaml --paper iclr24-acc-vit-need-registers
+    python run_study.py --max-pages 30   # ad-hoc run without a config
 """
 from __future__ import annotations
 
@@ -29,17 +33,27 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-RESULTS_DIR = HERE / "results"
-LOG_FILE = RESULTS_DIR / "run_log.jsonl"
-MAX_PAGES = 20
-MAX_TOKENS = 20_000
-TIMEOUT_SEC = 60 * 60  # 60 min/run
+import yaml
 
+HERE = Path(__file__).resolve().parent
+
+# Defaults — overridden by YAML config and/or CLI flags in main().
+DEFAULT_RESULTS_BASE = HERE / "results"
+DEFAULT_MAX_PAGES = 20
+DEFAULT_MAX_TOKENS = 20_000
+DEFAULT_TIMEOUT_SEC = 60 * 60  # 60 min/run
 # Parallelism: max N concurrent runs *per model* (to respect each model's
 # OpenRouter rate-limit pool independently). Total in-flight is at most
 # MAX_PER_MODEL * len(models). Default 2 per model -> 6 in flight for 3 models.
-MAX_PER_MODEL = 2
+DEFAULT_MAX_PER_MODEL = 2
+
+# Runtime values — populated in main() from (defaults < YAML < CLI).
+RESULTS_DIR: Path = DEFAULT_RESULTS_BASE
+LOG_FILE: Path = DEFAULT_RESULTS_BASE / "run_log.jsonl"
+MAX_PAGES: int = DEFAULT_MAX_PAGES
+MAX_TOKENS: int = DEFAULT_MAX_TOKENS
+TIMEOUT_SEC: int = DEFAULT_TIMEOUT_SEC
+MAX_PER_MODEL: int = DEFAULT_MAX_PER_MODEL
 
 # Lock printing + log writes so concurrent workers don't interleave bytes.
 _print_lock = threading.Lock()
@@ -139,8 +153,37 @@ def run_one(paper: dict, model: str, dry_run: bool = False) -> dict:
     return entry
 
 
+def load_config(path: str) -> dict:
+    """Load a YAML run-config file. Returns {} if path is None."""
+    if not path:
+        return {}
+    cfg_path = Path(path)
+    if not cfg_path.is_absolute():
+        # Try as-given (cwd-relative), then relative to this script.
+        cfg_path = cfg_path if cfg_path.exists() else HERE / path
+    if not cfg_path.exists():
+        sys.exit(f"config file not found: {path}")
+    with cfg_path.open() as f:
+        return yaml.safe_load(f) or {}
+
+
 def main() -> None:
+    global RESULTS_DIR, LOG_FILE, MAX_PAGES, MAX_TOKENS, TIMEOUT_SEC, MAX_PER_MODEL
+
     ap = argparse.ArgumentParser()
+    ap.add_argument("--config", help="YAML config file with run parameters.")
+    ap.add_argument("--name", help="Experiment name. Results -> <results>/<name>/. "
+                                   "Overrides config's 'name'.")
+    ap.add_argument("--max-pages", type=int, default=None,
+                    help=f"Max pages passed to CLI (default: {DEFAULT_MAX_PAGES}).")
+    ap.add_argument("--max-tokens", type=int, default=None,
+                    help=f"Max tokens passed to CLI (default: {DEFAULT_MAX_TOKENS}).")
+    ap.add_argument("--timeout-sec", type=int, default=None,
+                    help=f"Per-run subprocess timeout in seconds "
+                         f"(default: {DEFAULT_TIMEOUT_SEC}).")
+    ap.add_argument("--max-per-model", type=int, default=None,
+                    help=f"Concurrent runs per model "
+                         f"(default: {DEFAULT_MAX_PER_MODEL}).")
     ap.add_argument("--dry-run", action="store_true",
                     help="Print what would run, do not call the API.")
     ap.add_argument("--paper", help="Run only this paper slug.")
@@ -148,6 +191,21 @@ def main() -> None:
     ap.add_argument("--force", action="store_true",
                     help="Re-run even if already complete.")
     args = ap.parse_args()
+
+    # Resolve run knobs: CLI flag > YAML config > built-in default.
+    cfg = load_config(args.config)
+    name = args.name or cfg.get("name")
+    MAX_PAGES = args.max_pages if args.max_pages is not None \
+        else cfg.get("max_pages", DEFAULT_MAX_PAGES)
+    MAX_TOKENS = args.max_tokens if args.max_tokens is not None \
+        else cfg.get("max_tokens", DEFAULT_MAX_TOKENS)
+    TIMEOUT_SEC = args.timeout_sec if args.timeout_sec is not None \
+        else cfg.get("timeout_sec", DEFAULT_TIMEOUT_SEC)
+    MAX_PER_MODEL = args.max_per_model if args.max_per_model is not None \
+        else cfg.get("max_per_model", DEFAULT_MAX_PER_MODEL)
+
+    RESULTS_DIR = DEFAULT_RESULTS_BASE / name if name else DEFAULT_RESULTS_BASE
+    LOG_FILE = RESULTS_DIR / "run_log.jsonl"
 
     manifest = json.loads((HERE / "manifest.json").read_text())
     papers = manifest["papers"]
@@ -174,6 +232,14 @@ def main() -> None:
             else:
                 todo.append((p, m))
 
+    print(f"Binary:       {OPENAIREVIEW_BIN}")
+    if args.config:
+        print(f"Config:       {args.config}")
+    if name:
+        print(f"Experiment:   {name}")
+    print(f"Results dir:  {RESULTS_DIR}")
+    print(f"Caps:         {MAX_PAGES} pages, {MAX_TOKENS} tokens, "
+          f"{TIMEOUT_SEC}s timeout")
     print(f"Combinations: {len(papers)} papers x {len(models)} models = "
           f"{len(papers)*len(models)} total")
     print(f"  already complete: {len(skipped)}")
