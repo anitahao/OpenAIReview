@@ -1,0 +1,14 @@
+# Result directories (large, regenerable)
+results*/
+
+# Temporary / ephemeral configs
+configs/_*
+
+# Python
+__pycache__/
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/
+
+*.pdf

@@ -21,9 +21,16 @@ benchmarks/data/raw_html/
 # Review output
 review_results/
 
+# Perturbation output
+perturbation_results/
+
+# Jupyter
+.ipynb_checkpoints/
+
 # IDE
 .idea/
 .vscode/
 
 # macOS
 .DS_Store
+.claude/
