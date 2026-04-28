@@ -46,7 +46,7 @@ from datasets import load_dataset
 class Config:
     max_papers: int = 2
     length: str = field(default="short", metadata={"choices": ["short", "medium", "long"]})
-    error_type: str = field(default="all", metadata={"choices": ["surface", "formal", "all"]})
+    error_type: str = field(default="all", metadata={"choices": ["surface", "claim", "logic", "experimental", "all"]})
     score_method: str = field(default="llm", metadata={"choices": ["llm", "fuzzy", "semantic"]})
     perturb_model: str = "google/gemini-3-flash-preview"
     score_model: str = "google/gemini-3-flash-preview"

@@ -83,9 +83,9 @@ Choose from the following perturbation CANDIDATES:
 {candidates_json}
 
 If "error_type" is "surface", generate ONE compatible perturbation:
-- numeric_parameter: change a numeric constant (e.g. 0.5 → 0.25, n=10 → n=100)
-- operator_or_sign: flip an operator or sign (e.g. + → -, ≤ → ≥, ∪ → ∩)                                               
-- index_or_subscript: change a subscript/superscript (e.g. x_i → x_{{i+1}})                                           
+- numeric_parameter: change a numeric constant (e.g. 0.5 becomes 0.25, n=10 becomes n=100)
+- operator_or_sign: flip an operator or sign (e.g. + becomes -, ≤ becomes ≥)                                               
+- index_or_subscript: change a subscript/superscript (e.g. x_i becomes x_{{i+1}})                                           
 - computation: introduce an arithmetic error in a derivation step
 
 If "error_type" is "claim", generate ONE compatible perturbation:
@@ -99,7 +99,7 @@ If "error_type" is "logic", generate ONE compatible perturbation:
 
 If "error_type" is "experimental", you may generate MULTIPLE perturbations as long as they are DISJOINT:
 - misinterp: misinterpret a p-value or confidence interval
-- causal_reversed: flip a causal claim (X causes Y → Y causes X)                                                      
+- causal_reversed: flip a causal claim (X causes Y becomes Y causes X)                                                      
 - p_hacking: remove or negate a multiple testing correction (Bonferroni, FDR, etc.) 
 
 OUTPUT FORMAT:
@@ -240,7 +240,7 @@ def _parse_response(response: str,
             perturbation_id=f"P{i:03d}_{span_id}",
             span_id=span_id,
             error=error,
-            original=span.text,  # from OUR store, not the model's
+            original=span.text,
             offset=span.offset,  # from OUR store, not the model's
             perturbed=perturbed,
             why_wrong=item.get("why_wrong", ""),
