@@ -75,9 +75,10 @@ Return ONLY the JSON array.
 """
 
 PROMPT = r"""
-You are creating seeded errors for an academic paper in the field of {field} to benchmark LLM reviewers.
+You are generating perturbationsfor an academic paper in the field of {field} to benchmark LLM reviewers.
 
-While generating errors, pay attention to {domain_specific}. 
+While generating perturbations, consider the following possible errors:
+{domain_specific}
 
 Choose from the following perturbation CANDIDATES:
 {candidates_json}
