@@ -6,32 +6,47 @@ from enum import Enum
 
 class SpanType(str, Enum):
     """What kind of content a span contains."""
+    # abstract 
+    ABSTRACT = "abstract"
+
+    # surface errors
     EQUATION_DISPLAY = "equation_display"   # $$...$$ or \[...\]
     EQUATION_INLINE = "equation_inline"     # $...$ or \(...\)
     EQUATION_NAMED = "equation_named"       # align, equation, gather, multline, cases
 
+    # false claims
     DEFINITION = "definition"
     THEOREM = "theorem"
+
+    # logic errors
     PROOF = "proof"
+
+    # experimental errors
+    EXPERIMENTAL = "experimental"
+
 
 
 class Error(str, Enum):
-    """Edit-centric error taxonomy (from Codex)."""
+    """Edit-centric error taxonomy."""
     # surface
     NUMERIC_PARAMETER = "numeric_parameter"
     OPERATOR_OR_SIGN = "operator_or_sign"
-    SYMBOL_BINDING = "symbol_binding"
     INDEX_OR_SUBSCRIPT = "index_or_subscript"
+    COMPUTATION = "computation"
 
-    # formal
-    DEF_WRONG = "def_wrong"
-    THM_WRONG_CONDITION = "thm_wrong_condition"
-    THM_WRONG_CONCLUSION = "thm_wrong_conclusion"
-    THM_WRONG_SCOPE = "thm_wrong_scope"
-    PROOF_WRONG_DIRECTION = "proof_wrong_direction"
-    PROOF_MISSING_CASE = "proof_missing_case"
-    PROOF_WRONG_ASSUMPTION = "proof_wrong_assumption"
-    PROOF_MISMATCH = "proof_mismatch"
+    # claim 
+    INCORRECT_CLAIM = "incorrect_claim"
+
+    # logic
+    MISSING_CASE = "missing_case"
+    INDUCTION = "induction"
+    CIRCULAR_REASONING = "circular_reasoning"
+    INVALID_IMPLICATION = "invalid_implication"
+
+    # experimental 
+    MISINTERP = "misinterp"
+    CAUSAL_REVERSED = "causal_reversed"
+    P_HACKING = "p_hacking"
 
 
 @dataclass

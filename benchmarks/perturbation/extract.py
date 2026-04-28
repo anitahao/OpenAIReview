@@ -7,18 +7,14 @@ Each span is tagged with its type and compatible error categories.
 import re
 from .models import CandidateSpan, Error, SpanType
 
-def extract_candidates(text: str, error_type: str) -> list[CandidateSpan]:
+def extract_abstract(text: str):
+    pass 
+
+def extract_candidates(text: str) -> list[CandidateSpan]:
     """Extract all perturbation candidates from a paper's text.
 
     Returns spans sorted by position in the document.
     """
-    if error_type == "surface":
-        _EXTRACTORS = _EXTRACTORS_SURFACE
-    elif error_type == "formal":
-        _EXTRACTORS = _EXTRACTORS_FORMAL
-    else:
-        _EXTRACTORS = _EXTRACTORS_ALL
-
     candidates: list[CandidateSpan] = []
     span_counter = 0
 
@@ -30,8 +26,12 @@ def extract_candidates(text: str, error_type: str) -> list[CandidateSpan]:
 
             if extractor in _EXTRACTORS_SURFACE:
                 error_type = "surface"
-            elif extractor in _EXTRACTORS_FORMAL:
-                error_type = "formal"
+            elif extractor in _EXTRACTORS_CLAIM:
+                error_type = "claim"
+            elif extractor in _EXTRACTORS_LOGIC:
+                error_type = "logic"
+            elif extractor in _EXTRACTORS_EXPERIMENTAL:
+                error_type = "experimental"
 
             candidates.append(CandidateSpan(
                 span_id=f"S{span_counter:04d}",
@@ -104,7 +104,7 @@ _EXTRACTORS_SURFACE = [
 
 
 # ---------------------------------------------------------------------------
-# Error Type 2: Formal 
+# Error Type 2: Claim 
 # ---------------------------------------------------------------------------
 
 def _extract_definitions(text: str):
@@ -126,6 +126,15 @@ def _extract_theorems(text: str):
             yield SpanType.THEOREM, m.group(0), m.start()
 
 
+_EXTRACTORS_CLAIM = [
+    _extract_definitions,
+    _extract_theorems,
+]
+
+# ---------------------------------------------------------------------------
+# Error Type 3: Logic 
+# ---------------------------------------------------------------------------
+
 def _extract_proofs(text: str):
     """Find proof environments."""
     PRF_ENVS = ['proof', 'proof*']
@@ -134,20 +143,39 @@ def _extract_proofs(text: str):
         for m in re.finditer(pattern, text, re.DOTALL):
             yield SpanType.PROOF, m.group(0), m.start()
 
-
-_EXTRACTORS_FORMAL = [
-    _extract_definitions,
-    _extract_theorems,
+_EXTRACTORS_LOGIC = [
     _extract_proofs,
 ]
 
+# ---------------------------------------------------------------------------
+# Error Type 4: Experimental 
+# ---------------------------------------------------------------------------
+
+def _extract_experimental(text: str):                                                                                 
+      """Find experimental/results sections by heading, up to the next \\section."""
+      EXPERIMENTAL_KEYWORDS = re.compile(                                                                               
+          r'result|evaluation|empirical|numerical|case stud|analysis',                            
+          re.IGNORECASE                                                                                                 
+      )                                                                                                                 
+      section_re = re.compile(r'\\section\*?\{([^}]+)\}')                                                               
+      sections = list(section_re.finditer(text))
+                                                                                                                        
+      for i, match in enumerate(sections):
+          if not EXPERIMENTAL_KEYWORDS.search(match.group(1)):                                                          
+              continue
+          start = match.start()
+          end = sections[i + 1].start() if i + 1 < len(sections) else len(text)
+          yield SpanType.EXPERIMENTAL, text[start:end], start          
+
+_EXTRACTORS_EXPERIMENTAL = [
+    _extract_experimental,
+]
 
 # ---------------------------------------------------------------------------
-# All Errors:
+# All Errors
 # ---------------------------------------------------------------------------
 
-_EXTRACTORS_ALL = _EXTRACTORS_SURFACE + _EXTRACTORS_FORMAL
-
+_EXTRACTORS = _EXTRACTORS_SURFACE + _EXTRACTORS_CLAIM + _EXTRACTORS_LOGIC + _EXTRACTORS_EXPERIMENTAL
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -165,36 +193,41 @@ def _compatible_errors(span_type: SpanType) -> list[Error]:
     mapping = {
         SpanType.EQUATION_DISPLAY: [
             Error.OPERATOR_OR_SIGN,
-            Error.SYMBOL_BINDING,
             Error.INDEX_OR_SUBSCRIPT,
             Error.NUMERIC_PARAMETER,
+            Error.COMPUTATION,
         ],
         SpanType.EQUATION_INLINE: [
             Error.OPERATOR_OR_SIGN,
-            Error.SYMBOL_BINDING,
+            Error.COMPUTATION,
             Error.INDEX_OR_SUBSCRIPT,
             Error.NUMERIC_PARAMETER,
         ],
         SpanType.EQUATION_NAMED: [
             Error.OPERATOR_OR_SIGN,
-            Error.SYMBOL_BINDING,
+            Error.COMPUTATION,
             Error.INDEX_OR_SUBSCRIPT,
             Error.NUMERIC_PARAMETER,
         ], 
 
         SpanType.DEFINITION: [
-            Error.DEF_WRONG
+            Error.INCORRECT_CLAIM 
         ],
         SpanType.THEOREM: [
-            Error.THM_WRONG_CONDITION, 
-            Error.THM_WRONG_CONCLUSION,
-            Error.THM_WRONG_SCOPE
+            Error.INCORRECT_CLAIM 
         ],
+
         SpanType.PROOF: [
-            Error.PROOF_WRONG_DIRECTION,
-            Error.PROOF_MISSING_CASE,
-            Error.PROOF_WRONG_ASSUMPTION,
-            Error.PROOF_MISMATCH
+            Error.MISSING_CASE,
+            Error.INDUCTION,
+            Error.CIRCULAR_REASONING,
+            Error.INVALID_IMPLICATION
+        ],
+
+        SpanType.EXPERIMENTAL: [
+            Error.MISINTERP,
+            Error.CAUSAL_REVERSED,
+            Error.P_HACKING
         ]
     }
     return mapping.get(span_type, [])

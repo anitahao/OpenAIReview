@@ -1,7 +1,4 @@
 """LLM-based error generation from candidate spans.
-
-Type 1: Surface 
-Type 2: Formal 
 """
 
 import json

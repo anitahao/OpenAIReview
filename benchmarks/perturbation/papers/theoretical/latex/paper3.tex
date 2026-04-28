@@ -1,0 +1,103 @@
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,numberwithinsect]{lipics-v2021}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathabx}
+\usepackage{mathtools}
+\usepackage{thmtools}
+\usepackage{thm-restate}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{textgreek}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{silence}
+\WarningsOff*
+\ErrorsOff*
+
+
+\newcommand\catenate{\mathbin{\text{\ttfamily\upshape ++}}}
+
+\declaretheorem[name=Theorem,numberwithin=section]{thm}
+
+\bibliographystyle{plainurl}
+
+\title{On Effective Banach-Mazur Games and an application to the Poincar\'e Recurrence Theorem for Category} 
+
+\titlerunning{Effective Banach-Mazur Games and Poincar\'e Recurrence} 
+
+\author{Prajval Koul}{Department of Computer Science and Engineering, Indian Institute of Technology Kanpur, India.}{prajvalk@cse.iitk.ac.in}{}{}
+
+\author{Satyadev Nandakumar}{Department of Computer Science and Engineering, Indian Institute of Technology Kanpur, Kanpur, Uttar Pradesh, India. }{satyadev@cse.iitk.ac.in}{}{}
+
+\authorrunning{P. Koul and S. Nandakumar}
+
+\Copyright{Prajval Koul and Satyadev Nandakumar}
+
+\ccsdesc[100]{{Theory of Computation.}}
+
+\keywords{Recurrence, Topology, Category, Computable Analysis, Computable Toplogy, Dynamical Systems.}
+
+\category{}
+
+\relatedversion{}
+
+%\supplement{}
+%\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version}
+
+%\funding{(Optional) general funding statement \dots}
+
+%\acknowledgements{I want to thank \ldots}
+
+\nolinenumbers %uncomment to disable line numbering
+
+
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Access}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2025)}
+\EventShortTitle{CVIT 2025}
+\EventAcronym{CVIT}
+\EventYear{2025}
+\EventDate{December 24--27, 2025}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% ==================================
+% Special characters we require
+% ==================================
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\X}{\mathcal{X}}
+
+
+\begin{document}
+
+
+\maketitle
+
+\input{abstract}
+
+\input{introduction}
+
+\input{prerequisites}
+
+\input{effective_topological_spaces}
+
+\input{the_banach_mazur_game_revisited}
+
+\input{applications}
+
+\input{acknowledgments}
+
+\bibliography{main_jabref_shared}
+
+\end{document}
