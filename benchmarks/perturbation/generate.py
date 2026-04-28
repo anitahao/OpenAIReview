@@ -63,8 +63,21 @@ This is the abstract of an academic paper:
 Identify its main field of study and return ONLY 1-5 words. 
 """
 
+DOMAIN_PROMPT = r"""
+This is the abstract of an academic paper in {field}:
+{abstract}
+
+What are the 5 most realistic and detectable errors an author could make in this kind of paper? 
+
+Return a JSON array of 5 strings, each describing one error type concisely.                                             
+                                                                                                                        
+Return ONLY the JSON array. 
+"""
+
 PROMPT = r"""
 You are creating seeded errors for an academic paper in the field of {field} to benchmark LLM reviewers.
+
+While generating errors, pay attention to {domain_specific}. 
 
 Choose from the following perturbation CANDIDATES:
 {candidates_json}
@@ -113,13 +126,29 @@ def identify_field(abstract, model: str = "anthropic/claude-opus-4-6", reasoning
     )
 
     response, usage = chat(
-        messages=[{"role": "user", "content": FIELD_PROMPT}],
+        messages=[{"role": "user", "content": formatted_prompt}],
         model=model,
         max_tokens=8192,
         reasoning_effort=reasoning_effort,
     )
     
     return response.strip().lower()
+
+def domain_specific_errors(field, abstract, model: str = "anthropic/claude-opus-4-6", reasoning_effort: str | None = None):
+    formatted_prompt = DOMAIN_PROMPT.format(
+        field=field,
+        abstract=abstract,
+    )
+
+    response, usage = chat(
+        messages=[{"role": "user", "content": formatted_prompt}],
+        model=model,
+        max_tokens=8192,
+        reasoning_effort=reasoning_effort,
+    )
+
+    items = json.loads(response.strip())                                                                              
+    return ", ".join(items)
 
 def generate_perturbations(abstract,
                            candidates: list[CandidateSpan],
@@ -137,8 +166,11 @@ def generate_perturbations(abstract,
         for c in candidates
     ], indent=2)
 
+    field = identify_field(abstract)
+    domain_specific = domain_specific_errors(field, abstract)
     formatted_prompt = PROMPT.format(
-        field=identify_field(abstract),
+        field=field,
+        domain_specific=domain_specific,
         candidates_json=candidates_json,
         errors=", ".join(c.value for c in errors),
     )
