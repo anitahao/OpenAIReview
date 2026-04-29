@@ -47,7 +47,7 @@ def search_arxiv(domain: str, arxiv_category: str | None, start: int, batch_size
     )
 
     req = urllib.request.Request(url, headers={"User-Agent": "openaireview-research/1.0"})
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with urllib.request.urlopen(req, timeout=60) as resp:
         data = resp.read()
 
     root = ET.fromstring(data)
