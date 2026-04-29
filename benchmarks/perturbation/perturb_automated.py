@@ -6,11 +6,12 @@ and runs the perturbation pipeline until a target number of papers have been
 successfully perturbed (i.e. n_injected >= n_total).
 
 Usage:
-    python perturb_automated.py --domain "mathematics" --arxiv-category math --category theoretical --error-type logic --target 10 --n-total 20
+    python perturb_automated.py --domain "mathematics" --arxiv-category "math.*" --category theoretical --error-type logic --target 10 --n-total 10
 """
 
 import argparse
 import json
+import shutil
 import subprocess
 import tarfile
 import tempfile
@@ -142,21 +143,24 @@ def run_perturb(
     ]
 
     print(f"    $ {' '.join(cmd)}")
-    rc = subprocess.run(cmd).returncode
-    if rc != 0:
-        print(f"    ERROR (exit {rc})")
-        return 0
+    result = subprocess.run(cmd, capture_output=True, text=True)
 
     manifests = list(output_dir.glob("*_perturbations.json"))
     if not manifests:
+        if result.returncode != 0:
+            print(result.stdout + result.stderr)
         return 0
 
     manifest_path = max(manifests, key=lambda p: p.stat().st_mtime)
     try:
         manifest = json.loads(manifest_path.read_text())
-        return manifest.get("n_injected", 0)
+        n_injected = manifest.get("n_injected", 0)
     except Exception:
-        return 0
+        n_injected = 0
+
+    if n_injected >= 0:  # always stash output for caller to decide
+        result._n_injected = n_injected
+    return n_injected
 
 
 def _already_done(paper_output_dir: Path, n_total: int) -> bool:
@@ -288,14 +292,18 @@ def main() -> None:
                     continue
 
                 print(f"  Main file: {tex_path.name} ({tex_path.stat().st_size:,} bytes)")
-                paper_output_dir.mkdir(parents=True, exist_ok=True)
+                staging_dir = tmp_path / f"staging_{arxiv_id.replace('/', '_')}"
+                staging_dir.mkdir(exist_ok=True)
 
                 n_injected = run_perturb(
                     tex_path, args.category, args.error_type,
-                    args.n_total, args.model, paper_output_dir,
+                    args.n_total, args.model, staging_dir,
                 )
 
                 if n_injected >= args.n_total:
+                    paper_output_dir.mkdir(parents=True, exist_ok=True)
+                    for f in staging_dir.iterdir():
+                        shutil.move(str(f), str(paper_output_dir / f.name))
                     successful += 1
                     print(f"  SUCCESS: {n_injected} injected. [{successful}/{args.target}]")
                 else:
