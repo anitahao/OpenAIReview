@@ -20,13 +20,13 @@ def main() -> None:
     latex_dir = PAPERS_DIR / CATEGORY / "latex"
     if not latex_dir.exists():
         print(f"Warning: {latex_dir} not found")
-        return 
+        return
 
     tex_files = sorted(latex_dir.glob("*.tex"))
     print(f"\n{CATEGORY}: {len(tex_files)} papers")
 
     for tex_path in tex_files:
-        output_dir = Path(__file__).parent / "results" / "perturbations" / CATEGORY / tex_path.stem
+        output_dir = Path(__file__).parent / "_temp_results" / "perturbations" / CATEGORY / tex_path.stem
         cmd = [
             "openaireview", "perturb", str(tex_path),
             "--category", CATEGORY,

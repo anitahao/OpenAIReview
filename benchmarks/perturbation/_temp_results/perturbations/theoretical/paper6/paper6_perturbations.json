@@ -1,0 +1,10 @@
+{
+  "paper_title": "\\documentclass[12pt,a4paper,reqno]{amsart}",
+  "paper_slug": "paper6",
+  "n_candidates": 0,
+  "n_generated": 0,
+  "n_valid": 0,
+  "n_injected": 0,
+  "model": "anthropic/claude-opus-4-6",
+  "perturbations": []
+}

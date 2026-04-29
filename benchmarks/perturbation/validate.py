@@ -65,6 +65,8 @@ def validate_perturbations(
             rejected.append((p, "replacement would create garbled text at boundaries"))
             continue
 
+        # Check 4: quick LLM check to make sure perturbation is good quality?
+
         occupied.append((idx, span_end))
         valid.append(p)
 

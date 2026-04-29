@@ -1,0 +1,19 @@
+{
+  "paper_title": "The Willmore conjecture",
+  "paper_slug": "paper8",
+  "n_candidates": 1,
+  "n_generated": 1,
+  "n_valid": 1,
+  "n_injected": 1,
+  "model": "anthropic/claude-opus-4-6",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "missing_case",
+      "original": "\\begin{proof}[Proof of Theorem \\ref{main.thm}] We can now put everything together and explain how to prove the inequality in Theorem \\ref{main.thm}. Through a stereographic projection, we can think of $\\Sigma$ as a compact surface with positive genus  in $S^3$. The canonical family associated to $\\Sigma$ gives us a  map $\\Phi:I^5\\to \\mathcal Z_2(S^3)$ satisfying properties (A), (B), (C), and (D). We use the $2\\pi^2$ Theorem and property (A) to conclude that\n$$2\\pi^2\\leq\\sup_{x\\in I^5}{\\rm area}(\\Phi(x))\\leq \\mathcal W(\\Sigma).$$\nIn the equality case $\\mathcal W(\\Sigma)=2\\pi^2$, there must exist some $(v_0,t_0)$ such that ${\\rm area}(\\Sigma_{(v_0,t_0)}) = \\mathcal W(\\Sigma_{v_0})= 2\\pi^2.$ With some extra work (see \\cite{marques-neves}) we prove that $t_0=0$ and that $\\Sigma_{v_0}$ is the Clifford torus. Since $\\Sigma=F_{v_0}^{-1}(\\Sigma_{v_0})$ and $F_{v_0}$ is conformal, the rigidity case also follows.\n\\end{proof}",
+      "perturbed": "\\begin{proof}[Proof of Theorem \\ref{main.thm}] We can now put everything together and explain how to prove the inequality in Theorem \\ref{main.thm}. Through a stereographic projection, we can think of $\\Sigma$ as a compact surface with positive genus  in $S^3$. The canonical family associated to $\\Sigma$ gives us a  map $\\Phi:I^5\\to \\mathcal Z_2(S^3)$ satisfying properties (A), (B), (C), and (D). We use the $2\\pi^2$ Theorem and property (A) to conclude that\n$$2\\pi^2\\leq\\sup_{x\\in I^5}{\\rm area}(\\Phi(x))\\leq \\mathcal W(\\Sigma).$$\nThis completes the proof.\n\\end{proof}",
+      "why_wrong": "The proof of Theorem \\ref{main.thm} requires establishing both the inequality $\\mathcal{W}(\\Sigma) \\geq 2\\pi^2$ and the rigidity case: that equality $\\mathcal{W}(\\Sigma) = 2\\pi^2$ holds only for the Clifford torus (up to conformal transformations). The perturbed proof omits the entire equality/rigidity analysis, which is an essential part of the theorem's statement. The original proof explicitly handles the case $\\mathcal{W}(\\Sigma)=2\\pi^2$ by showing $\\Sigma_{v_0}$ must be the Clifford torus and using conformality of $F_{v_0}$ to conclude rigidity."
+    }
+  ]
+}

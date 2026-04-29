@@ -1,0 +1,10 @@
+{
+  "paper_title": "Roth's Theorem in the Primes",
+  "paper_slug": "paper4",
+  "n_candidates": 0,
+  "n_generated": 0,
+  "n_valid": 0,
+  "n_injected": 0,
+  "model": "anthropic/claude-opus-4-6",
+  "perturbations": []
+}
