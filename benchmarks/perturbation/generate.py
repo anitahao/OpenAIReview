@@ -77,7 +77,7 @@ If "error_type" is "claim", generate ONE compatible perturbation:
 - incorrect_claim: corrupt the statement subtly (e.g. wrong condition, wrong quantifier, wrong bound, wrong constant, wrong sign, wrong index/subscript)
 
 If "error_type" is "logic", generate ONE compatible perturbation (in order from most to least important):
-- missing_case: remove one case from case analysis, or corrupt the base case in an induction
+- missing_case: remove one case from case analysis
 - induction: incorrect base case or inductive step                                                                      
 - circular_reasoning: use the theorem being proved as a step in its own proof
 - invalid_implication: reverse or invalidate a key logical implication
