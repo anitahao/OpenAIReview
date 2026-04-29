@@ -229,7 +229,9 @@ def cmd_perturb(args: argparse.Namespace) -> None:
     if str(_BENCHMARKS_DIR) not in sys.path:
         sys.path.insert(0, str(_BENCHMARKS_DIR))
     from perturbation import (
-        extract_candidates,
+        extract_abstract,
+        extract_candidates_theoretical,
+        extract_candidates_experimental,
         generate_perturbations,
         inject_perturbations,
         validate_perturbations,
@@ -254,7 +256,10 @@ def cmd_perturb(args: argparse.Namespace) -> None:
 
     # Stage 0: Extract candidates
     print("\nStage 0: Extracting candidate spans...")
-    candidates = extract_candidates(content, args.error_type)
+    if args.category == "theoretical":
+        candidates = extract_candidates_theoretical(content)
+    elif args.category == "experimental": 
+        candidates = extract_candidates_experimental(content)
     print(f"  {len(candidates)} candidates found")
 
     from collections import Counter
@@ -266,12 +271,13 @@ def cmd_perturb(args: argparse.Namespace) -> None:
 
     # Stage 1: Generate perturbations
     print(f"\nGenerating perturbations...")
+    abstract = extract_abstract(content) or content[:2000]
     perturbations = generate_perturbations(
+        args.category,
+        abstract,
         candidates,
         model=args.model,
-        n_per_error=args.n_per_error,
         reasoning_effort=reasoning,
-        error_type=args.error_type
     )
 
     # Validate
@@ -585,10 +591,6 @@ def main() -> None:
         help="Model for perturbation generation (default: anthropic/claude-opus-4-6)",
     )
     perturb_parser.add_argument(
-        "--n-per-error", type=int, default=2,
-        help="Target perturbations per error category (default: 2)",
-    )
-    perturb_parser.add_argument(
         "--output-dir", default="./perturbation_results",
         help="Directory for output files (default: ./perturbation_results)",
     )
@@ -599,8 +601,8 @@ def main() -> None:
         help="Reasoning effort level",
     )
     perturb_parser.add_argument(
-        "--error_type", default="all",
-        help="Error type (default: all)",
+        "--category", default="theoretical",
+        help="Paper category (default: theoretical)",
     )
 
     # score subcommand

@@ -7,15 +7,30 @@ Each span is tagged with its type and compatible error categories.
 import re
 from .models import CandidateSpan, Error, SpanType
 
-def extract_abstract(text: str):
-    """Extract abstract text from LaTeX."""                                                                           
-    m = re.search(r'\\begin\{abstract\}(.+?)\\end\{abstract\}', text, re.DOTALL)                                      
-    if m:
-        return m.group(1).strip()        
-                                                                                 
-    return None 
+def extract_abstract(text: str) -> str | None:
+    """Extract abstract text from LaTeX.
 
-def extract_candidates(text: str) -> list[CandidateSpan]:
+    Tries, in order: \\begin{abstract}, then a section named
+    abstract/introduction/background/motivation/overview.
+    """
+    m = re.search(r'\\begin\{abstract\}(.+?)\\end\{abstract\}', text, re.DOTALL)
+    if m:
+        return m.group(1).strip()
+
+    section_re = re.compile(
+        r'\\(?:section|subsection)\*?\{(abstract|introduction|background|motivation|overview)[^}]*\}',
+        re.IGNORECASE,
+    )
+    m = section_re.search(text)
+    if m:
+        start = m.end()
+        next_sec = re.search(r'\\(?:section|subsection)\*?\{', text[start:])
+        end = start + next_sec.start() if next_sec else start + 2000
+        return text[start:end].strip()
+
+    return None
+
+def extract_candidates_theoretical(text: str) -> list[CandidateSpan]:
     """Extract all perturbation candidates from a paper's text.
 
     Returns spans sorted by position in the document.
@@ -24,7 +39,7 @@ def extract_candidates(text: str) -> list[CandidateSpan]:
     span_counter = 0
 
     # Extract spans of each type
-    for extractor in _EXTRACTORS: # CAN return overlapping spans (diff categories)
+    for extractor in _EXTRACTORS_THEORETICAL: # CAN return overlapping spans (diff categories)
         for span_type, match_text, match_offset in extractor(text):
             context = _get_context(text, match_offset, match_len=len(match_text), window=200)
             errors = _compatible_errors(span_type)
@@ -35,8 +50,6 @@ def extract_candidates(text: str) -> list[CandidateSpan]:
                 error_type = "claim"
             elif extractor in _EXTRACTORS_LOGIC:
                 error_type = "logic"
-            elif extractor in _EXTRACTORS_EXPERIMENTAL:
-                error_type = "experimental"
 
             candidates.append(CandidateSpan(
                 span_id=f"S{span_counter:04d}",
@@ -51,6 +64,39 @@ def extract_candidates(text: str) -> list[CandidateSpan]:
 
     return candidates
 
+def extract_candidates_experimental(text: str) -> list[CandidateSpan]:
+    """Extract all perturbation candidates from a paper's text.
+
+    Returns spans sorted by position in the document.
+    """
+    candidates: list[CandidateSpan] = []
+    span_counter = 0
+
+    # Extract spans of each type
+    for extractor in _EXTRACTORS_EXPERIMENTAL: # CAN return overlapping spans (diff categories)
+        for span_type, match_text, match_offset in extractor(text):
+            context = _get_context(text, match_offset, match_len=len(match_text), window=200)
+            errors = _compatible_errors(span_type)
+
+            if extractor in _EXTRACTORS_SURFACE:
+                error_type = "surface"
+            elif extractor == _extract_paragraphs:
+                error_type = "claim"
+            elif extractor == _extract_experimental:
+                error_type = "experimental"
+
+            candidates.append(CandidateSpan(
+                span_id=f"S{span_counter:04d}",
+                span_type=span_type,
+                text=match_text,
+                offset=match_offset,
+                context=context,
+                error_type=error_type,
+                compatible_errors=errors,
+            ))
+            span_counter += 1
+
+    return candidates
 
 # ---------------------------------------------------------------------------
 # Error Type 1: Surface 
@@ -155,32 +201,62 @@ _EXTRACTORS_LOGIC = [
 # ---------------------------------------------------------------------------
 # Error Type 4: Experimental 
 # ---------------------------------------------------------------------------
+def _extract_paragraphs(text: str):
+    """Extract paragraphs from non-experimental sections (intro, related work, conclusion, etc.)"""                   
+    EXPERIMENTAL_KEYWORDS = re.compile(                                                                               
+        r'result|evaluation|empirical|numerical|case stud|analysis|method|approach|statistical',
+        re.IGNORECASE                                                                                                 
+    )                                                                                                                 
+    section_re = re.compile(r'\\section\*?\{([^}]+)\}')
+    sections = list(section_re.finditer(text))                                                                        
+                
+    for i, match in enumerate(sections):                                                                              
+        if EXPERIMENTAL_KEYWORDS.search(match.group(1)):
+            continue                                                                                                  
+        start = match.start()
+        end = sections[i + 1].start() if i + 1 < len(sections) else len(text)
+        section_text = text[start:end]
+                                                                                                                    
+        for para in re.split(r'\n\n+', section_text):
+            para = para.strip()                                                                                       
+            if len(para) < 50:
+                continue
+            para_offset = text.find(para, start)                                                                      
+            if para_offset == -1:
+                continue                                                                                              
+            yield SpanType.EXPERIMENTAL, para, para_offset
 
 def _extract_experimental(text: str):                                                                                 
-      """Find experimental/results sections by heading, up to the next \\section."""
-      EXPERIMENTAL_KEYWORDS = re.compile(                                                                               
-          r'result|evaluation|empirical|numerical|case stud|analysis',                            
-          re.IGNORECASE                                                                                                 
-      )                                                                                                                 
-      section_re = re.compile(r'\\section\*?\{([^}]+)\}')                                                               
-      sections = list(section_re.finditer(text))
-                                                                                                                        
-      for i, match in enumerate(sections):
-          if not EXPERIMENTAL_KEYWORDS.search(match.group(1)):                                                          
-              continue
-          start = match.start()
-          end = sections[i + 1].start() if i + 1 < len(sections) else len(text)
-          yield SpanType.EXPERIMENTAL, text[start:end], start          
+    """Find experimental/results/methods sections, yielding individual paragraphs."""
+    EXPERIMENTAL_KEYWORDS = re.compile(                                                                               
+        r'result|evaluation|empirical|numerical|case stud|analysis|method|approach|statistical',
+        re.IGNORECASE                                                                                                 
+    )           
+    section_re = re.compile(r'\\section\*?\{([^}]+)\}')
+    sections = list(section_re.finditer(text))                                                                        
 
-_EXTRACTORS_EXPERIMENTAL = [
-    _extract_experimental,
-]
+    for i, match in enumerate(sections):                                                                              
+        if not EXPERIMENTAL_KEYWORDS.search(match.group(1)):
+            continue
+        start = match.start()
+        end = sections[i + 1].start() if i + 1 < len(sections) else len(text)                                         
+        section_text = text[start:end]
+                                                                                                                    
+        for para in re.split(r'\n\n+', section_text):                                                                 
+            para = para.strip()
+            if len(para) < 50:                                                                                        
+                continue
+            para_offset = text.find(para, start)
+            if para_offset == -1:
+                continue
+            yield SpanType.EXPERIMENTAL, para, para_offset
 
 # ---------------------------------------------------------------------------
 # All Errors
 # ---------------------------------------------------------------------------
 
-_EXTRACTORS = _EXTRACTORS_SURFACE + _EXTRACTORS_CLAIM + _EXTRACTORS_LOGIC + _EXTRACTORS_EXPERIMENTAL
+_EXTRACTORS_THEORETICAL = _EXTRACTORS_SURFACE + _EXTRACTORS_CLAIM + _EXTRACTORS_LOGIC 
+_EXTRACTORS_EXPERIMENTAL = _EXTRACTORS_SURFACE + [_extract_paragraphs, _extract_experimental]
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -216,23 +292,32 @@ def _compatible_errors(span_type: SpanType) -> list[Error]:
         ], 
 
         SpanType.DEFINITION: [
-            Error.INCORRECT_CLAIM 
+            Error.INCORRECT_CLAIM,
         ],
         SpanType.THEOREM: [
-            Error.INCORRECT_CLAIM 
+            Error.INCORRECT_CLAIM,
         ],
 
         SpanType.PROOF: [
             Error.MISSING_CASE,
             Error.INDUCTION,
             Error.CIRCULAR_REASONING,
-            Error.INVALID_IMPLICATION
+            Error.INVALID_IMPLICATION,
+            Error.OPERATOR_OR_SIGN,
+            Error.INDEX_OR_SUBSCRIPT,
+            Error.NUMERIC_PARAMETER,
+            Error.COMPUTATION
         ],
 
         SpanType.EXPERIMENTAL: [
             Error.MISINTERP,
             Error.CAUSAL_REVERSED,
-            Error.P_HACKING
+            Error.P_HACKING,
+            Error.INCORRECT_CLAIM,
+            Error.OPERATOR_OR_SIGN,
+            Error.INDEX_OR_SUBSCRIPT,
+            Error.NUMERIC_PARAMETER,
+            Error.COMPUTATION
         ]
     }
     return mapping.get(span_type, [])

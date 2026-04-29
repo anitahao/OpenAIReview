@@ -35,10 +35,13 @@ def validate_perturbations(
     """
     valid: list[Perturbation] = []
     rejected: list[tuple[Perturbation, str]] = []
-    # Track occupied character ranges to prevent overlaps
     occupied: list[tuple[int, int]] = []
 
-    for p in perturbations:
+    # Process larger spans first so theorems/proofs take priority over
+    # surface-level equations contained within them
+    ordered = sorted(perturbations, key=lambda p: len(p.original), reverse=True)
+
+    for p in ordered:
         idx = p.offset
 
         # Check 1: perturbed differs from original
