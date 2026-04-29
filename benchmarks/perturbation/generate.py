@@ -11,6 +11,8 @@ from .models import (
     Perturbation,
 )
 
+_BATCH_SIZE = 25
+
 errors = [
     Error.NUMERIC_PARAMETER,
     Error.OPERATOR_OR_SIGN,
@@ -74,15 +76,11 @@ If "error_type" is "surface", generate ONE compatible perturbation:
 If "error_type" is "claim", generate ONE compatible perturbation:
 - incorrect_claim: corrupt the statement subtly (e.g. wrong condition, wrong quantifier, wrong bound, wrong constant, wrong sign, wrong index/subscript)
 
-If "error_type" is "logic", generate ONE compatible perturbation:
+If "error_type" is "logic", generate ONE compatible perturbation (in order from most to least important):
 - missing_case: remove one case from case analysis, or corrupt the base case in an induction
-- induction: make the inductive step invalid                                                                          
+- induction: incorrect base case or inductive step                                                                      
 - circular_reasoning: use the theorem being proved as a step in its own proof
 - invalid_implication: reverse or invalidate a key logical implication
-- numeric_parameter: change a numeric constant (e.g. 0.5 becomes 0.25, n=10 becomes n=100)
-- operator_or_sign: flip an operator or sign (e.g. + becomes -, ≤ becomes ≥)                                               
-- index_or_subscript: change a subscript/superscript (e.g. x_i becomes x_{{i+1}})                                           
-- computation: introduce an arithmetic error in a derivation step
 
 OUTPUT FORMAT:
 For each perturbation, return:
@@ -92,6 +90,7 @@ For each perturbation, return:
 - why_wrong: a short explanation of how the error can be detected using ONLY the paper
 
 Return ONLY a JSON array of perturbation objects. No commentary.
+Example: [{{"span_id": "S0001", "error": "operator_or_sign", "perturbed": "...", "why_wrong": "..."}}]
 
 STRICT REQUIREMENTS:
 - The perturbed text must be valid LaTeX
@@ -118,15 +117,11 @@ If "error_type" is "surface", generate ONE compatible perturbation:
 If "error_type" is "claim", generate ONE compatible perturbation:
 - incorrect_claim: corrupt the statement so it is factually incorrect
 
-If "error_type" is "experimental", generate ONE compatible perturbation:
+If "error_type" is "experimental", generate ONE compatible perturbation (in order from most to least important):
 - misinterp: misinterpret a result (e.g. p-value or confidence interval)
 - causal_reversed: flip a causal claim (X causes Y becomes Y causes X)                                                      
 - p_hacking: introduce a methodological flaw that constitutes p-hacking (e.g. remove or negate a multiple testing correction, change the stopping rule, 
 selectively report only the significant outcome from a set of tested hypotheses)
-- numeric_parameter: change a numeric constant (e.g. 0.5 becomes 0.25, n=10 becomes n=100)
-- operator_or_sign: flip an operator or sign (e.g. + becomes -, ≤ becomes ≥)                                               
-- index_or_subscript: change a subscript/superscript (e.g. x_i becomes x_{{i+1}})                                           
-- computation: introduce an arithmetic error in a derivation step
 
 OUTPUT FORMAT:
 For each perturbation, return:
@@ -136,6 +131,7 @@ For each perturbation, return:
 - why_wrong: a short explanation of how the error can be detected using ONLY the paper
 
 Return ONLY a JSON array of perturbation objects. No commentary.
+Example: [{{"span_id": "S0001", "error": "operator_or_sign", "perturbed": "...", "why_wrong": "..."}}]
 
 STRICT REQUIREMENTS:
 - The perturbed text must be valid LaTeX
@@ -181,18 +177,6 @@ def generate_perturbations(category,
                            candidates: list[CandidateSpan],
                            model: str = "anthropic/claude-opus-4-6",
                            reasoning_effort: str | None = None) -> list[Perturbation]:
-    # Build candidate JSON for the prompt
-    candidates_json = json.dumps([
-        {
-            "span_id": c.span_id,
-            "text": c.text,
-            "context": c.context,
-            "error_type": c.error_type,
-            "compatible_errors": [error.value for error in c.compatible_errors],
-        }
-        for c in candidates
-    ], indent=2)
-
     field = identify_field(abstract, model=model, reasoning_effort=reasoning_effort)
     domain_specific = domain_specific_errors(field, abstract, model=model, reasoning_effort=reasoning_effort)
 
@@ -201,26 +185,43 @@ def generate_perturbations(category,
     elif category == "experimental":
         prompt = EXPERIMENTAL_PROMPT
 
-    formatted_prompt = prompt.format(
-        field=field,
-        domain_specific=domain_specific,
-        candidates_json=candidates_json,
-        errors=", ".join(c.value for c in errors),
-    )
+    errors_str = ", ".join(c.value for c in errors)
+    batches = [candidates[i:i + _BATCH_SIZE] for i in range(0, len(candidates), _BATCH_SIZE)]
+    print(f"  {len(candidates)} candidates in {len(batches)} batches of {_BATCH_SIZE}...")
 
-    print(f"  {len(candidates)} candidates...")
+    all_perturbations: list[Perturbation] = []
+    for batch_idx, batch in enumerate(batches):
+        candidates_json = json.dumps([
+            {
+                "span_id": c.span_id,
+                "text": c.text,
+                "context": c.context,
+                "error_type": c.error_type,
+                "compatible_errors": [error.value for error in c.compatible_errors],
+            }
+            for c in batch
+        ], indent=2)
 
-    response, usage = chat(
-        messages=[{"role": "user", "content": formatted_prompt}],
-        model=model,
-        max_tokens=8192,
-        reasoning_effort=reasoning_effort,
-    )
+        formatted_prompt = prompt.format(
+            field=field,
+            domain_specific=domain_specific,
+            candidates_json=candidates_json,
+            errors=errors_str,
+        )
 
-    perturbations = _parse_response(response, candidates)
-    print(f"    -> {len(perturbations)} perturbations")
+        response, usage = chat(
+            messages=[{"role": "user", "content": formatted_prompt}],
+            model=model,
+            max_tokens=8192,
+            reasoning_effort=reasoning_effort,
+        )
 
-    return perturbations
+        batch_result = _parse_response(response, batch)
+        print(f"    batch {batch_idx + 1}/{len(batches)}: {len(batch_result)} perturbations")
+        all_perturbations.extend(batch_result)
+
+    print(f"  -> {len(all_perturbations)} total perturbations")
+    return all_perturbations
 
 # ---------------------------------------------------------------------------
 # Helpers:
@@ -254,6 +255,8 @@ def _parse_response(response: str,
 
     perturbations = []
     for i, item in enumerate(items):
+        if not isinstance(item, dict):
+            continue
         span_id = item.get("span_id", "")
         if span_id not in span_lookup:
             continue

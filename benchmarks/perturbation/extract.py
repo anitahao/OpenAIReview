@@ -201,17 +201,23 @@ _EXTRACTORS_LOGIC = [
 # ---------------------------------------------------------------------------
 # Error Type 4: Experimental 
 # ---------------------------------------------------------------------------
+_SKIP_SECTIONS = re.compile(
+    r'bibliograph|reference|appendix|acknowledge|acknowledgement',
+    re.IGNORECASE,
+)
+
 def _extract_paragraphs(text: str):
-    """Extract paragraphs from non-experimental sections (intro, related work, conclusion, etc.)"""                   
-    EXPERIMENTAL_KEYWORDS = re.compile(                                                                               
+    """Extract paragraphs from non-experimental sections (intro, related work, conclusion, etc.)"""
+    EXPERIMENTAL_KEYWORDS = re.compile(
         r'result|evaluation|empirical|numerical|case stud|analysis|method|approach|statistical',
-        re.IGNORECASE                                                                                                 
-    )                                                                                                                 
+        re.IGNORECASE
+    )
     section_re = re.compile(r'\\section\*?\{([^}]+)\}')
-    sections = list(section_re.finditer(text))                                                                        
-                
-    for i, match in enumerate(sections):                                                                              
-        if EXPERIMENTAL_KEYWORDS.search(match.group(1)):
+    sections = list(section_re.finditer(text))
+
+    for i, match in enumerate(sections):
+        title = match.group(1)
+        if EXPERIMENTAL_KEYWORDS.search(title) or _SKIP_SECTIONS.search(title):
             continue                                                                                                  
         start = match.start()
         end = sections[i + 1].start() if i + 1 < len(sections) else len(text)
@@ -235,8 +241,9 @@ def _extract_experimental(text: str):
     section_re = re.compile(r'\\section\*?\{([^}]+)\}')
     sections = list(section_re.finditer(text))                                                                        
 
-    for i, match in enumerate(sections):                                                                              
-        if not EXPERIMENTAL_KEYWORDS.search(match.group(1)):
+    for i, match in enumerate(sections):
+        title = match.group(1)
+        if not EXPERIMENTAL_KEYWORDS.search(title) or _SKIP_SECTIONS.search(title):
             continue
         start = match.start()
         end = sections[i + 1].start() if i + 1 < len(sections) else len(text)                                         
