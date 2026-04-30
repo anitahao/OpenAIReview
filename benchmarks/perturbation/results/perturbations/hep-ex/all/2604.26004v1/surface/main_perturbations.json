@@ -1,0 +1,131 @@
+{
+  "paper_title": "Revisiting Turner Window Axions: The Untapped Potential of NaI Dark Matter Detectors",
+  "paper_slug": "main",
+  "n_candidates": 43,
+  "n_generated": 16,
+  "n_valid": 15,
+  "n_injected": 15,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0011",
+      "span_id": "S0011",
+      "error": "numeric_parameter",
+      "original": "$|g_{app}| \\sim 10^{-6.5}$",
+      "perturbed": "$|g_{app}| \\sim 10^{-2.5}$",
+      "why_wrong": "The abstract states that the coupling range extends to $10^{-2}$. Changing the lower bound from $10^{-6.5}$ to $10^{-2.5}$ significantly shrinks the sensitivity range by four orders of magnitude, which contradicts the subsequent claim that the experiment can cover QCD axions with $m_a \\gtrsim 10$ eV."
+    },
+    {
+      "perturbation_id": "P001_S0013",
+      "span_id": "S0013",
+      "error": "operator_or_sign",
+      "original": "$m_a \\gtrsim 10$",
+      "perturbed": "$m_a \\lesssim 10$",
+      "why_wrong": "The paper discusses searching for axions with masses high enough to be produced in stellar cores and detected via resonant absorption. Flipping the inequality to $m_a \\lesssim 10$ eV suggests sensitivity to lower masses, which contradicts the experimental design focused on the 440 keV transition of $^{23}$Na."
+    },
+    {
+      "perturbation_id": "P002_S0017",
+      "span_id": "S0017",
+      "error": "index_or_subscript",
+      "original": "$^{12}$",
+      "perturbed": "$^{13}$",
+      "why_wrong": "The context describes $\\alpha$-stable fusion products which are even-even nuclei. $^{12}$C is the standard $\\alpha$-stable product of helium burning; $^{13}$C is an odd-A isotope and would not be categorized as an inefficient emitter in the same way as the even-even isotopes listed ($^4$He, $^{16}$O)."
+    },
+    {
+      "perturbation_id": "P003_S0019",
+      "span_id": "S0019",
+      "error": "computation",
+      "original": "$^{57}$",
+      "perturbed": "$^{59}$",
+      "why_wrong": "The text identifies the most efficient axion emitters based on excitation energy and transition strength. $^{57}$Fe is the standard isotope for low-temperature axion emission due to its 14.4 keV state; changing the mass number to 59 is a computational/identification error as $^{59}$Fe is unstable and not a primary constituent for stellar axion emission calculations."
+    },
+    {
+      "perturbation_id": "P000_S0021",
+      "span_id": "S0021",
+      "error": "operator_or_sign",
+      "original": "$T_8 \\lesssim 1$",
+      "perturbed": "$T_8 \\gtrsim 1$",
+      "why_wrong": "The text defines $T_8 \\lesssim 1$ as 'low' and $T_8 \\gtrsim 4$ as 'high' stellar core temperatures. Flipping the operator to $T_8 \\gtrsim 1$ creates a logical contradiction where the 'low' temperature range overlaps with or exceeds the 'high' temperature range."
+    },
+    {
+      "perturbation_id": "P001_S0023",
+      "span_id": "S0023",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\n{^{12}\\mathrm{C}}+{^{12}\\mathrm{C}} \\rightarrow {^{24}\\mathrm{Mg}}^* \\rightarrow \\left\\{ \\begin{array}{ll} {^{20}\\mathrm{Ne}}+\\alpha & +4.62 \\MeV \\\\ {^{23}\\mathrm{Na}}+p & + 2.24 \\MeV \\\\\n^{23}\\mathrm{Mg} + n & - 2.60 \\MeV \\end{array} \\right.~.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n{^{12}\\mathrm{C}}+{^{12}\\mathrm{C}} \\rightarrow {^{24}\\mathrm{Mg}}^* \\rightarrow \\left\\{ \\begin{array}{ll} {^{20}\\mathrm{Ne}}+\\alpha & +4.62 \\MeV \\\\ {^{23}\\mathrm{Na}}+p & - 2.24 \\MeV \\\\\n^{23}\\mathrm{Mg} + n & - 2.60 \\MeV \\end{array} \\right.~.\n\\end{equation}",
+      "why_wrong": "The sentence immediately following the equation states that 'The branch to $^{23}$Na is exothermic'. An exothermic reaction must have a positive Q-value (+2.24 MeV), but the perturbed text shows a negative value (-2.24 MeV), which represents an endothermic reaction."
+    },
+    {
+      "perturbation_id": "P002_S0025",
+      "span_id": "S0025",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\n    \\frac{\\epsilon_a}{M_N} \\Omega_J^\\prime \\sim \\frac{\\epsilon_a}{M_N} y^{(J-1)/2},~~~~~\\Sigma_J^{\\prime \\prime} \\sim \\left\\{ \\begin{array}{ll} y^{(J-1)/2} & J \\ge 1 \\\\ ~y^{1/2} & J=0 \\end{array} \\right.~~\n    ~.~~\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n    \\frac{\\epsilon_a}{M_N} \\Omega_J^\\prime \\sim \\frac{\\epsilon_a}{M_N} y^{(J+1)/2},~~~~~\\Sigma_J^{\\prime \\prime} \\sim \\left\\{ \\begin{array}{ll} y^{(J-1)/2} & J \\ge 1 \\\\ ~y^{1/2} & J=0 \\end{array} \\right.~~\n    ~.~~\n\\end{equation}",
+      "why_wrong": "The text states that for $J \\ge 1$, the contribution of $\\Omega_J^\\prime$ relative to $\\Sigma_J^{\\prime \\prime}$ is suppressed by $\\epsilon_a/M_N$. If the exponent is changed from $(J-1)/2$ to $(J+1)/2$, the scaling with $y$ (the long-wavelength limit parameter) would differ between the two operators, contradicting the claim that the suppression is simply the constant factor $\\epsilon_a/M_N$."
+    },
+    {
+      "perturbation_id": "P003_S0029",
+      "span_id": "S0029",
+      "error": "computation",
+      "original": "\\begin{equation}\n    \\phi_0 = 0.173 \\times 10^6 \\left| \\frac{ g_{ann}^\\mathrm{eff \\, ^{23}Na} }{ 10^{-7}} \\right|^2\\mathrm{cm^{-2}s^{-1}}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n    \\phi_0 = 0.173 \\times 10^6 \\left| \\frac{ g_{ann}^\\mathrm{eff \\, ^{23}Na} }{ 10^{-7}} \\right|\\mathrm{cm^{-2}s^{-1}}.\n\\end{equation}",
+      "why_wrong": "The axion emission rate $\\omega_a$ defined in equation (11) (span S0027) is proportional to the square of the coupling constants ($g^2$). Therefore, the resulting flux $\\phi_0$ must scale with the square of the effective coupling. Removing the exponent '2' makes the flux linear in the coupling, which is physically inconsistent with the underlying emission physics described in the paper."
+    },
+    {
+      "perturbation_id": "P000_S0031",
+      "span_id": "S0031",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\n\\phi_a^\\mathrm{Betel} = \\left\\{ \\begin{array}{l} 1.57 \\\\ 1.91 \\end{array}  \\right. \\times 10^6  \\left| \\frac{ g_{ann}^\\mathrm{eff \\, ^{23}Na} }{ 10^{-7}} \\right|^2\\mathrm{cm^{-2}s^{-1}}~\n\\label{eq:Bet}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\phi_a^\\mathrm{Betel} = \\left\\{ \\begin{array}{l} 15.7 \\\\ 19.1 \\end{array}  \\right. \\times 10^6  \\left| \\frac{ g_{ann}^\\mathrm{eff \\, ^{23}Na} }{ 10^{-7}} \\right|^2\\mathrm{cm^{-2}s^{-1}}~\n\\label{eq:Bet}\n\\end{equation}",
+      "why_wrong": "The text immediately preceding the equation states that the median galactic flux is 0.214 x 10^6 (Eq. 10), and the context for Betelgeuse describes the flux as exceeding the galactic value. However, changing the coefficients from 1.57/1.91 to 15.7/19.1 creates a discrepancy with the subsequent discussion of the exclusion limits in Fig. 5 and the sensitivity analysis, where such a massive order-of-magnitude increase in flux would lead to much stronger coupling limits than those derived in the paper."
+    },
+    {
+      "perturbation_id": "P001_S0032",
+      "span_id": "S0032",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n    P_\\mathrm{esc} [z_0]= \\exp\\left[-\\int_{z_0}^{z_S}~\\sum_i n_i(z) ~\\sigma_i ~dz \\right].\n    \\label{eq:prob}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n    P_\\mathrm{esc} [z_0]= \\exp\\left[+\\int_{z_0}^{z_S}~\\sum_i n_i(z) ~\\sigma_i ~dz \\right].\n    \\label{eq:prob}\n\\end{equation}",
+      "why_wrong": "The escape probability must decrease as the integral of the opacity (density times cross-section) increases. Flipping the sign from negative to positive in the exponential would mean the probability of escaping the star increases exponentially with the amount of matter encountered, which contradicts the definition of 'opacity' and 'escape probability' described in the surrounding text."
+    },
+    {
+      "perturbation_id": "P002_S0034",
+      "span_id": "S0034",
+      "error": "computation",
+      "original": "\\begin{equation}\n   \\Delta_\\mathrm{bg}^\\mathrm{stat} \\approx 3 \\sqrt{M\\, t\\,  b\\,  \\Gamma_\\mathrm{FWHM}}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n   \\Delta_\\mathrm{bg}^\\mathrm{stat} \\approx 3 \\sqrt{\\frac{M\\, t\\,  b}{\\Gamma_\\mathrm{FWHM}}}\n\\end{equation}",
+      "why_wrong": "The statistical uncertainty in a background count is proportional to the square root of the total number of background events. The total events are the product of the rate (b), mass (M), time (t), and the energy window (resolution FWHM). Moving the FWHM to the denominator is a dimensional and arithmetic error, as the number of background events must increase with a wider energy window, not decrease."
+    },
+    {
+      "perturbation_id": "P003_S0039",
+      "span_id": "S0039",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n1.9 \\times 10^{-5} < |g_{aNN}^3| < 0.95 \\times 10^{-3},\n\\label{eq:SNO}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n1.9 \\times 10^{-5} > |g_{aNN}^3| > 0.95 \\times 10^{-3},\n\\label{eq:SNO}\n\\end{equation}",
+      "why_wrong": "The inequality signs are flipped. The text states that 1.9e-5 is the lower bound (sensitivity limit) and 0.95e-3 is the upper bound (trapping limit). The perturbed equation mathematically claims that 1.9e-5 is greater than 0.95e-3, which is numerically impossible, and contradicts the textual description of the bounds."
+    },
+    {
+      "perturbation_id": "P000_S0040",
+      "span_id": "S0040",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n    ~~~~~1.3 \\times 10^{-6} < \\sqrt{g_{app}^2 + g_{ann}^2} < 1.4 \\times 10^{-3} ,\n    \\label{eq:SN1987count}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n    ~~~~~1.3 \\times 10^{-6} > \\sqrt{g_{app}^2 + g_{ann}^2} > 1.4 \\times 10^{-3} ,\n    \\label{eq:SN1987count}\n\\end{equation}",
+      "why_wrong": "The inequality signs are flipped, creating a mathematical impossibility where a value must be simultaneously less than $10^{-6}$ and greater than $10^{-3}$. Furthermore, the context describes this as a 'range' or 'constraint' on couplings, which implies the lower bound should be less than the upper bound."
+    },
+    {
+      "perturbation_id": "P001_S0041",
+      "span_id": "S0041",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation} \n3 \\times 10^{-7} \\rightarrow 2.5 \\times 10^{-6}\n\\label{eq:cooling2}\n\\end{equation}",
+      "perturbed": "\\begin{equation} \n3 \\times 10^{-5} \\rightarrow 2.5 \\times 10^{-4}\n\\label{eq:cooling2}\n\\end{equation}",
+      "why_wrong": "The text states that this equation represents a 'more aggressive upper bound' compared to Eq. (\\ref{eq:cooling}), which is $3 \\times 10^{-7}$. Increasing the values to $10^{-5}$ and $10^{-4}$ makes the bound significantly weaker (less aggressive), contradicting the textual description."
+    },
+    {
+      "perturbation_id": "P002_S0042",
+      "span_id": "S0042",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n   1.6 \\times 10^{-7} < |g^0_{aNN}-0.838 g^3_{aNN}|,\n %  \\label{eq:Fe}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n   1.6 \\times 10^{-7} > |g^0_{aNN}-0.838 g^3_{aNN}|,\n %  \\label{eq:Fe}\n\\end{equation}",
+      "why_wrong": "The text describes this result as a 'limit' or 'bound' that 'overlaps with the bound established by SN1987A cooling'. Flipping the inequality to 'greater than' changes the exclusion limit into a requirement for a non-zero coupling, which contradicts the standard presentation of cooling limits in the context of the paper."
+    }
+  ]
+}

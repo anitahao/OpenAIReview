@@ -1,0 +1,91 @@
+{
+  "paper_title": "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
+  "paper_slug": "formlibre-nprojections",
+  "n_candidates": 20,
+  "n_generated": 10,
+  "n_valid": 10,
+  "n_injected": 10,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\\label{CAToeplitz} \n\tThe $C^*$-algebra $\\mathcal{C}^*(\\mathcal{T}_n^{0,0})$ is isomorphic and isometric to \n\tthe $C^*$-algebra $\\mathcal{D}_n^{\\mathbb{C}I}$, which consists of all\n\tmatrix-valued functions $M\\in M_n(\\mathbb{C}) \\otimes C[0,\\infty]$ such that  $M(0)=M( \\infty)$. \n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\\label{CAToeplitz} \n\tThe $C^*$-algebra $\\mathcal{C}^*(\\mathcal{T}_n^{0,0})$ is isomorphic and isometric to \n\tthe $C^*$-algebra $\\mathcal{D}_n^{\\mathbb{C}I}$, which consists of all\n\tmatrix-valued functions $M\\in M_n(\\mathbb{C}) \\otimes C[0,\\infty]$ such that  $M(0)=M( 1)$. \n\\end{corollary}",
+      "why_wrong": "The context states that the symbols $b$ satisfy $b^0 = b^{+\\infty}$. Therefore, the boundary condition for the isomorphic algebra must be $M(0)=M(\\infty)$, not $M(0)=M(1)$."
+    },
+    {
+      "perturbation_id": "P003_S0013",
+      "span_id": "S0013",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{cor:Vas-generic} \n\tThe set of operators $P_T, Q_{\\Pi,(1)},\\dots, Q_{\\Pi,(n)}$ is a system of all-but-one orthogonal projections in generic position. \n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{cor:Vas-generic} \n\tThe set of operators $P_T, Q_{\\Pi,(1)},\\dots, Q_{\\Pi,(n)}$ is a system of $n$ orthogonal projections in generic position. \n\\end{lemma}",
+      "why_wrong": "The set contains $n$ projections $Q_{\\Pi,(j)}$ plus the projection $P_T$, making it $n+1$ projections. Describing it as a system of '$n$ orthogonal projections' is numerically incorrect based on the indices provided."
+    },
+    {
+      "perturbation_id": "P002_S0012",
+      "span_id": "S0012",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\\label{cor} \n\tThe set of operators $P_\\gamma I, Q_1,\\ldots, Q_n$ is a system all-but-one orthogonal projections in generic position. \n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\\label{cor} \n\tThe set of operators $P_\\gamma I, Q_1,\\ldots, Q_n$ is a system of orthogonal projections in generic position. \n\\end{corollary}",
+      "why_wrong": "The perturbation removes the 'all-but-one' qualifier. In operator theory, a system of projections is 'all-but-one' if their sum is the identity or related to a specific rank condition; the paper specifically identifies this as an 'all-but-one' system in the context of the $n$ projections $Q_j$ and the projection $P_\\gamma$."
+    },
+    {
+      "perturbation_id": "P004_S0014",
+      "span_id": "S0014",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{lem:sep-x0-x1-2}\n\tLet $v, w \\in \\mathbb{C}^n$ be unit vectors,  and $x_0, x_1 \\in (0, \\infty)$. \n\tSuppose that\n\t\\begin{align}\n\t\tf_{x_0,v}(Q_j P_\\gamma I Q_k)=f_{x_1,w}(Q_jP_\\gamma I Q_k), \\label{fQjQk-2}\\\\\n\t\tf_{x_0,v}(Q_j P_\\gamma I Q_kP_\\gamma I Q_j)=f_{x_1,w}(Q_jP_\\gamma I Q_kP_\\gamma I Q_j) \\label{fQjQkQl-2}\n\t\\end{align}\n\tfor all $j,k=1,\\dots,n$.\n\tThen $x_0=x_1$ and $v=\\lambda w$, where $\\lambda$ is a unimodular complex number.\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{lem:sep-x0-x1-2}\n\tLet $v, w \\in \\mathbb{C}^n$ be unit vectors,  and $x_0, x_1 \\in (0, \\infty)$. \n\tSuppose that\n\t\\begin{align}\n\t\tf_{x_0,v}(Q_j P_\\gamma I Q_k)=f_{x_1,w}(Q_jP_\\gamma I Q_k), \\label{fQjQk-2}\\\\\n\t\tf_{x_0,v}(Q_j P_\\gamma I Q_kP_\\gamma I Q_j)=f_{x_1,w}(Q_jP_\\gamma I Q_kP_\\gamma I Q_j) \\label{fQjQkQl-2}\n\t\\end{align}\n\tfor all $j,k=1,\\dots,n$.\n\tThen $x_0=x_1$ and $v=w$.\n\\end{lemma}",
+      "why_wrong": "The perturbation claims $v=w$, but pure states $f_{x,v}$ are defined via inner products $\\langle M(x)v, v \\rangle$. Thus, $v$ is only determined up to a unimodular constant $\\lambda$ (a phase), as correctly stated in the original text."
+    },
+    {
+      "perturbation_id": "P005_S0015",
+      "span_id": "S0015",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{lem:sep-ext-2} \n\tLet $v=(v_1,\\dots,v_n)^t \\in \\mathbb{C}^n$ be a unit vector, \n\t$x_0 \\in (0,\\infty)$ and $x_1=0, \\infty$.\n\tIf $v_j\\neq 0$, then\n\t$$f_{x_0,v}(Q_j P_\\gamma I Q_j) \\neq f_{x_1,e_k}(Q_j P_\\gamma I Q_j),\\ \\ k=1,\\dots,n.$$\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{lem:sep-ext-2} \n\tLet $v=(v_1,\\dots,v_n)^t \\in \\mathbb{C}^n$ be a unit vector, \n\t$x_0 \\in (0,\\infty)$ and $x_1=0, \\infty$.\n\tIf $v_j\\neq 0$, then\n\t$$f_{x_0,v}(Q_j P_\\gamma I Q_j) = f_{x_1,e_k}(Q_j P_\\gamma I Q_j),\\ \\ k=1,\\dots,n.$$\n\\end{lemma}",
+      "why_wrong": "The lemma is intended to show that the algebra 'separates' pure states. If the values were equal ($=$), the states would not be separated. The proof context shows $f_{x_0,v} \\in (0,1)$ while the boundary values are $0$ or $1$, implying they must be unequal."
+    },
+    {
+      "perturbation_id": "P006_S0016",
+      "span_id": "S0016",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{lem:sep-extyx0-2} \n\tThe algebra $\\mathcal{B}^{1,n}$ separates all the pure states \n\t$$f_{0,e_1},\\dots,f_{0,e_n}, f_{\\infty,e_1},f_{\\infty,e_n}$$\n\tof the algebra $\\mathcal{D}_n^{1,n}$.\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{lem:sep-extyx0-2} \n\tThe algebra $\\mathcal{B}^{1,n}$ separates all the pure states \n\t$$f_{0,e_1},\\dots,f_{0,e_n}, f_{\\infty,e_1},f_{\\infty,e_n}$$\n\tof the algebra $\\mathcal{D}_n^{1,n}$ using only the operators $Q_j$.\n\\end{lemma}",
+      "why_wrong": "The proof context mentions that $f_{0,e_k}(Q_k)=1$ and $f_{\\infty,e_1}(Q_k)=\\delta$, but to separate states at $0$ from states at $\\infty$, one typically needs the spectral function $\\gamma$ or $P_\\gamma$ because $Q_j$ values might coincide at both boundaries."
+    },
+    {
+      "perturbation_id": "P007_S0017",
+      "span_id": "S0017",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\n\tThe Laplace transform of function $th(t)$ is given by\n\t\\begin{equation}\\label{integral-Kjn}\n\t\t\\int_{0}^{\\infty}  e^{-pt} \\, t (1-e^{-2t})^{1/2} dt =- \\frac{d}{dp} J(p)\n\t\t=J(p) \\left( \\beta(p)+\\frac{1}{p+1}\\right).\n\t\\end{equation}\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\n\tThe Laplace transform of function $th(t)$ is given by\n\t\\begin{equation}\\label{integral-Kjn}\n\t\t\\int_{0}^{\\infty}  e^{-pt} \\, t (1-e^{-2t})^{1/2} dt = \\frac{d}{dp} J(p)\n\t\t=J(p) \\left( \\beta(p)+\\frac{1}{p+1}\\right).\n\t\\end{equation}\n\\end{lemma}",
+      "why_wrong": "The derivative of a Laplace transform $\\mathcal{L}\\{f(t)\\}(p)$ with respect to $p$ is $\\mathcal{L}\\{-t f(t)\\}(p)$. Therefore, the transform of $t h(t)$ must be $-\\frac{d}{dp} J(p)$, not $+\\frac{d}{dp} J(p)$."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{C-Ta,B(j)}\n\tThe $C^*$-algebra $\\mathcal{C}^*(T_{n,a_0},B_{\\Pi,(1)},\\dots,B_{\\Pi,(n)})$ \n\tis isomorphic and isometric to the $C^*$-algebra $\\mathcal{D}_n$.\n\tEquivalently, the $C^*$-algebra \n\t$\\mathcal{D}_n$ is generated by \n\t\\begin{equation*}\\label{gamma-Qjs}\n\t\t\\gamma^{n,a_0}, Q_1, \\dots, Q_{n}.\n\t\\end{equation*}\n\tMoreover, the map \n\t$\\mathcal{C}^*(T_{n,a_0},B_{\\Pi,(1)},\\dots,B_{\\Pi,(n)}) \\ni T\\longmapsto R_n  TR_n^* \\in \\mathcal{D}_n$ \n\tis an isometric isomorphism of $C^*$-algebras, where\n\t\\begin{equation*}\n\t\tT_{n,a_0}\\longmapsto \\gamma^{n,a_0}I \\quad \\text{and} \\quad B_{\\Pi,(j)} \\longmapsto Q_j.\n\t\\end{equation*}\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{C-Ta,B(j)}\n\tThe $C^*$-algebra $\\mathcal{C}^*(T_{n,a_0},B_{\\Pi,(1)},\\dots,B_{\\Pi,(n)})$ \n\tis isomorphic and isometric to the $C^*$-algebra $\\mathcal{D}_n$.\n\tEquivalently, the $C^*$-algebra \n\t$\\mathcal{D}_n$ is generated by \n\t\\begin{equation*}\\label{gamma-Qjs}\n\t\t\\gamma^{n,a_0}, Q_1, \\dots, Q_{n-1}.\n\t\\end{equation*}\n\tMoreover, the map \n\t$\\mathcal{C}^*(T_{n,a_0},B_{\\Pi,(1)},\\dots,B_{\\Pi,(n)}) \\ni T\\longmapsto R_n  TR_n^* \\in \\mathcal{D}_n$ \n\tis an isometric isomorphism of $C^*$-algebras, where\n\t\\begin{equation*}\n\t\tT_{n,a_0}\\longmapsto \\gamma^{n,a_0}I \\quad \\text{and} \\quad B_{\\Pi,(j)} \\longmapsto Q_j.\n\t\\end{equation*}\n\\end{theorem}",
+      "why_wrong": "The perturbation claims the algebra is generated by $Q_1, \\dots, Q_{n-1}$, but the isomorphism map explicitly maps $B_{\\Pi,(j)}$ to $Q_j$ for $j=1, \\dots, n$. Omitting $Q_n$ contradicts the definition of the generators of $\\mathcal{D}_n$ and the mapping of the $n$ projections $B_{\\Pi,(j)}$."
+    },
+    {
+      "perturbation_id": "P008_S0018",
+      "span_id": "S0018",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{lem:sep-x0-x1}\n\tLet $v, w \\in \\mathbb{C}^n$ be unit vectors,  and $x_0, x_1 \\in (0, \\infty)$. \n\tLet $\\gamma^{n,a_0}$ be the spectral function of the Toeplitz operator $T_{n,a_0}$, where $a_0(z)=\\chi_{[0,\\alpha/2]}(y)$.\n\tSuppose that\n\t\\begin{align}\n\t\tf_{x_0,v}(Q_j\\gamma^{n,a_0}I Q_k)& =f_{x_1,w}(Q_j\\gamma^{n,a_0}I Q_k), \\label{fQjQk}   \\\\\n\t\tf_{x_0,v}(Q_j\\gamma^{n,a_0}I Q_k\\gamma^{n,a_0}I Q_l)&=f_{x_1,w}(Q_j\\gamma^{n,a_0}I Q_k\\gamma^{n,a_0}I Q_l), \\label{fQjQkQl}\n\t\\end{align}\n\tfor all $j,k,l=1,...,n.$\n\tThen $x_0=x_1$ and $v=\\lambda w$, where $\\lambda$ is a unimodular complex number.\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{lem:sep-x0-x1}\n\tLet $v, w \\in \\mathbb{C}^n$ be unit vectors,  and $x_0, x_1 \\in (0, \\infty)$. \n\tLet $\\gamma^{n,a_0}$ be the spectral function of the Toeplitz operator $T_{n,a_0}$, where $a_0(z)=\\chi_{[0,\\alpha/2]}(y)$.\n\tSuppose that\n\t\\begin{align}\n\t\tf_{x_0,v}(Q_j\\gamma^{n,a_0}I Q_k)& =f_{x_1,w}(Q_j\\gamma^{n,a_0}I Q_k), \\label{fQjQk}   \\\\\n\t\tf_{x_0,v}(Q_j\\gamma^{n,a_0}I Q_k\\gamma^{n,a_0}I Q_l)&=f_{x_1,w}(Q_j\\gamma^{n,a_0}I Q_k\\gamma^{n,a_0}I Q_l), \\label{fQjQkQl}\n\t\\end{align}\n\tfor all $j,k,l=1,...,n.$\n\tThen $x_0=x_1$ and $v=w$.\n\\end{lemma}",
+      "why_wrong": "As with S0014, pure states $f_{x,v}$ are invariant under scalar multiplication of $v$ by a unimodular constant $\\lambda$. Thus, the condition only implies $v = \\lambda w$, not $v=w$."
+    },
+    {
+      "perturbation_id": "P009_S0019",
+      "span_id": "S0019",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{lemma}\\label{lem:sep-ext}  \n\tLet $\\gamma^{n,a_0}$ be the spectral function of the Toeplitz operator $T_{n,a_0}$, where $a_0(z)=\\chi_{[0,\\alpha/2]}(y)$. \n\tThen \n\t\\begin{equation*}\n\t\tf_{0,e_j} (\\gamma^{n,a_0}I) \\neq f_{\\infty,e_k}(\\gamma^{n,a_0}I) \\quad \\text{ for all} \\quad j,k=1,\\dots,n.\n\t\\end{equation*}\n\tIn addition, the pure states $f_{x,e_1},\\dots,f_{x,e_n}$ are separated by $Q_1,\\dots,Q_n$, where $x=0, +\\infty$.\n\\end{lemma}",
+      "perturbed": "\\begin{lemma}\\label{lem:sep-ext}  \n\tLet $\\gamma^{n,a_0}$ be the spectral function of the Toeplitz operator $T_{n,a_0}$, where $a_0(z)=\\chi_{[0,\\alpha/2]}(y)$. \n\tThen \n\t\\begin{equation*}\n\t\tf_{0,e_j} (\\gamma^{n,a_0}I) = f_{\\infty,e_k}(\\gamma^{n,a_0}I) \\quad \\text{ for all} \\quad j,k=1,\\dots,n.\n\t\\end{equation*}\n\tIn addition, the pure states $f_{x,e_1},\\dots,f_{x,e_n}$ are separated by $Q_1,\\dots,Q_n$, where $x=0, +\\infty$.\n\\end{lemma}",
+      "why_wrong": "The proof context explicitly states $f_{0,e_j}(\\gamma^{n,a_0}I)=0$ and $f_{\\infty,e_k}(\\gamma^{n,a_0}I)=1$. Therefore, they cannot be equal; they must be unequal to satisfy the 'separation' of states."
+    }
+  ]
+}

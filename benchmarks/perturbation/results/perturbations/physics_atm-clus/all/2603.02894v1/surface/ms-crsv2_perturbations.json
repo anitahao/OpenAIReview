@@ -1,0 +1,131 @@
+{
+  "paper_title": "Polarization Effects in Laser-Assisted (e,2e) Collision on H-atom by Twisted Electrons",
+  "paper_slug": "ms-crsv2",
+  "n_candidates": 40,
+  "n_generated": 15,
+  "n_valid": 15,
+  "n_injected": 15,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "index_or_subscript",
+      "original": "$_{av}$",
+      "perturbed": "$_{coh}$",
+      "why_wrong": "The text describes examining OAM effects for a macroscopic target, which requires an incoherent average over impact parameters. Changing the subscript from 'av' (average) to 'coh' (coherent) contradicts the physical requirement for macroscopic targets where individual atomic positions are not resolved, leading to an incorrect normalization of the twisted electron wave packet."
+    },
+    {
+      "perturbation_id": "P001_S0003",
+      "span_id": "S0003",
+      "error": "operator_or_sign",
+      "original": "$\\mathrm{CP_Y}$",
+      "perturbed": "$\\mathrm{LP}$",
+      "why_wrong": "The sentence claims that the specified laser produces a significantly larger TDCS compared to LP lasers. By changing the subject to LP, the sentence becomes self-contradictory, stating that an LP laser produces a larger TDCS than LP lasers, which is logically impossible within the comparison."
+    },
+    {
+      "perturbation_id": "P002_S0005",
+      "span_id": "S0005",
+      "error": "computation",
+      "original": "$(e,2e)$",
+      "perturbed": "$(e,3e)$",
+      "why_wrong": "The context describes the ionization of hydrogen and helium involving an incident electron and the detection of an ejected electron in an asymmetric coplanar geometry. An (e, 3e) process would imply double ionization, which is inconsistent with the described kinematics and the cited literature (Ta\u00efeb et al.) focusing on single ionization (e, 2e)."
+    },
+    {
+      "perturbation_id": "P003_S0008",
+      "span_id": "S0008",
+      "error": "numeric_parameter",
+      "original": "$m_l$",
+      "perturbed": "$m_l + 1$",
+      "why_wrong": "The topological charge is a fundamental integer parameter of the twisted electron beam. Shifting the parameter by 1 in the definition of the beam's properties introduces a phase mismatch in the OAM-dependent interference terms, as the subsequent analysis of OAM effects would be based on an incorrect orbital angular momentum value."
+    },
+    {
+      "perturbation_id": "P004_S0009",
+      "span_id": "S0009",
+      "error": "operator_or_sign",
+      "original": "$\\theta_p$",
+      "perturbed": "$1/\\theta_p$",
+      "why_wrong": "The opening angle is a geometric parameter of the twisted electron beam. Replacing the angle with its reciprocal changes the scaling of the transverse momentum components, which leads to numerical instabilities and incorrect integration of the OAM-dependent terms in the TDCS calculation."
+    },
+    {
+      "perturbation_id": "P000_S0021",
+      "span_id": "S0021",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{2}\n\\mathbf{A}(t) \\rightarrow A_{0}(\\hat{x}  \\ cos(\\omega t) + \\hat{y} \\ sin(\\omega t) \\tan(\\eta/2)) \n \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{2}\n\\mathbf{A}(t) \\rightarrow A_{0}(\\hat{x}  \\ cos(\\omega t) - \\hat{y} \\ sin(\\omega t) \\tan(\\eta/2)) \n \\end{equation}",
+      "why_wrong": "The vector potential A(t) and the electric field E(t) are related by E = -dA/dt. If the sign in the y-component of A(t) is changed to negative, the derivative would result in a positive y-component for E(t), which contradicts the negative sign in the y-component of the electric field defined in equation (3)."
+    },
+    {
+      "perturbation_id": "P001_S0022",
+      "span_id": "S0022",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{3}\n\\mathbf{E}(t) \\rightarrow E_{0}(\\hat{x}  \\ sin(\\omega t) - \\hat{y} \\ cos(\\omega t) \\tan(\\eta/2)) \n \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{3}\n\\mathbf{E}(t) \\rightarrow E_{0}(\\hat{x}  \\ sin(\\omega t) - \\hat{y} \\ cos(\\omega t) \\tan(\\eta/2)) \n \\end{equation}\n     \n      where $\\mathbf{E_{0}}$ = $\\mathbf{A_{0}}$ $c$/\\omega",
+      "why_wrong": "The text defines the relationship between the field strength E0 and vector potential A0. In the perturbed version, the ratio is inverted to c/omega. This is dimensionally inconsistent with the standard relation E0 = A0 * omega / c mentioned in the original context."
+    },
+    {
+      "perturbation_id": "P002_S0024",
+      "span_id": "S0024",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{4}\n\t\tT_{fi}^{B1}=-i\\int_{-\\infty}^{+\\infty} dt\\left< \\chi _{k_{s}}\\left ( \\mathbf{r_{0}},t \\right )\\Phi_{k_{e}}\\left ( \\mathbf{r_{1}},t \\right ) |\\frac{-1}{r_0}  +  \\frac{1}{|\\mathbf{r_0} - \\mathbf{r_i}|}| \\chi _{k_{i}}\\left ( \\mathbf{r_{0}},t \\right )\\Phi_{0}\\left ( \\mathbf{r_{1}},t \\right )\\right>\n\t\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{4}\n\t\tT_{fi}^{B1}=-i\\int_{-\\infty}^{+\\infty} dt\\left< \\chi _{k_{s}}\\left ( \\mathbf{r_{0}},t \\right )\\Phi_{k_{e}}\\left ( \\mathbf{r_{1}},t \\right ) |\\frac{1}{r_0}  +  \\frac{1}{|\\mathbf{r_0} - \\mathbf{r_i}|}| \\chi _{k_{i}}\\left ( \\mathbf{r_{0}},t \\right )\\Phi_{0}\\left ( \\mathbf{r_{1}},t \\right )\\right>\n\t\\end{equation}",
+      "why_wrong": "The interaction potential between the incident electron and the nucleus (charge +1 for Hydrogen) must be attractive (-1/r0). Changing the sign to +1/r0 represents a repulsive interaction between the electron and the nucleus, which is physically incorrect for an atom."
+    },
+    {
+      "perturbation_id": "P003_S0026",
+      "span_id": "S0026",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{5}\n     \\chi_{\\mathbf{k}}(\\mathbf{r}_0,t)\n= (2\\pi)^{-3/2} \\exp\\!\\left\\{ i \\left(\\mathbf{k}\\cdot \\mathbf{r}_0- E_k t\n- \\Delta_{k}\\sin(\\omega t - \\gamma_k) \\right) \\right\\} \n   \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{5}\n     \\chi_{\\mathbf{k}}(\\mathbf{r}_0,t)\n= (2\\pi)^{-3/2} \\exp\\!\\left\\{ i \\left(\\mathbf{k}\\cdot \\mathbf{r}_0- E_k t\n+ \\Delta_{k}\\sin(\\omega t - \\gamma_k) \\right) \\right\\} \n   \\end{equation}",
+      "why_wrong": "The Volkov wavefunction phase shift due to the laser field is conventionally subtracted from the plane wave phase. Changing the sign of the Delta_k term creates a phase mismatch with the laser field interaction described in the subsequent equations for the vector potential."
+    },
+    {
+      "perturbation_id": "P004_S0027",
+      "span_id": "S0027",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{6}\n     \\Delta_{k}\n= \\alpha_0({(\\mathbf{k}\\cdot \\hat{\\mathbf{x}})^2\n+ (\\mathbf{k}\\cdot \\hat{\\mathbf{y}})^2 \\tan^2\\!\\left(\\frac{\\eta}{2}\\right)\n})\n \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{6}\n     \\Delta_{k}\n= \\alpha_0({(\\mathbf{k}\\cdot \\hat{\\mathbf{x}})^2\n+ (\\mathbf{k}\\cdot \\hat{\\mathbf{y}})^2 \\tan\\!\\left(\\frac{\\eta}{2}\\right)\n})\n \\end{equation}",
+      "why_wrong": "Equation (6) defines the term Delta_k. In the original derivation for a circularly polarized field, the tan term must be squared to be consistent with the magnitude of the vector potential components. Removing the square power makes it inconsistent with the geometry of the field defined in equation (2)."
+    },
+    {
+      "perturbation_id": "P000_S0031",
+      "span_id": "S0031",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{8}\n\\begin{aligned}\n\\Phi_{k_e}^{(-)}(\\mathbf{r}_1,t)\n&= e^{-i \\mathbf{a}\\cdot \\mathbf{r}_0}\n   e^{-i E_{k_e} t}\n   e^{-i \\Delta_{k_e}\\sin(\\omega t - \\gamma_{k_e})}\n   \\left\\{\n   \\psi_{C,k_e}^{(-)}(\\mathbf{r})\n   \\left[\n   1 + i \\Delta_{k_e}\\sin(\\omega t - \\gamma_{k_e})\n   \\right] \\right. \\\\\n&\\qquad \\left.\n   + \\frac{i}{2}\n   \\sum_n\n   \\left[\n   \\frac{e^{i\\omega t}}\n        {E_n - E_{k_e} + \\omega} - \\frac{e^{-i\\omega t}}\n        {E_n - E_{k_e} - \\omega}\n   \\right]\n   M_{nj}\\,\n   \\psi_n(\\mathbf{r})\n   \\right\\}\n\\end{aligned}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{8}\n\\begin{aligned}\n\\Phi_{k_e}^{(-)}(\\mathbf{r}_1,t)\n&= e^{-i \\mathbf{a}\\cdot \\mathbf{r}_0}\n   e^{-i E_{k_e} t}\n   e^{-i \\Delta_{k_e}\\sin(\\omega t - \\gamma_{k_e})}\n   \\left\\{\n   \\psi_{C,k_e}^{(-)}(\\mathbf{r})\n   \\left[\n   1 - i \\Delta_{k_e}\\sin(\\omega t - \\gamma_{k_e})\n   \\right] \\right. \\\\\n&\\qquad \\left.\n   + \\frac{i}{2}\n   \\sum_n\n   \\left[\n   \\frac{e^{i\\omega t}}\n        {E_n - E_{k_e} + \\omega} - \\frac{e^{-i\\omega t}}\n        {E_n - E_{k_e} - \\omega}\n   \\right]\n   M_{nj}\\,\n   \\psi_n(\\mathbf{r})\n   \\right\\}\n\\end{aligned}\n\\end{equation}",
+      "why_wrong": "The sign in the first-order expansion term [1 + i...] is flipped to [1 - i...]. This violates the standard Taylor expansion of the Volkov phase factor exp(-i Delta sin(...)) which is used in the Coulomb-Volkov approximation."
+    },
+    {
+      "perturbation_id": "P001_S0032",
+      "span_id": "S0032",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{9}\n        M_{nj} = <\\psi_n|\\boldsymbol{\\varepsilon}.\\boldsymbol{r_i}|\\psi_{k_e}>\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{9}\n        M_{nj} = <\\psi_n|\\boldsymbol{\\varepsilon}.\\boldsymbol{r_i}|\\psi_{k_s}>\n    \\end{equation}",
+      "why_wrong": "The subscript of the final state wavefunction is changed from k_e (ejected electron) to k_s (scattered electron). This is inconsistent with the context of the transition matrix element for the ionization of the target atom."
+    },
+    {
+      "perturbation_id": "P002_S0035",
+      "span_id": "S0035",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{11}\n\\tan(\\gamma)\n=\\frac{\n-\\Delta_{k_s}\\sin(\\gamma_{k_s})\n+\\Delta_{k_e}\\sin(\\gamma_{k_e})\n-\\Delta_{k_i}\\sin(\\gamma_{k_i})\n}{\n\\Delta_{k_s}\\cos(\\gamma_{k_s})\n+\\Delta_{k_e}\\cos(\\gamma_{k_e})\n+\\Delta_{k_i}\\cos(\\gamma_{k_i})\n}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{11}\n\\tan(\\gamma)\n=\\frac{\n-\\Delta_{k_s}\\sin(\\gamma_{k_s})\n-\\Delta_{k_e}\\sin(\\gamma_{k_e})\n-\\Delta_{k_i}\\sin(\\gamma_{k_i})\n}{\n\\Delta_{k_s}\\cos(\\gamma_{k_s})\n+\\Delta_{k_e}\\cos(\\gamma_{k_e})\n+\\Delta_{k_i}\\cos(\\gamma_{k_i})\n}\n\\end{equation}",
+      "why_wrong": "The sign of the ejected electron term (+Delta_{k_e}) in the numerator is flipped to negative. This breaks the phase matching condition required for the conservation of momentum/energy in the laser-assisted (e, 2e) process."
+    },
+    {
+      "perturbation_id": "P003_S0038",
+      "span_id": "S0038",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{14}\n\t\tf_{II}=i\\mathbf{\\Delta^{-2}}\\sum_{n}\\left< \\psi_{C,k_{e}}^{-}\\left| \\exp(i\\mathbf{\\Delta} .\\mathbf{r} - 1)\\right|\\Phi_{n}\\right>M_{nj}\\left [ \\frac{J_{l-1}\\left ( \\lambda  \\right )}{E_{n}-E_{j}-\\omega } -\\frac{J_{l+1}\\left ( \\lambda  \\right )}{E_{n}-E_{j}+\\omega } \\right ]\n\t\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{14}\n\t\tf_{II}=i\\mathbf{\\Delta^{-2}}\\sum_{n}\\left< \\psi_{C,k_{e}}^{-}\\left| \\exp(i\\mathbf{\\Delta} .\\mathbf{r} - 1)\\right|\\Phi_{n}\\right>M_{nj}\\left [ \\frac{J_{l-1}\\left ( \\lambda  \\right )}{E_{n}-E_{j}+\\omega } -\\frac{J_{l+1}\\left ( \\lambda  \\right )}{E_{n}-E_{j}-\\omega } \\right ]\n\t\\end{equation}",
+      "why_wrong": "The energy denominators for the absorption and emission of photons are swapped (+omega and -omega). This is mathematically inconsistent with the time-dependent perturbation theory used to derive the second-order scattering amplitude."
+    },
+    {
+      "perturbation_id": "P004_S0039",
+      "span_id": "S0039",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{15}\n\t\t\\begin{aligned}\n\t\t\tf_{III}=i\\mathbf{\\Delta^{-2}}\\sum_{n}\\left< \\Phi_{n}\\left| \\exp\\left ( i\\mathbf{\\Delta} .\\mathbf{r} - 1\\right )\\right|\\Phi_{j}\\right>M_{n,k_{e}}^{*}\\left [ \\frac{J_{l-1}(\\lambda )}{E_{n}-E_{k_{e}}+\\omega }-\\frac{J_{l+1}\\left ( \\lambda  \\right )}{E_{n}-E_{k_{e}}-\\omega } \\right ]\\\\\n\t\t\t-\\frac{1}{2}\\mathbf{\\Delta_{k_{e}}} \\left [J_{l-1} \\left (\\lambda   \\right )  e^{i \\gamma_{k_{e}}} -J_{l+1} \\left ( \\lambda  \\right ) e^{-i \\gamma_{k_e}}   \\right ]\\left< \\psi_{C,k_{e}}^{-}\\left| exp\\left ( i\\mathbf{\\Delta} .\\mathbf{r} \\right )\\right|\\Phi_{j}\\right>\n\t\t\\end{aligned}\n\t\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{15}\n\t\t\\begin{aligned}\n\t\t\tf_{III}=i\\mathbf{\\Delta^{-2}}\\sum_{n}\\left< \\Phi_{n}\\left| \\exp\\left ( i\\mathbf{\\Delta} .\\mathbf{r} - 1\\right )\\right|\\Phi_{j}\\right>M_{n,k_{e}}^{*}\\left [ \\frac{J_{l-1}(\\lambda )}{E_{n}-E_{k_{e}}+\\omega }-\\frac{J_{l+1}\\left ( \\lambda  \\right )}{E_{n}-E_{k_{e}}-\\omega } \\right ]\\\\\n\t\t\t-\\frac{1}{4}\\mathbf{\\Delta_{k_{e}}} \\left [J_{l-1} \\left (\\lambda   \\right )  e^{i \\gamma_{k_{e}}} -J_{l+1} \\left ( \\lambda  \\right ) e^{-i \\gamma_{k_e}}   \\right ]\\left< \\psi_{C,k_{e}}^{-}\\left| exp\\left ( i\\mathbf{\\Delta} .\\mathbf{r} \\right )\\right|\\Phi_{j}\\right>\n\t\t\\end{aligned}\n\t\\end{equation}",
+      "why_wrong": "The prefactor 1/2 in the second term of f_III is changed to 1/4. This coefficient arises from the decomposition of the sine function in the laser field interaction and its modification leads to an incorrect weighting of the interference terms."
+    }
+  ]
+}
