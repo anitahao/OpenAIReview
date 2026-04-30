@@ -600,7 +600,7 @@ def main() -> None:
     )
     perturb_parser.add_argument(
         "--category",
-        choices=["theoretical", "experimental"],
+        choices=["theoretical", "empirical"],
         default="theoretical",
         help="Paper category (default: theoretical)",
     )

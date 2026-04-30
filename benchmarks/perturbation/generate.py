@@ -254,7 +254,7 @@ def generate_perturbations(category,
         elif error_type == "logic":
             valid_errors = LOGIC_ERRORS
             errors_str = ", ".join(c.value for c in errors_logic)
-    elif category == "experimental":
+    elif category == "empirical":
         if error_type == "all":
             valid_errors = EMPIRICAL_ERRORS
             errors_str = ", ".join(c.value for c in errors_empirical)
@@ -287,7 +287,7 @@ def generate_perturbations(category,
         formatted_prompt = PROMPT.format(
             field=field,
             domain_specific=domain_specific,
-            n_target=max(1, n_total // len(batches)),
+            n_target=2 * n_total // len(batches), # double to have generation buffer 
             candidates_json=candidates_json,
             valid_errors=valid_errors,
             error_types=errors_str,

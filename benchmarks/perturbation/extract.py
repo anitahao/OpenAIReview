@@ -50,7 +50,7 @@ def extract_candidates(category, error_type, text: str) -> list[CandidateSpan]:
             extractors = _EXTRACTORS_CLAIM_THEORETICAL
         elif error_type == "logic":
             extractors = _EXTRACTORS_LOGIC
-    elif category == "experimental":
+    elif category == "empirical":
         if error_type == "all":
             extractors = _EXTRACTORS_EMPIRICAL
         elif error_type == "surface":

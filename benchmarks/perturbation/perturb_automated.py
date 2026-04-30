@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import json
+import random
 import shutil
 import subprocess
 import tarfile
@@ -31,12 +32,9 @@ RESULTS_DIR = Path(__file__).parent / "results" / "perturbations"
 # arXiv helpers
 # ---------------------------------------------------------------------------
 
-def search_arxiv(domain: str, arxiv_category: str | None, start: int, batch_size: int, min_year: int | None = None) -> list[dict]:
+def search_arxiv(arxiv_category: str | None, start: int, batch_size: int, min_year: int | None = None) -> list[dict]:
     """Return a list of {arxiv_id, title} dicts from the arXiv API."""
-    query_parts = [f"all:{urllib.parse.quote(domain)}"]
-    if arxiv_category:
-        query_parts.append(f"cat:{arxiv_category}")
-    query = "+AND+".join(query_parts)
+    query = f"cat:{arxiv_category}" if arxiv_category else "all:*"
 
     url = (
         f"{ARXIV_API}?search_query={query}"
@@ -148,43 +146,49 @@ def run_perturb(
     else:
         error_types = [error_type]
 
-    per_run = max(1, n_total // len(error_types))
     total_injected = 0
+    all_passed = True
 
     for et in error_types:
+        et_dir = output_dir / et if len(error_types) > 1 else output_dir
+        et_dir.mkdir(parents=True, exist_ok=True)
+
         cmd = [
             "openaireview", "perturb", str(tex_path),
             "--category", category,
             "--error-type", et,
-            "--n-total", str(per_run),
+            "--n-total", str(n_total),
             "--model", model,
-            "--output-dir", str(output_dir),
+            "--output-dir", str(et_dir),
         ]
 
         print(f"    $ {' '.join(cmd)}")
         result = subprocess.run(cmd, capture_output=True, text=True)
 
-        manifests = list(output_dir.glob(f"*_{et}_perturbations.json"))
-        if not manifests:
-            manifests = list(output_dir.glob("*_perturbations.json"))
+        manifests = list(et_dir.glob("*_perturbations.json"))
         if not manifests:
             if result.returncode != 0:
                 print(result.stdout + result.stderr)
+            all_passed = False
             continue
 
         manifest_path = max(manifests, key=lambda p: p.stat().st_mtime)
         try:
-            manifest = json.loads(manifest_path.read_text())
-            total_injected += manifest.get("n_injected", 0)
+            et_injected = json.loads(manifest_path.read_text()).get("n_injected", 0)
         except Exception:
-            pass
+            et_injected = 0
 
-    return total_injected
+        print(f"      {et}: {et_injected}/{n_total}")
+        total_injected += et_injected
+        if et_injected < 0.8 * n_total: # buffer for errors injected 
+            all_passed = False
+
+    return total_injected if all_passed else 0
 
 
 def _already_done(paper_output_dir: Path, n_total: int) -> bool:
     """Return True if this paper already has a successful perturbation run."""
-    manifests = list(paper_output_dir.glob("*_perturbations.json"))
+    manifests = list(paper_output_dir.rglob("*_perturbations.json"))
     for m in manifests:
         try:
             if json.loads(m.read_text()).get("n_injected", 0) >= n_total:
@@ -203,15 +207,11 @@ def main() -> None:
         description="Automated arXiv perturbation pipeline",
     )
     parser.add_argument(
-        "--domain", required=True,
-        help="Search term for arXiv (e.g. 'combinatorics', 'stochastic processes')",
+        "--arxiv-category", required=True,
+        help="arXiv category to search (e.g. math.CO, cs.LG, stat.ME, math.*)",
     )
     parser.add_argument(
-        "--arxiv-category", default=None,
-        help="arXiv category to restrict search (e.g. math.CO, cs.LG, stat.ML)",
-    )
-    parser.add_argument(
-        "--category", choices=["theoretical", "experimental"], required=True,
+        "--category", choices=["theoretical", "empirical"], required=True,
         help="Paper category for the perturbation pipeline",
     )
     parser.add_argument(
@@ -254,12 +254,11 @@ def main() -> None:
     output_root = (
         Path(args.output_dir)
         if args.output_dir
-        else RESULTS_DIR / args.domain.replace(" ", "_") / args.error_type
+        else RESULTS_DIR / args.arxiv_category.replace("*", "all").replace(".", "_") / args.error_type
     )
     output_root.mkdir(parents=True, exist_ok=True)
 
-    print(f"Domain:         {args.domain}")
-    print(f"arXiv category: {args.arxiv_category or 'any'}")
+    print(f"arXiv category: {args.arxiv_category}")
     print(f"Category:       {args.category}")
     print(f"Error type:     {args.error_type}")
     print(f"Target:         {args.target} papers")
@@ -279,7 +278,7 @@ def main() -> None:
             print(f"\n--- arXiv results {arxiv_start}–{arxiv_start + args.batch_size - 1} ---")
             try:
                 papers = search_arxiv(
-                    args.domain, args.arxiv_category,
+                    args.arxiv_category,
                     arxiv_start, args.batch_size,
                     min_year=args.min_year,
                 )
