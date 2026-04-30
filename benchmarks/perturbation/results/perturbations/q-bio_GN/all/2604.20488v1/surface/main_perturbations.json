@@ -1,0 +1,155 @@
+{
+  "paper_title": "Conditional Monte Carlo Tree Diffusion for Designing Cell-Type-Specific and Biologically Faithful Regulatory DNA",
+  "paper_slug": "main",
+  "n_candidates": 29,
+  "n_generated": 18,
+  "n_valid": 18,
+  "n_injected": 18,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "index_or_subscript",
+      "original": "$^{1,2}$",
+      "perturbed": "$^{1,3}$",
+      "why_wrong": "The author affiliations listed below the title only define institutions 1 and 2. Introducing a superscript 3 creates a reference to a non-existent affiliation in the author block."
+    },
+    {
+      "perturbation_id": "P001_S0004",
+      "span_id": "S0004",
+      "error": "numeric_parameter",
+      "original": "$^1$",
+      "perturbed": "$^3$",
+      "why_wrong": "The author list uses superscripts 1 and 2 to map names to institutions. Changing the first institution's label to 3 breaks the mapping, as no authors are assigned to a third institution."
+    },
+    {
+      "perturbation_id": "P002_S0006",
+      "span_id": "S0006",
+      "error": "computation",
+      "original": "$\\mathcal{V} = \\{A, C, G, T, \\bm{m}\\}$",
+      "perturbed": "$\\mathcal{V} = \\{A, C, G, T\\}$",
+      "why_wrong": "The text explicitly states that the vocabulary includes a special mask token 'm' used for the diffusion process. Removing 'm' from the set definition contradicts the subsequent sentence which defines 'm' as a member of the vocabulary."
+    },
+    {
+      "perturbation_id": "P003_S0007",
+      "span_id": "S0007",
+      "error": "operator_or_sign",
+      "original": "$\\bm{m}$",
+      "perturbed": "$\\bm{x}$",
+      "why_wrong": "The context defines 'm' as the special mask token used for diffusion. Replacing the symbol with 'x' creates a conflict because 'x' is defined later in the same paragraph as a clean DNA sequence containing only {A, C, G, T}."
+    },
+    {
+      "perturbation_id": "P004_S0008",
+      "span_id": "S0008",
+      "error": "numeric_parameter",
+      "original": "$V = |\\mathcal{V}| = 5$",
+      "perturbed": "$V = |\\mathcal{V}| = 4$",
+      "why_wrong": "The vocabulary set is explicitly listed as {A, C, G, T, m}. Counting these elements yields 5. Setting the size V to 4 is a cardinality error visible within the same sentence."
+    },
+    {
+      "perturbation_id": "P005_S0009",
+      "span_id": "S0009",
+      "error": "index_or_subscript",
+      "original": "$\\mathbb{R}^V$",
+      "perturbed": "$\\mathbb{R}^{V-1}$",
+      "why_wrong": "The text states that each token is represented as a one-hot vector. Since the vocabulary size is defined as V, the one-hot encoding space must be of dimension V, not V-1."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "index_or_subscript",
+      "original": "$\\bm{z}_t, \\bm{x} \\in \\mathcal{V}^L$",
+      "perturbed": "$\\bm{z}_t, \\bm{x} \\in \\mathcal{V}^{L-1}$",
+      "why_wrong": "The context defines sequences as having length $L$. Changing the exponent to $L-1$ creates a dimensionality mismatch with the sequence length $L$ defined later in the same section."
+    },
+    {
+      "perturbation_id": "P001_S0012",
+      "span_id": "S0012",
+      "error": "numeric_parameter",
+      "original": "$\\{A,C,G,T\\}$",
+      "perturbed": "$\\{A,C,G\\}$",
+      "why_wrong": "The text explicitly states $V = |\\mathcal{V}| = 5$, which accounts for the four DNA nucleotides plus a mask token. Removing 'T' reduces the nucleotide set to 3, making the total vocabulary size 4, which contradicts the stated $V=5$."
+    },
+    {
+      "perturbation_id": "P002_S0014",
+      "span_id": "S0014",
+      "error": "index_or_subscript",
+      "original": "$\\mathcal{V}$",
+      "perturbed": "$\\Delta^{V}$",
+      "why_wrong": "The probability simplex for a vocabulary of size $V$ is mathematically defined as $\\Delta^{V-1}$. Changing it to $\\Delta^{V}$ is a dimensionality error in the categorical distribution parameter space."
+    },
+    {
+      "perturbation_id": "P003_S0016",
+      "span_id": "S0016",
+      "error": "operator_or_sign",
+      "original": "$\\alpha_t \\in [0, 1]$",
+      "perturbed": "$\\alpha_t \\in [-1, 0]$",
+      "why_wrong": "The text describes $\\alpha_t$ as a probability and a noise schedule where tokens remain original with probability $\\alpha_t$. Probabilities must be in the range $[0, 1]$, making a negative range physically impossible."
+    },
+    {
+      "perturbation_id": "P004_S0017",
+      "span_id": "S0017",
+      "error": "index_or_subscript",
+      "original": "$\\alpha_t$",
+      "perturbed": "$\\alpha_{t-1}$",
+      "why_wrong": "The forward diffusion equation $q(\\bm{z}_t | \\bm{x})$ is defined at time $t$. Using $\\alpha_{t-1}$ creates a temporal mismatch between the state variable index and the noise schedule index."
+    },
+    {
+      "perturbation_id": "P005_S0018",
+      "span_id": "S0018",
+      "error": "computation",
+      "original": "$1 - \\alpha_t$",
+      "perturbed": "$1 + \\alpha_t$",
+      "why_wrong": "The text states that tokens remain original with probability $\\alpha_t$ or are replaced with probability $1 - \\alpha_t$. Since these are complementary events in a categorical distribution, the sum must be 1. $1 + \\alpha_t$ would result in a total probability greater than 1."
+    },
+    {
+      "perturbation_id": "P000_S0020",
+      "span_id": "S0020",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\label{eq:time_reversal}\n\\resizebox{0.5\\linewidth}{!}{$%\nq(\\bm{z}_s | \\bm{z}_t,\\bm{x})=\n\\begin{cases}\n\\mathrm{Cat}(\\bm{z}_s;\\bm{z}_t), & \\bm{z}_t\\neq \\bm{m},\\\\\n\\mathrm{Cat}\\Bigl(\\bm{z}_s;\\dfrac{(1-\\alpha_s)\\bm{m}+(\\alpha_s-\\alpha_t)\\bm{x}}{1-\\alpha_t}\\Bigr), & \\bm{z}_t=\\bm{m}.\n\\end{cases}\n$}%\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\label{eq:time_reversal}\n\\resizebox{0.5\\linewidth}{!}{$%\nq(\\bm{z}_s | \\bm{z}_t,\\bm{x})=\n\\begin{cases}\n\\mathrm{Cat}(\\bm{z}_s;\\bm{z}_t), & \\bm{z}_t\\neq \\bm{m},\\\\\n\\mathrm{Cat}\\Bigl(\\bm{z}_s;\\dfrac{(1-\\alpha_s)\\bm{m}-(\\alpha_s-\\alpha_t)\\bm{x}}{1-\\alpha_t}\\Bigr), & \\bm{z}_t=\\bm{m}.\n\\end{cases}\n$}%\n\\end{equation}",
+      "why_wrong": "The sign in the numerator is changed from + to -, which incorrectly defines the categorical distribution for the unmasking step in the reverse diffusion process, making it inconsistent with standard discrete diffusion formulations where the clean sequence x and mask token m are interpolated."
+    },
+    {
+      "perturbation_id": "P001_S0022",
+      "span_id": "S0022",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\label{eq:CFG_parallel_sampling}\n\\resizebox{0.5\\linewidth}{!}{$%\np_\\theta^\\gamma(\\bm{z}_s^{1:L}| \\bm{z}_t^{1:L}, \\bm{y})\n=\\prod_{\\ell=1}^{L}\\dfrac{1}{Z^{(\\ell)}}p_\\theta(\\bm{z}_s^{\\ell}|\\bm{y},\\bm{z}_t^{1:L})^\\gamma p_\\theta(\\bm{z}_s^{\\ell}|\\bm{z}_t^{1:L})^{1-\\gamma} \n$}%\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\label{eq:CFG_parallel_sampling}\n\\resizebox{0.5\\linewidth}{!}{$%\np_\\theta^\\gamma(\\bm{z}_s^{1:L}| \\bm{z}_t^{1:L}, \\bm{y})\n=\\prod_{\\ell=1}^{L}\\dfrac{1}{Z^{(\\ell)}}p_\\theta(\\bm{z}_s^{\\ell}|\\bm{y},\\bm{z}_t^{1:L})^\\gamma p_\\theta(\\bm{z}_s^{\\ell}|\\bm{z}_t^{1:L})^{1+\\gamma} \n$}%\n\\end{equation}",
+      "why_wrong": "The exponent for the unconditional probability is changed from 1-gamma to 1+gamma. This contradicts the definition of Classifier-Free Guidance (CFG) where the weights of the conditional and unconditional components should sum to 1 or follow the standard power-scale interpolation."
+    },
+    {
+      "perturbation_id": "P002_S0023",
+      "span_id": "S0023",
+      "error": "numeric_parameter",
+      "original": "\\begin{align}\n    U(\\bm{z}_t, \\bm{z}_s) = \\frac{W(\\bm{z}_s)}{N_{\\text{visit}}(\\bm{z}_s)}  + c_{\\text{expl}} \\cdot \\frac{\\sqrt{N_{\\text{visit}}(\\bm{z}_t)}}{1 + N_{\\text{visit}}(\\bm{z}_s)},\n\\end{align}",
+      "perturbed": "\\begin{align}\n    U(\\bm{z}_t, \\bm{z}_s) = \\frac{W(\\bm{z}_s)}{N_{\\text{visit}}(\\bm{z}_s)}  + c_{\\text{expl}} \\cdot \\frac{\\sqrt{N_{\\text{visit}}(\\bm{z}_t)}}{1 - N_{\\text{visit}}(\\bm{z}_s)},\n\\end{align}",
+      "why_wrong": "The denominator in the exploration term is changed from 1 + N_visit to 1 - N_visit. This would result in a negative or undefined selection score as the visit count increases, which is mathematically inconsistent with the Upper Confidence Bound (UCB) algorithm's goal of encouraging exploration."
+    },
+    {
+      "perturbation_id": "P003_S0025",
+      "span_id": "S0025",
+      "error": "operator_or_sign",
+      "original": "\\begin{align} \\label{eq:mingap}\n    g(\\bm{x}_i) = \\underbrace{\\frac{1}{|\\mathcal{C}^+|} \\sum_{c \\in \\mathcal{C}^+} s_c(\\bm{x}_i)}_{\\text{Mean Activity (Desired)}} - \\underbrace{\\max_{c \\in \\mathcal{C}^-} s_c(\\bm{x}_i)}_{\\text{Max Activity (Undesired)}}.\n\\end{align}",
+      "perturbed": "\\begin{align} \\label{eq:mingap}\n    g(\\bm{x}_i) = \\underbrace{\\frac{1}{|\\mathcal{C}^+|} \\sum_{c \\in \\mathcal{C}^+} s_c(\\bm{x}_i)}_{\\text{Mean Activity (Desired)}} + \\underbrace{\\max_{c \\in \\mathcal{C}^-} s_c(\\bm{x}_i)}_{\\text{Max Activity (Undesired)}}.\n\\end{align}",
+      "why_wrong": "The specificity score g(x_i) is defined in the text as the 'difference' between mean desired activity and maximum undesired activity. Changing the operator to '+' makes it a sum, which contradicts the textual definition and the biological goal of maximizing the gap between cell types."
+    },
+    {
+      "perturbation_id": "P004_S0026",
+      "span_id": "S0026",
+      "error": "operator_or_sign",
+      "original": "\\begin{align}\n\\label{eq:mingap_reward}\n    r(\\bm{x}_i) = \\frac{1}{|\\mathcal{G}^*|} \\sum_{\\bm{x}^* \\in \\mathcal{G}^*} \\mathbb{I}\\big[ g(\\bm{x}_i) \\geq g(\\bm{x}^*) \\big].\n\\end{align}",
+      "perturbed": "\\begin{align}\n\\label{eq:mingap_reward}\n    r(\\bm{x}_i) = \\frac{1}{|\\mathcal{G}^*|} \\sum_{\\bm{x}^* \\in \\mathcal{G}*} \\mathbb{I}\\big[ g(\\bm{x}_i) \\leq g(\\bm{x}^*) \\big].\n\\end{align}",
+      "why_wrong": "The indicator function condition is flipped from >= to <=. The text states the reward is 'highest for outstanding sequences'. Since g(x) represents specificity, a higher g(x) should yield a higher reward; this change would reward the worst-performing sequences relative to the archive."
+    },
+    {
+      "perturbation_id": "P005_S0027",
+      "span_id": "S0027",
+      "error": "index_or_subscript",
+      "original": "\\begin{align}\n    W(\\bm{z}_{\\text{parent}}) &\\leftarrow W(\\bm{z}_{\\text{parent}}) + r(\\bm{x}_i) \\\\\n    N_{\\text{visit}}(\\bm{z}_{\\text{parent}}) &\\leftarrow N_{\\text{visit}}(\\bm{z}_{\\text{parent}}) + 1.\n\\end{align}",
+      "perturbed": "\\begin{align}\n    W(\\bm{z}_{\\text{root}}) &\\leftarrow W(\\bm{z}_{\\text{parent}}) + r(\\bm{x}_i) \\\\\n    N_{\\text{visit}}(\\bm{z}_{\\text{parent}}) &\\leftarrow N_{\\text{visit}}(\\bm{z}_{\\text{parent}}) + 1.\n\\end{align}",
+      "why_wrong": "The subscript for the weight update is changed from 'parent' to 'root'. The text describes backpropagating the reward 'up the tree' for 'every node along the path'. Updating the root weight using the parent's previous weight in each step breaks the recursive path update logic of MCTS."
+    }
+  ]
+}

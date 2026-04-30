@@ -1,0 +1,107 @@
+{
+  "paper_title": "\\bf Kernelization Bounds for Constrained Coloring",
+  "paper_slug": "rainbow",
+  "n_candidates": 29,
+  "n_generated": 12,
+  "n_valid": 12,
+  "n_injected": 12,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\\label{def:R-CC}\nFor positive integers $q$ and $r$, let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$.\nThe input of the $R$-\\CC problem consists of a graph $G=(V,E)$ and a collection $\\calF \\subseteq V^r$ of $r$-tuples of vertices.\nThe goal is to decide whether there exists a proper coloring $c:V \\to [q]$ of $G$, such that for every $r$-tuple $(x_1, \\ldots, x_r) \\in \\calF$, it holds that $(c(x_1), \\ldots, c(x_r)) \\in R$. The number of constraints in the instance $(G,\\calF)$ is $|E|+|\\calF|$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}\\label{def:R-CC}\nFor positive integers $q$ and $r$, let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$.\nThe input of the $R$-\\CC problem consists of a graph $G=(V,E)$ and a collection $\\calF \\subseteq V^r$ of $r$-tuples of vertices.\nThe goal is to decide whether there exists a proper coloring $c:V \\to [q]$ of $G$, such that for every $r$-tuple $(x_1, \\ldots, x_r) \\in \\calF$, it holds that $(c(x_1), \\ldots, c(x_r)) \\in R$. The number of constraints in the instance $(G,\\calF)$ is $|V|+|E|+|\\calF|$.\n\\end{definition}",
+      "why_wrong": "The definition incorrectly includes the number of vertices $|V|$ in the count of constraints. The text immediately following the definition and the standard definition of constraint satisfaction problems in the context of this paper define the number of constraints as the sum of edges and the size of the constraint collection $|E|+|\\calF|$."
+    },
+    {
+      "perturbation_id": "P005_S0009",
+      "span_id": "S0009",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:Lower-R-CC}\nFor positive integers $q$, $r$, and $k \\geq 3$, let $R \\subseteq [q]^r$ be a permutation-invariant relation of arity $r$ over $[q]$ from which an \\OR relation of arity $k$ is definable. Then, for any real $\\eps >0$, the $R$-\\CC problem parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{k-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:Lower-R-CC}\nFor positive integers $q$, $r$, and $k \\geq 3$, let $R \\subseteq [q]^r$ be a permutation-invariant relation of arity $r$ over $[q]$ from which an \\OR relation of arity $k$ is definable. Then, for any real $\\eps >0$, the $R$-\\CC problem parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{k-\\eps})$ unless $\\P = \\NP$.\n\\end{theorem}",
+      "why_wrong": "The theorem incorrectly replaces the standard complexity assumption 'NP not in coNP/poly' (used for kernel lower bounds) with 'P = NP'. Kernelization lower bounds for problems like this are conditionally based on the hierarchy not collapsing to the third level, which is implied by NP not in coNP/poly, not P vs NP."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:Hyper}\nFor all integers $\\ell \\geq 2$ and $q \\geq 3$, and for any real $\\eps >0$, the $q$-\\Col problem on $\\ell$-uniform hypergraphs parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{\\ell-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:Hyper}\nFor all integers $\\ell \\geq 2$ and $q \\geq 3$, and for any real $\\eps >0$, the $q$-\\Col problem on $\\ell$-uniform hypergraphs parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{\\ell-1-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "why_wrong": "The lower bound for $q$-coloring on $\\ell$-uniform hypergraphs is $n^{\\ell-\\eps}$. Reducing the exponent to $\\ell-1-\\eps$ makes the lower bound weaker than what is known for $k$-SAT (which is $n^{k-\\eps}$) and contradicts the 'near-optimal' description in the preceding context, as the number of possible edges in an $\\ell$-uniform hypergraph is $O(n^\\ell)$."
+    },
+    {
+      "perturbation_id": "P001_S0002",
+      "span_id": "S0002",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\\label{def:eta}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set\n\\[\n\\eta(d,\\ell,q) =\n\\begin{cases}\nd\\ell, & \\text{if } \\ell \\geq 2 \\text{ and } q \\geq d + 2, \\\\\nd\\ell - 1, & \\text{if } \\ell \\geq 2,~ q=d+1, \\text{ and } (d,\\ell) \\neq (1,2), \\\\\n(d - 1)\\ell, & \\text{if } (\\ell \\geq 2 \\text{ and } q = d \\geq 2) \\text{ or } (\\ell = 1 \\text{ and } d \\geq 3), \\\\\n2, & \\text{if } \\ell = 1,~d \\leq 2, \\text{ and } q \\geq 3, \\\\\n0, & \\text{if } (q=2 \\text{ and } d\\ell \\leq 2) \\text{ or } q=1.\n\\end{cases}\n\\]\n\\end{definition}",
+      "perturbed": "\\begin{definition}\\label{def:eta}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set\n\\[\n\\eta(d,\\ell,q) =\n\\begin{cases}\nd\\ell, & \\text{if } \\ell \\geq 2 \\text{ and } q \\geq d + 2, \\\\\nd\\ell - 1, & \\text{if } \\ell \\geq 2,~ q=d+1, \\text{ and } (d,\\ell) \\neq (1,2), \\\\\n(d - 1)\\ell, & \\text{if } (\\ell \\geq 2 \\text{ and } q = d \\geq 2) \\text{ or } (\\ell = 1 \\text{ and } d \\geq 3), \\\\\n1, & \\text{if } \\ell = 1,~d \\leq 2, \\text{ and } q \\geq 3, \\\\\n0, & \\text{if } (q=2 \\text{ and } d\\ell \\leq 2) \\text{ or } q=1.\n\\end{cases}\n\\]\n\\end{definition}",
+      "why_wrong": "The value of eta for the case where l=1, d<=2, and q>=3 is changed from 2 to 1. This contradicts the paper's subsequent lower bound results (like Theorem 1.2) which rely on eta representing the maximum arity of an OR-relation definable from the NUR relation; for d=2, l=1, a 2-arity OR is definable."
+    },
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:Full-URFC}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set $\\eta = \\eta(d,\\ell,q)$ as in Definition~\\ref{def:eta}.\nThe $(d,\\ell,q)$-\\URFC problem parameterized by the number of vertices $n$ admits a kernel with $O(n^{\\eta})$ constraints, while for any real $\\eps>0$, it does not admit a compression of size $O(n^{\\eta-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:Full-URFC}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set $\\eta = \\eta(d,\\ell,q)$ as in Definition~\\ref{def:eta}.\nThe $(d,\\ell,q)$-\\URFC problem parameterized by the number of vertices $n$ admits a kernel with $O(n^{\\eta-1})$ constraints, while for any real $\\eps>0$, it does not admit a compression of size $O(n^{\\eta-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "why_wrong": "The theorem claims a kernel of size $O(n^{\\eta-1})$ while simultaneously claiming a lower bound of $O(n^{\\eta-\\eps})$. If a kernel of size $O(n^{\\eta-1})$ existed, it would provide a compression smaller than the lower bound for any $\\eps < 1$, which would imply $\\NP \\subseteq \\coNPpoly$ according to the second half of the same theorem."
+    },
+    {
+      "perturbation_id": "P002_S0012",
+      "span_id": "S0012",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:t-Cliques}\nFor positive integers $q \\geq 3$ and $t \\leq q$, set $r = r(q,t) = \\max_{\\ell \\in [t]} {\\eta(q-\\ell+1,\\ell,q)}$, with $\\eta$ as in Definition~\\ref{def:eta}.\nThe $q$-\\Col problem on $t\\lClique+k\\mathrm{v}$ graphs admits a kernel with $O(k^r)$ vertices, while for any real $\\eps >0$, it does not admit a compression of size $O(k^{r-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:t-Cliques}\nFor positive integers $q \\geq 3$ and $t \\leq q$, set $r = r(q,t) = \\min_{\\ell \\in [t]} {\\eta(q-\\ell+1,\\ell,q)}$, with $\\eta$ as in Definition~\\ref{def:eta}.\nThe $q$-\\Col problem on $t\\lClique+k\\mathrm{v}$ graphs admits a kernel with $O(k^r)$ vertices, while for any real $\\eps >0$, it does not admit a compression of size $O(k^{r-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "why_wrong": "The parameter $r$ should be the maximum over $\\ell \\in [t]$, not the minimum. The complexity of the problem is determined by the hardest sub-structure (the largest required arity), so taking the minimum would incorrectly suggest a smaller kernel than what is actually required for the general case."
+    },
+    {
+      "perturbation_id": "P002_S0004",
+      "span_id": "S0004",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\\label{def:OR definable}\nLet $q$, $r$, and $k$ be positive integers, and let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$.\nWe say that {\\em an \\OR relation of arity $k$ is definable from $R$} if there exist sets $D_1, \\ldots, D_r \\subseteq [q]$, exactly $k$ of which are of size $2$ and the others of size $1$, such that all $2^k$ tuples in the product $D_1 \\times \\cdots \\times D_r$ except one belong to $R$, equivalently, $| (D_1 \\times \\cdots \\times D_r) \\cap R| = 2^k-1$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}\\label{def:OR definable}\nLet $q$, $r$, and $k$ be positive integers, and let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$.\nWe say that {\\em an \\OR relation of arity $k$ is definable from $R$} if there exist sets $D_1, \\ldots, D_r \\subseteq [q]$, exactly $k$ of which are of size $2$ and the others of size $1$, such that all $2^k$ tuples in the product $D_1 \\times \\cdots \\times D_r$ belong to $R$, equivalently, $| (D_1 \\times \\cdots \\times D_r) \\cap R| = 2^k$.\n\\end{definition}",
+      "why_wrong": "The definition of an OR relation requires that exactly one tuple in the product space does NOT belong to the relation (representing the 'False' assignment in a clause). By requiring all $2^k$ tuples to belong to R, it defines a constant TRUE relation rather than an OR relation."
+    },
+    {
+      "perturbation_id": "P003_S0014",
+      "span_id": "S0014",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}[{\\cite{JansenP17,ChenJP20}}]\\label{thm:NAE}\nFor every integer $k \\geq 3$ and any real $\\eps >0$, the $k$-\\NAE problem parameterized by the number of variables $n$ does not admit a compression of size $O(n^{k-1-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}[{\\cite{JansenP17,ChenJP20}}]\\label{thm:NAE}\nFor every integer $k \\geq 3$ and any real $\\eps >0$, the $k$-\\NAE problem parameterized by the number of variables $n$ does not admit a compression of size $O(n^{k-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "why_wrong": "The standard lower bound for $k$-NAE-SAT is $O(n^{k-1-\\eps})$, which is one degree lower than $k$-SAT. Claiming $O(n^{k-\\eps})$ contradicts the cited literature (Jansen and Pieters, Chen et al.) mentioned in the context, which establishes the $k-1$ exponent."
+    },
+    {
+      "perturbation_id": "P004_S0015",
+      "span_id": "S0015",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:Lower-R-CLC}\nFor positive integers $q$, $r$, and $k \\geq 3$, let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$ from which an \\OR relation of arity $k$ is definable. Then, for any real $\\eps >0$, the $R$-\\CLC problem parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{k-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:Lower-R-CLC}\nFor positive integers $q$, $r$, and $k \\geq 3$, let $R \\subseteq [q]^r$ be a relation of arity $r$ over $[q]$ from which an \\OR relation of arity $k$ is definable. Then, for any real $\\eps >0$, the $R$-\\CLC problem parameterized by the number of vertices $n$ does not admit a compression of size $O(n^{r-\\eps})$ unless $\\NP \\subseteq \\coNPpoly$.\n\\end{theorem}",
+      "why_wrong": "The lower bound is determined by the arity $k$ of the definable OR-relation, not the arity $r$ of the original relation $R$. If $k < r$, the claim $O(n^{r-\\eps})$ would be an overstatement of the hardness derived from the OR-relation reduction."
+    },
+    {
+      "perturbation_id": "P003_S0006",
+      "span_id": "S0006",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\\label{def:NUR}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, we define the relations $\\UR_{d,\\ell}^q$ and $\\NUR_{d,\\ell}^q$ of arity $d \\ell$ over $[q]$, whose $d \\ell$-tuples are viewed as $d \\times \\ell$ matrices with entries indexed by $[d] \\times [\\ell]$.\nLet $\\UR_{d,\\ell}^q \\subseteq [q]^{d \\times \\ell}$ be the collection of all matrices $M \\in [q]^{d \\times \\ell}$ in which each column consists of $d$ distinct elements and all columns contain the same set of elements, that is, the sets $\\{M_{i,j} \\mid i \\in [d]\\}$ for $j \\in [\\ell]$ are all equal and of size $d$. Further, let $\\NUR_{d,\\ell}^q = [q]^{d \\times \\ell} \\setminus \\UR_{d,\\ell}^q$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}\\label{def:NUR}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, we define the relations $\\UR_{d,\\ell}^q$ and $\\NUR_{d,\\ell}^q$ of arity $d \\ell$ over $[q]$, whose $d \\ell$-tuples are viewed as $d \\times \\ell$ matrices with entries indexed by $[d] \\times [\\ell]$.\nLet $\\UR_{d,\\ell}^q \\subseteq [q]^{d \\times \\ell}$ be the collection of all matrices $M \\in [q]^{d \\times \\ell}$ in which each column consists of $d$ distinct elements and at least two columns contain the same set of elements. Further, let $\\NUR_{d,\\ell}^q = [q]^{d \\times \\ell} \\setminus \\UR_{d,\\ell}^q$.\n\\end{definition}",
+      "why_wrong": "The definition of Uniformly Rainbow (UR) requires all columns to share the same set of colors. Changing 'all columns' to 'at least two columns' fundamentally changes the relation and contradicts the problem name 'Uniformly Rainbow', which implies consistency across the entire tuple."
+    },
+    {
+      "perturbation_id": "P004_S0007",
+      "span_id": "S0007",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\\label{def:URproperty}\nFor positive integers $m$ and $q$, and for a field $\\Fset$, let $C \\subseteq \\Fset^m$ be a set of size $|C|=q$. For a positive integer $n$, a matrix $M = (a_1, \\ldots, a_n) \\in \\Fset^{m \\times n}$ is called {\\em $C$-colored} if each of its columns belongs to $C$, that is, $a_i \\in C$ for all $i \\in [n]$. For positive integers $d$ and $\\ell$, let $p: \\Fset^{m \\times (d\\ell)} \\to \\Fset$ be a polynomial in $m d \\ell$ variables, which are represented as an $m \\times (d \\ell)$ matrix over $\\Fset$. We say that the pair $(C,p)$ {\\em captures the $(d,\\ell,q)$-uniformly rainbow property} if for every $C$-colored matrix $M = (a_1, \\ldots, a_{d \\ell}) \\in \\Fset^{m \\times (d \\ell)}$, it holds that $p(M) \\neq 0$ if and only if the $\\ell$ disjoint blocks of $d$ consecutive columns in $M$ coincide as sets and have size $d$, equivalently, the $\\ell$ sets\n\\[F_j = \\{a_i \\mid (j-1)d < i \\leq jd\\},~~~j \\in [\\ell],\\]\nare all equal and of size $d$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}\\label{def:URproperty}\nFor positive integers $m$ and $q$, and for a field $\\Fset$, let $C \\subseteq \\Fset^m$ be a set of size $|C|=q$. For a positive integer $n$, a matrix $M = (a_1, \\ldots, a_n) \\in \\Fset^{m \\times n}$ is called {\\em $C$-colored} if each of its columns belongs to $C$, that is, $a_i \\in C$ for all $i \\in [n]$. For positive integers $d$ and $\\ell$, let $p: \\Fset^{m \\times (d\\ell)} \\to \\Fset$ be a polynomial in $m d \\ell$ variables. We say that the pair $(C,p)$ {\\em captures the $(d,\\ell,q)$-uniformly rainbow property} if for every $C$-colored matrix $M = (a_1, \\ldots, a_{d \\ell}) \\in \\Fset^{m \\times (d \\ell)}$, it holds that $p(M) = 0$ if and only if the $\\ell$ disjoint blocks of $d$ consecutive columns in $M$ coincide as sets and have size $d$.\n\\end{definition}",
+      "why_wrong": "The condition for capturing the property is flipped. In polynomial-based kernelization (like the method of Alon et al. cited in the paper), the property is typically captured by a non-zero evaluation ($p(M) \\neq 0$). Flipping it to $p(M)=0$ would invalidate the subsequent algebraic compression results."
+    },
+    {
+      "perturbation_id": "P005_S0018",
+      "span_id": "S0018",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:Upper-URFC}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set $\\eta = \\eta(d,\\ell,q)$ as in Definition~\\ref{def:eta}.\nThe $(d,\\ell,q)$-\\URFC problem parameterized by the number of vertices $n$ admits a kernel with $O(n^{\\eta})$ constraints.\nMoreover, when $\\eta \\geq 2$, given an instance $(G,\\calF)$, the kernel returns an instance $(G,\\calF')$ with $\\calF' \\subseteq \\calF$, such that $(G,\\calF)$ and $(G,\\calF')$ have the same solution set.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:Upper-URFC}\nFor positive integers $d$, $\\ell$, and $q \\geq d$, set $\\eta = \\eta(d,\\ell,q)$ as in Definition~\\ref{def:eta}.\nThe $(d,\\ell,q)$-\\URFC problem parameterized by the number of vertices $n$ admits a kernel with $O(n^{\\eta})$ vertices.\nMoreover, when $\\eta \\geq 2$, given an instance $(G,\\calF)$, the kernel returns an instance $(G,\\calF')$ with $\\calF' \\subseteq \\calF$, such that $(G,\\calF)$ and $(G,\\calF')$ have the same solution set.\n\\end{theorem}",
+      "why_wrong": "The theorem states the kernel has $O(n^\\eta)$ vertices, but the problem is parameterized by the number of vertices $n$. A kernel with $O(n^\\eta)$ vertices for a problem already parameterized by $n$ is trivial/meaningless for $\\eta \\geq 1$. The actual result (as seen in the context and Theorem 1.2) is a kernel with $O(n^\\eta)$ constraints."
+    }
+  ]
+}

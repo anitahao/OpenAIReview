@@ -1,0 +1,115 @@
+{
+  "paper_title": "Identification to Subclasses of Chordal Graphs\\footnoteThe research leading to these results has been supported by the Research Council of Norway via the BWCA Grant 314528 and the Extreme-Algorithms Grant 355137 and by the Leverhulme Trust Grant RPG-2024-182.",
+  "paper_slug": "idh",
+  "n_candidates": 21,
+  "n_generated": 18,
+  "n_valid": 13,
+  "n_injected": 13,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0001",
+      "span_id": "S0001",
+      "error": "operator_or_sign",
+      "original": "$(x)+(6pt,.75em)$",
+      "perturbed": "$(x)-(6pt,.75em)$",
+      "why_wrong": "The coordinate calculation for the box heading uses subtraction instead of addition, which would place the label outside or behind the intended frame boundary defined by the north west coordinate (x), contradicting the visual layout logic of a framed problem definition."
+    },
+    {
+      "perturbation_id": "P001_S0005",
+      "span_id": "S0005",
+      "error": "operator_or_sign",
+      "original": "$n-k$",
+      "perturbed": "$n+k$",
+      "why_wrong": "The parameter $n-k$ represents the number of vertices in the target graph $H$ (since each identification reduces the vertex count by one). Changing this to $n+k$ is nonsensical in the context of vertex identification, which strictly reduces the order of the graph."
+    },
+    {
+      "perturbation_id": "P002_S0006",
+      "span_id": "S0006",
+      "error": "index_or_subscript",
+      "original": "$w_{uv}$",
+      "perturbed": "$w_{u,v,k}$",
+      "why_wrong": "The definition of vertex identification involves exactly two vertices $u$ and $v$. Introducing a third index $k$ in the resulting vertex name $w_{u,v,k}$ is inconsistent with the binary operation described in the text."
+    },
+    {
+      "perturbation_id": "P003_S0007",
+      "span_id": "S0007",
+      "error": "index_or_subscript",
+      "original": "${\\cal H}$",
+      "perturbed": "${\\cal H}_{k}$",
+      "why_wrong": "The text defines ${\\cal H}$ as a fixed class of graphs (like chordal graphs). Adding a subscript $k$ suggests the class itself depends on the budget of identifications, which contradicts the problem definition where $k$ is an input integer and ${\\cal H}$ is the target property."
+    },
+    {
+      "perturbation_id": "P004_S0008",
+      "span_id": "S0008",
+      "error": "index_or_subscript",
+      "original": "${\\cal H}$",
+      "perturbed": "${\\cal H}'$",
+      "why_wrong": "The problem is defined as reaching a graph in the class ${\\cal H}$. Changing the target to ${\\cal H}'$ introduces an undefined graph class, making the problem statement mathematically incomplete within the context of the introduction."
+    },
+    {
+      "perturbation_id": "P005_S0009",
+      "span_id": "S0009",
+      "error": "operator_or_sign",
+      "original": "$H\\in {\\cal H}$",
+      "perturbed": "$H\\notin {\\cal H}$",
+      "why_wrong": "The goal of the identification problem is to transform $G$ into a graph that belongs to the class ${\\cal H}$. Changing the condition to $H \notin {\\cal H}$ (not an element of) reverses the objective of the problem."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "numeric_parameter",
+      "original": "${\\cal H}$",
+      "perturbed": "${\\cal H}_{k+1}$",
+      "why_wrong": "The problem definition for ${\\cal H}$-Identification asks whether a graph $G$ can be transformed into *some* graph $H$ in the target class ${\\cal H}$. Introducing a subscript $k+1$ suggests the target class depends on the budget, which contradicts the standard definition of graph modification problems where the target class is fixed."
+    },
+    {
+      "perturbation_id": "P001_S0012",
+      "span_id": "S0012",
+      "error": "operator_or_sign",
+      "original": "${\\cal H}$",
+      "perturbed": "${\\cal H}$ using at least $k$",
+      "why_wrong": "Graph modification problems, including identification, are defined as optimization or decision problems where the goal is to achieve a property within a maximum budget. Changing 'at most' to 'at least' flips the logic of the parameterized complexity question."
+    },
+    {
+      "perturbation_id": "P002_S0013",
+      "span_id": "S0013",
+      "error": "index_or_subscript",
+      "original": "${\\cal H}$",
+      "perturbed": "${\\cal H}^2$",
+      "why_wrong": "The text defines the problem as ${\\cal H}$-Identification. Squaring the class symbol ${\\cal H}$ is notationally inconsistent with the subsequent mentions of the problem and the standard definition of graph classes in the context of modification problems."
+    },
+    {
+      "perturbation_id": "P003_S0015",
+      "span_id": "S0015",
+      "error": "index_or_subscript",
+      "original": "$\\cal H$",
+      "perturbed": "$\\cal H_{id}$",
+      "why_wrong": "The context refers to the problem variant related to \\Hid{$\\cal H$}. Changing the class symbol to $\\cal H_{id}$ confuses the target class with the operation name (identification), whereas the problem is defined by the class $\\cal H$ it aims to reach."
+    },
+    {
+      "perturbation_id": "P004_S0018",
+      "span_id": "S0018",
+      "error": "computation",
+      "original": "${\\cal H}$",
+      "perturbed": "$f(k,{\\cal H})\\cdot n^{k+o(1)}$",
+      "why_wrong": "The text cites the Graph Minor Theorem and related algorithms which provide FPT (Fixed-Parameter Tractable) runtimes. Changing the exponent from $1+o(1)$ to $k+o(1)$ turns an FPT runtime into an XP runtime, which contradicts the claim that these problems are efficiently solvable for fixed $k$."
+    },
+    {
+      "perturbation_id": "P005_S0019",
+      "span_id": "S0019",
+      "error": "numeric_parameter",
+      "original": "$\\cal H$",
+      "perturbed": "$\\cal H'$",
+      "why_wrong": "The sentence establishes a condition: 'if ${\\cal H}$ is minor-closed'. Changing the second instance to $\\cal H'$ breaks the logical flow that the yes-instances of the problem defined by class ${\\cal H}$ form a class related to that same ${\\cal H}$."
+    },
+    {
+      "perturbation_id": "P000_S0020",
+      "span_id": "S0020",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:rec}\nT(i,(p_1,\\ldots,p_t))=\\bigvee_{j\\in[t]}T(i-1,(p_1,\\ldots,p_{j-1},\n\\max\\{0,p_j-d_i\\},p_{j+1},\\ldots,p_t)).    \n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:rec}\nT(i,(p_1,\\ldots,p_t))=\\bigwedge_{j\\in[t]}T(i-1,(p_1,\\ldots,p_{j-1},\n\\max\\{0,p_j-d_i\\},p_{j+1},\\ldots,p_t)).    \n\\end{equation}",
+      "why_wrong": "The recurrence uses a logical AND (\\bigwedge) instead of a logical OR (\\bigvee). Since the goal is to determine if there exists a valid assignment of the i-th element to any one of the t bins to satisfy the demands, the operation must be a disjunction over all possible choices j in [t]."
+    }
+  ]
+}

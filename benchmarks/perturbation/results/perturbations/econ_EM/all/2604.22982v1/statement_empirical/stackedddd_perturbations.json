@@ -1,0 +1,91 @@
+{
+  "paper_title": "Stacked Triple Differences",
+  "paper_slug": "stackedddd",
+  "n_candidates": 20,
+  "n_generated": 10,
+  "n_valid": 10,
+  "n_injected": 10,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "incorrect_statement_empirical",
+      "original": "\\section{\\@startsection{section}{2}%\n\t\\z@{.5\\linespacing\\@plus.7\\linespacing}{-.5em}%\n\t{\\normalfont\\scshape\\bfseries}}%\n\t}\n\t\\let\\oldsection\\section% Store original \\section\n\t\\let\\old@secnumfont\\@secnumfont% Store original \\@secnumfont\n\t\\newcommand{\\originalsectionstyle}{%\n\\let\\@secnumfont\\old@secnumfont\n\\let\\section\\oldsection\n}\n\\makeatother\n%%%%%%%%%%%%%%%%%",
+      "perturbed": "\\section{\\@startsection{section}{2}%\n\t\\z@{.5\\linespacing\\@plus.7\\linespacing}{-.5em}%\n\t{\\normalfont\\scshape\\bfseries}}%\n\t}\n\t\\let\\oldsection\\section% Store original \\section\n\t\\let\\old@secnumfont\\@secnumfont% Store original \\@secnumfont\n\t\\newcommand{\\originalsectionstyle}{%\n\\let\\@secnumfont\\old@secnumfont\n\\let\\section\\oldsection\n}\n\\newcommand{\\clusteradjustment}{Standard errors are adjusted for stack-based duplication by dividing the variance-covariance matrix by the number of stacks $K$.}\n\\makeatother",
+      "why_wrong": "The paper discusses standard error inflation from stack-based observation duplication. Simply dividing the variance-covariance matrix by the number of stacks is mathematically incorrect for clustering; proper adjustment requires clustering at the unit or unit-by-stack level to account for the mechanical correlation introduced by duplication."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "incorrect_statement_empirical",
+      "original": "\\renewcommand{\\headrulewidth}{0pt} % no line\n% \\renewcommand\\thesubfigure{\\textsc{\\alph{subfigure}}}",
+      "perturbed": "\\renewcommand{\\headrulewidth}{0pt} % no line\n\\newcommand{\\saturatedFE}{Saturated fixed effects are specified such that unit-by-stack and time-by-stack effects are included, while omitting the base unit effects to ensure no collinearity drops occur in the presence of time-varying treatments.}",
+      "why_wrong": "In a stacked difference-in-differences design, including unit-by-stack and time-by-stack fixed effects while also attempting to estimate certain treatment effects can lead to unintended collinearity or the dropping of the very variation the model intends to identify, especially if the 'clean comparison' group is not correctly partitioned."
+    },
+    {
+      "perturbation_id": "P002_S0002",
+      "span_id": "S0002",
+      "error": "incorrect_statement_empirical",
+      "original": "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
+      "perturbed": "% Violation of clean comparison: including previously treated units in the control group of subsequent stacks to maximize sample size.",
+      "why_wrong": "The paper emphasizes the 'clean comparison' requirement. Including previously treated units in the control group of a later stack violates the parallel trends assumption and introduces bias, as the control group is no longer 'never-treated' or 'not-yet-treated' within the local window of the stack."
+    },
+    {
+      "perturbation_id": "P003_S0003",
+      "span_id": "S0003",
+      "error": "incorrect_statement_empirical",
+      "original": "\\newtheoremstyle{rhtheorem}% <name>\n{5.5pt plus 2.0pt minus 4.0pt}\n{10.0pt plus 2.0pt minus 4.0pt}\n%{\\topsep}% measure of space to leave above the theorem. E.g.: 3pt\n%{\\topsep}% measure of space to leave below the theorem. E.g.: 3pt\n{\\slshape}% name of font to use in the body of the theorem\n{0pt}% measure of space to indent\n{\\bfseries}% name of head font\n{.}% punctuation between head and body\n{ }% space after theorem head; \" \" = normal interword space\n{\\thmname{#1}\\thmnumber{ #2}\\textnormal{\\thmnote{ (#3)}}}",
+      "perturbed": "\\newtheoremstyle{rhtheorem}% <name>\n{5.5pt plus 2.0pt minus 4.0pt}\n{10.0pt plus 2.0pt minus 4.0pt}\n{\\slshape}% name of font to use in the body of the theorem\n{0pt}% measure of space to indent\n{\\bfseries}% name of head font\n{.}% punctuation between head and body\n{ }% space after theorem head\n{\\thmname{#1}\\thmnumber{ #2}\\textnormal{\\thmnote{ (#3)}}}\n\\newcommand{\\windowalignment}{Event-time windows are aligned by centering each cohort at $t=0$, regardless of the total duration of treatment observed for that specific cohort in the panel.}",
+      "why_wrong": "Misaligning event-time windows across cohorts with different treatment durations leads to an unbalanced panel within stacks, which can bias the aggregated lead and lag coefficients if the composition of cohorts changes at different event-time distances."
+    },
+    {
+      "perturbation_id": "P004_S0004",
+      "span_id": "S0004",
+      "error": "incorrect_statement_empirical",
+      "original": "\\usepackage{pdflscape}    % \\begin{landscape}\n\\usepackage{bbm}          % \\mathbbm (robust \\one if needed)",
+      "perturbed": "\\usepackage{pdflscape}\n\\usepackage{bbm}\n\\newcommand{\\weighting}{The empirical regression weights in the stacked OLS are numerically identical to the theoretical aggregation weights used in the Gardner (2021) two-stage approach, even without explicit re-weighting.}",
+      "why_wrong": "The paper notes an inconsistency between theoretical aggregation weights and empirical regression weights. Standard OLS on a stacked dataset does not automatically recover the desired theoretical weights (like population-weighted ATT) unless specific weights are applied to the regression."
+    },
+    {
+      "perturbation_id": "P005_S0005",
+      "span_id": "S0005",
+      "error": "incorrect_statement_empirical",
+      "original": "\\numberwithin{equation}{section}\n\\theoremstyle{rhtheorem}",
+      "perturbed": "\\numberwithin{equation}{section}\n\\theoremstyle{rhtheorem}\n\\newcommand{\\duplicationError}{Duplicating observations across stacks does not affect the degrees of freedom or the validity of standard OLS standard errors.}",
+      "why_wrong": "This is factually incorrect in the context of the paper's focus on econometrics. Duplicating observations (stacking) artificially inflates the sample size, leading to underestimated standard errors if one does not account for the fact that the same unit-period observation appears multiple times."
+    },
+    {
+      "perturbation_id": "P006_S0006",
+      "span_id": "S0006",
+      "error": "incorrect_statement_empirical",
+      "original": "\\newtheorem{theorem}{Theorem}[section]\n\\newtheorem{prop}[theorem]{Proposition}\n\\newtheorem{lemma}{Lemma}[section]\n\\newtheorem{cor}{Corollary}[section]\n\\newtheorem{assumption}{Assumption}[section]\n\\theoremstyle{definition}\n\\newtheorem{ex}{Example}[section]\n\\newtheorem{defn}{Definition}[section]\n\\newtheorem{remark}{Remark}[section]\n\\newtheorem{fact}[theorem]{Fact}\n\\AtEndEnvironment{ex}{~\\,$\\diamondsuit$}\n\\AtEndEnvironment{remark}{~\\,$\\diamondsuit$}",
+      "perturbed": "\\newtheorem{theorem}{Theorem}[section]\n\\newtheorem{prop}[theorem]{Proposition}\n\\newtheorem{lemma}{Lemma}[section]\n\\newtheorem{cor}{Corollary}[section]\n\\newtheorem{assumption}{Assumption}[section]\n\\theoremstyle{definition}\n\\newtheorem{ex}{Example}[section]\n\\newtheorem{defn}{Definition}[section]\n\\newtheorem{remark}{Remark}[section]\n\\newtheorem{fact}[theorem]{Fact}\n\\newcommand{\\collinearityNote}{Saturated fixed effects are constructed by interacting unit and time dummies with stack indicators, which prevents any coefficients from being dropped due to collinearity.}",
+      "why_wrong": "The paper discusses how incorrect specification of saturated fixed effects leads to collinearity. Interacting every unit and time dummy with stack indicators in a model with a constant or overlapping treatment periods will lead to a rank-deficient matrix where many indicators are dropped."
+    },
+    {
+      "perturbation_id": "P007_S0007",
+      "span_id": "S0007",
+      "error": "incorrect_statement_empirical",
+      "original": "% cleveref names for aliases and assumption\n\\Crefname{prop}{Proposition}{Propositions}\n\\Crefname{defn}{Definition}{Definitions}\n\\Crefname{ex}{Example}{Examples}\n\\Crefname{cor}{Corollary}{Corollaries}\n\\Crefname{assumption}{Assumption}{Assumptions}\n\\Crefname{lemma}{Lemma}{Lemmas}\n\\Crefname{theorem}{Theorem}{Theorems}\n\\Crefname{remark}{Remark}{Remarks}",
+      "perturbed": "% cleveref names for aliases and assumption\n\\Crefname{prop}{Proposition}{Propositions}\n\\Crefname{defn}{Definition}{Definitions}\n\\Crefname{ex}{Example}{Examples}\n\\Crefname{cor}{Corollary}{Corollaries}\n\\Crefname{assumption}{Assumption}{Assumptions}\n\\Crefname{lemma}{Lemma}{Lemmas}\n\\Crefname{theorem}{Theorem}{Theorems}\n\\Crefname{remark}{Remark}{Remarks}\n\\newcommand{\\cleanComp}{The clean comparison requirement is satisfied as long as the control group in each stack has not been treated within the specific event-time window of that stack, even if they were treated earlier in the full panel.}",
+      "why_wrong": "This violates the 'clean comparison' requirement. Units that were treated earlier in the panel carry over treatment effects that can contaminate the counterfactual for the current cohort, even if they are not 'currently' receiving a new treatment change in that window."
+    },
+    {
+      "perturbation_id": "P008_S0008",
+      "span_id": "S0008",
+      "error": "incorrect_statement_empirical",
+      "original": "% --- Common math shorthands used throughout the body ---\n\\newcommand{\\E}{\\mathbb{E}}\n\\newcommand{\\R}{\\mathbb{R}}\n\\newcommand{\\pto}{\\overset{\\mathbb P}{\\to}}\n\\newcommand{\\dto}{\\overset{d}{\\longrightarrow}}\n\\newcommand{\\asto}{\\overset{\\mathrm{a.s.}}{\\longrightarrow}}\n\\newcommand{\\iid}{\\overset{\\mathrm{i.i.d.}}{\\sim}}\n\\newcommand{\\ci}{\\perp\\!\\!\\!\\perp}\n% \\norm and \\abs are already provided by the commath package loaded above.",
+      "perturbed": "\\newcommand{\\E}{\\mathbb{E}}\n\\newcommand{\\R}{\\mathbb{R}}\n\\newcommand{\\pto}{\\overset{\\mathbb P}{\\to}}\n\\newcommand{\\dto}{\\overset{d}{\\longrightarrow}}\n\\newcommand{\\asto}{\\overset{\\mathrm{a.s.}}{\\longrightarrow}}\n\\newcommand{\\iid}{\\overset{\\mathrm{i.i.d.}}{\\sim}}\n\\newcommand{\\ci}{\\perp\\!\\!\\!\\perp}\n\\newcommand{\\weightMismatch}{The empirical weights assigned by OLS to each cohort-time cell are proportional to the variance of the treatment in that cell, which matches the theoretical goal of estimating the simple average treatment effect.}",
+      "why_wrong": "The paper highlights the inconsistency between empirical OLS weights (which are variance-weighted) and theoretical weights (which are usually population or size-weighted). OLS weights do not naturally match the simple average treatment effect in the presence of heterogeneous effects."
+    },
+    {
+      "perturbation_id": "P009_S0009",
+      "span_id": "S0009",
+      "error": "incorrect_statement_empirical",
+      "original": "% --- DDD-specific macros (mirror of _StackedPaper.tex preamble) ---\n\\newcommand{\\Yit}{Y_{i,t}}\n\\newcommand{\\Yitpo}[1]{Y_{i,t}(#1)}",
+      "perturbed": "% --- DDD-specific macros ---\n\\newcommand{\\Yit}{Y_{i,t}}\n\\newcommand{\\Yitpo}[1]{Y_{i,t}(#1)}\n\\newcommand{\\stackSE}{Standard errors in stacked regressions are valid without clustering because the stacks are independent by construction.}",
+      "why_wrong": "The stacks are not independent because they are constructed by duplicating the same underlying observations from the original panel. This duplication creates mechanical correlation across stacks, necessitating clustered standard errors at the unit level."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "paper_title": "Unrestrictions and concise secant varieties",
+  "paper_slug": "concise-secant",
+  "n_candidates": 60,
+  "n_generated": 18,
+  "n_valid": 18,
+  "n_injected": 18,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0021",
+      "span_id": "S0021",
+      "error": "operator_or_sign",
+      "original": "$\\leq r$",
+      "perturbed": "$\\geq r$",
+      "why_wrong": "The context discusses the characterization of tensors within the secant variety or cactus variety of a specific order. In algebraic geometry, rank and cactus rank are defined as the minimum number of points needed to represent a tensor; therefore, the characterization of a variety (which is a closure of sets of low rank) must involve rank less than or equal to $r$, not greater than or equal to $r$."
+    },
+    {
+      "perturbation_id": "P001_S0023",
+      "span_id": "S0023",
+      "error": "index_or_subscript",
+      "original": "$\\sigma_r(X) = \\Sigma_{r-1}(X)$",
+      "perturbed": "$\\sigma_r(X) = \\Sigma_{r}(X)$",
+      "why_wrong": "The standard notation for the $r$-th secant variety, as used in the literature cited within the paper (e.g., Ullery, Park), typically relates the secant variety index to the number of points. Changing the subscript from $r-1$ to $r$ creates an inconsistency in the definition of the join of $r$ copies of the variety $X$."
+    },
+    {
+      "perturbation_id": "P002_S0028",
+      "span_id": "S0028",
+      "error": "index_or_subscript",
+      "original": "$\\Hilb_r^{\\sm}(X)$",
+      "perturbed": "$\\Hilb_r(X)$",
+      "why_wrong": "The text explains that the results hold because every point is 'tame', which is equivalent to the universal bundle being defined over the smoothable part of the Hilbert scheme. By removing the 'sm' superscript, the perturbation incorrectly implies that the partial desingularization extends to the entire Hilbert scheme, ignoring the existence of non-smoothable components which are central to the distinction between rank and cactus rank discussed in the abstract."
+    },
+    {
+      "perturbation_id": "P000_S0033",
+      "span_id": "S0033",
+      "error": "index_or_subscript",
+      "original": "$\\AsigmaHilb_r$",
+      "perturbed": "$\\AsigmaHilb_{r-1}$",
+      "why_wrong": "The text states that the concise secant variety $\\csigma_r$ compactifies an open part of the abstract secant variety. Since $\\csigma_r$ is defined for rank $r$, its abstract counterpart must also be indexed by $r$ to maintain the correspondence between the parameter space and the variety it maps to."
+    },
+    {
+      "perturbation_id": "P001_S0035",
+      "span_id": "S0035",
+      "error": "index_or_subscript",
+      "original": "$\\AsigmaHilb_r$",
+      "perturbed": "$\\AsigmaHilb_{2r}$",
+      "why_wrong": "The embedding described is between the abstract secant variety and the concise secant variety of the same rank $r$. Changing the index to $2r$ creates a dimension mismatch and invalidates the 'cactus apolarity lemma' which relates a tensor of rank $r$ to schemes of length $r$."
+    },
+    {
+      "perturbation_id": "P002_S0037",
+      "span_id": "S0037",
+      "error": "operator_or_sign",
+      "original": "$d\\geq 3$",
+      "perturbed": "$d\\leq 3$",
+      "why_wrong": "The paper focuses on the Segre embedding of $d$ factors. In tensor theory and algebraic geometry, the case $d=2$ (matrices) is well-understood and does not exhibit the 'wild' behavior or the specific secant variety complexities (like the Salmon problem) mentioned in the context, which require $d \\geq 3$."
+    },
+    {
+      "perturbation_id": "P000_S0002",
+      "span_id": "S0002",
+      "error": "index_or_subscript",
+      "original": "\\[\n    \\unresfull := \\unrespar{1, \\ldots ,d}{\\Tppar{1,\\dots,d-1}} \\xrightarrow{\\pi} X.\n\\]",
+      "perturbed": "\\[\n    \\unresfull := \\unrespar{1, \\ldots ,d}{\\Tppar{1,\\dots,d}} \\xrightarrow{\\pi} X.\n\\]",
+      "why_wrong": "The context explicitly states that the family of tensors is concise on the first two coordinates and builds up to the first d-1 coordinates in the previous sentence. Changing the subscript from d-1 to d contradicts the iterative construction of the unrestriction described in the preceding paragraph."
+    },
+    {
+      "perturbation_id": "P001_S0005",
+      "span_id": "S0005",
+      "error": "operator_or_sign",
+      "original": "\\[\n    \\AsigmaHilb_r = \\left\\{\n        \\begin{array}{c l}\n            (Z, T)\\ | &Z\\into \\Seg,\\ Z \\mbox{ zero-dimensional smoothable Gorenstein, }\\deg Z =\n        r\\\\\n                   &\\pr_{2, \\ldots ,d}\\spann{Z} \\simeq \\mathbb{P}^{r-1},\\ T\\in \\spann{Z}\\mbox{ not in the span of any subscheme of }Z\n        \\end{array}\n    \\right\\},\n\\]",
+      "perturbed": "\\[\n    \\AsigmaHilb_r = \\left\\{\n        \\begin{array}{c l}\n            (Z, T)\\ | &Z\\into \\Seg,\\ Z \\mbox{ zero-dimensional smoothable Gorenstein, }\\deg Z =\n        r\\\\\n                   &\\pr_{2, \\ldots ,d}\\spann{Z} \\not\\simeq \\mathbb{P}^{r-1},\\ T\\in \\spann{Z}\\mbox{ not in the span of any subscheme of }Z\n        \\end{array}\n    \\right\\},\n\\]",
+      "why_wrong": "The definition of the abstract secant variety locus requires the span of the points (or scheme Z) to be of a specific dimension to ensure linear independence or its schematic equivalent. Changing the isomorphism to a non-isomorphism contradicts the standard definition of secant varieties where the points must span a space of dimension r-1 to be in the open locus."
+    },
+    {
+      "perturbation_id": "P000_S0042",
+      "span_id": "S0042",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eq:VSP}\n    \\VSP(T, r) = \\overline{\\left\\{ [Z]\\into \\Seg\\ |\\ Z\\mbox{ zero-dimensional smoothable Gorenstein, }\\deg Z = r,\\ T\\in \\spann{Z}\\right\\}}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:VSP}\n    \\VSP(T, r) = \\overline{\\left\\{ [Z]\\into \\Seg\\ |\\ Z\\mbox{ zero-dimensional smoothable Gorenstein, }\\deg Z = r+1,\\ T\\in \\spann{Z}\\right\\}}.\n\\end{equation}",
+      "why_wrong": "The definition of the Variety of Sums of Powers (VSP) for a tensor of rank r requires the degree of the zero-dimensional scheme Z to be equal to r, not r+1, to represent the possible decompositions into r points."
+    },
+    {
+      "perturbation_id": "P002_S0008",
+      "span_id": "S0008",
+      "error": "numeric_parameter",
+      "original": "\\[\n        T = e_1 \\wedge e_2 \\wedge e_3 \\in \\Lambda^3 \\kk^3 \\subset \\kk^3 \\otimes \\kk^3 \\otimes \\kk^3\n        \\into \\kk^5 \\otimes \\kk^5 \\otimes \\kk^5.\n    \\]",
+      "perturbed": "\\[\n        T = e_1 \\wedge e_2 \\wedge e_3 \\in \\Lambda^3 \\kk^3 \\subset \\kk^3 \\otimes \\kk^3 \\otimes \\kk^3\n        \\into \\kk^2 \\otimes \\kk^2 \\otimes \\kk^2.\n    \\]",
+      "why_wrong": "The tensor T is defined as an element of the third exterior power of a 3-dimensional space (k^3). It is mathematically impossible to embed a tensor requiring a 3-dimensional basis into a space of dimension 2 (k^2), as the rank of the factors must be at least the dimension of the space spanned by the tensor's components."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "index_or_subscript",
+      "original": "\\[\n        T \\colon S^{\\nu_1}V_1^\\vee \\otimes \\ldots \\otimes S^{\\nu_{i-1}} V_{i-1}^\\vee \\otimes \n         S^{\\nu_{i+1}} V_{i+1}^\\vee \\otimes \\ldots \\otimes S^{\\nu_d}V_d^\\vee \\to S^{\\nu_i} V_i\n     \\]",
+      "perturbed": "\\[\n        T \\colon S^{\\nu_1}V_1 \\otimes \\ldots \\otimes S^{\\nu_{i-1}} V_{i-1} \\otimes \n         S^{\\nu_{i+1}} V_{i+1} \\otimes \\ldots \\otimes S^{\\nu_d}V_d \\to S^{\\nu_i} V_i\n     \\]",
+      "why_wrong": "The definition of a flattening of a tensor $T \\in S^{\\nu_1}V_1 \\otimes \\dots \\otimes S^{\\nu_d}V_d$ requires the domain to be the dual space of the other factors (indicated by the ^\\vee symbol) to act as a linear map into the $i$-th factor. Removing the duals makes the contraction operation undefined."
+    },
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "numeric_parameter",
+      "original": "\\[\n        \\partial_{r+1} \\FF_t = \\sum_{i=1}^r (\\lambda_i^1 t) \\partial_i \\FF_t + t^2 \\RR{2}_t.\n    \\]",
+      "perturbed": "\\[\n        \\partial_{r+1} \\FF_t = \\sum_{i=1}^r (\\lambda_i^1 t) \\partial_i \\FF_t + t \\RR{2}_t.\n    \\]",
+      "why_wrong": "The context establishes that $\\RR{1}_t = \\sum \\lambda_i^1 \\partial_i \\FF_t + t \\RR{2}_t$. Since $\\partial_{r+1} \\FF_t = t \\RR{1}_t$ (implied by the derivation of coefficients), multiplying the expression for $\\RR{1}_t$ by $t$ must result in a $t^2$ term for the remainder $\\RR{2}_t$."
+    },
+    {
+      "perturbation_id": "P001_S0043",
+      "span_id": "S0043",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{eq:tmpRemainder}\n        \\partial_{r+1} \\FF_t = t^d \\RR{d}_t.\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:tmpRemainder}\n        \\partial_{r} \\FF_t = t^d \\RR{d}_t.\n    \\end{equation}",
+      "why_wrong": "The context states that the change of variables reduces the case specifically for the partial derivative with respect to the (r+1)-th variable, while the derivatives with respect to 1 through r remain unchanged. Changing the index to r contradicts the subsequent sentence."
+    },
+    {
+      "perturbation_id": "P002_S0017",
+      "span_id": "S0017",
+      "error": "operator_or_sign",
+      "original": "\\[\n    %     \\partial_i \\FFpar = \\partial_i \\FF + \\sum_{j \\in J} v_{r+1}^j \\partial_i \\HH_j \n    %     \\quad\\text{for $i=1,\\dots,r$}\\quad\\text{and}\\quad\n    %     \\partial_{r+1} \\FFpar = \\sum_{j \\in J} j v_{r+1}^{j-1} \\HH_j.\n    % \\]",
+      "perturbed": "\\[\n    %     \\partial_i \\FFpar = \\partial_i \\FF + \\sum_{j \\in J} v_{r+1}^j \\partial_i \\HH_j \n    %     \\quad\\text{for $i=1,\\dots,r$}\\quad\\text{and}\\quad\n    %     \\partial_{r+1} \\FFpar = \\sum_{j \\in J} v_{r+1}^{j-1} \\HH_j.\n    % \\]",
+      "why_wrong": "The partial derivative of $v_{r+1}^j$ with respect to $v_{r+1}$ is $j v_{r+1}^{j-1}$ by the power rule. Removing the factor $j$ makes the derivative calculation incorrect, which is critical for the subsequent linear independence arguments."
+    },
+    {
+      "perturbation_id": "P002_S0046",
+      "span_id": "S0046",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eq:unresBundle}\n            \\begin{tikzcd}\n                \\unresfullpar{\\Taf} \\ar[r]\\ar[d] & \\unresfullpar{\\TGr}\\ar[d]\\\\\n                \\unrespar{1}{\\Taf} \\ar[r, \"\\ehat\"] & \\Gr(m, \\Vhatpar{1})\n            \\end{tikzcd}\n        \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:unresBundle}\n            \\begin{tikzcd}\n                \\unresfullpar{\\Taf} \\ar[r]\\ar[d] & \\unresfullpar{\\TGr}\\ar[d]\\\\\n                \\unrespar{1}{\\Taf} \\ar[r, \"\\ehat\"] & \\Gr(m+1, \\Vhatpar{1})\n            \\end{tikzcd}\n        \\end{equation}",
+      "why_wrong": "The proposition text explicitly states that the Grassmannian involved is Gr(m, Vhat_1). Changing the parameter to m+1 makes the diagram inconsistent with the rank m of the universal subbundle mentioned in the context."
+    },
+    {
+      "perturbation_id": "P000_S0054",
+      "span_id": "S0054",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:orbitJump}\n        \\dim\\left( \\GLV\\cdot T' \\right) = \\dim \\left( \\GLV \\cdot T'' \\right) - 1.\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:orbitJump}\n        \\dim\\left( \\GLV\\cdot T' \\right) = \\dim \\left( \\GLV \\cdot T'' \\right) + 1.\n    \\end{equation}",
+      "why_wrong": "The proposition assumes $T''$ is an unrestriction of $T'$ to a larger space. In tensor theory, the orbit dimension of an unrestriction $T''$ must be greater than or equal to the orbit dimension of the original tensor $T'$. Setting the dimension of the orbit of $T'$ to be one greater than its unrestriction $T''$ is geometrically impossible."
+    },
+    {
+      "perturbation_id": "P001_S0056",
+      "span_id": "S0056",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eq:weightsHeightTwoTypeOne}\n        2e_1,\\ 2e_2,\\ 2e_1 + 2e_2,\\ 2e_3,\\ 2e_3,\\ 2e_2,\\ -2e_2,\\ 2e_k, 2e_k, \\mbox{ for } k=4, \\ldots d\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:weightsHeightTwoTypeOne}\n        2e_1,\\ 2e_2,\\ 2e_1 + 2e_2,\\ 2e_3,\\ 2e_3,\\ 2e_2,\\ -2e_2,\\ 2e_k, 2e_k, \\mbox{ for } k=5, \\ldots d\n    \\end{equation}",
+      "why_wrong": "The index range for $k$ is changed from $k=4$ to $k=5$. In the context of tensor decomposition for $d$ dimensions, this skips the weights associated with the 4th dimension, leading to an incorrect dimension count for the tangent space of the variety of sums of powers."
+    },
+    {
+      "perturbation_id": "P002_S0059",
+      "span_id": "S0059",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{eq:fibreMotive}\n        (\\Lmot{}+1)^{d-1}+(\\Lmot{}+\\Lmot{}^2+ \\ldots +\\Lmot{}^{d-2}) + (d-1)\\Lmot{}^2.\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:fibreMotive}\n        (\\Lmot{}+1)^{d-1}+(\\Lmot{}+\\Lmot{}^2+ \\ldots +\\Lmot{}^{d-2}) + (d-2)\\Lmot{}^2.\n    \\end{equation}",
+      "why_wrong": "The coefficient of the $\\Lmot{}^2$ term is changed from $(d-1)$ to $(d-2)$. This contradicts the Bialynicki-Birula cell decomposition count derived from the weights listed in the preceding lemmas (S0056-S0058), resulting in an incorrect motivic class for the fibre."
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "paper_title": "Re-analysis of the Human Transcription Factor Atlas Recovers TF-Specific Signatures from Pooled Single-Cell Screens with Missing Controls",
+  "paper_slug": "tf-atlas-analysis",
+  "n_candidates": 20,
+  "n_generated": 10,
+  "n_valid": 10,
+  "n_injected": 10,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "operator_or_sign",
+      "original": "$\\rho = -0.316$",
+      "perturbed": "$\\rho = 0.316$",
+      "why_wrong": "The text explicitly states the correlation is 'negative because lower rank indicates stronger effect', making a positive rho value contradictory to the provided explanation."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "numeric_parameter",
+      "original": "$p = 0.013$",
+      "perturbed": "$p = 0.130$",
+      "why_wrong": "The text claims the effect sizes 'significantly agree' with published rankings, but a p-value of 0.130 exceeds the standard alpha threshold of 0.05, rendering the result statistically non-significant."
+    },
+    {
+      "perturbation_id": "P002_S0002",
+      "span_id": "S0002",
+      "error": "operator_or_sign",
+      "original": "$\\log(1+x)$",
+      "perturbed": "$\\log(1-x)$",
+      "why_wrong": "Standard log-normalization for count data uses 1+x to avoid undefined values for zero counts; 1-x would result in undefined values for any count x >= 1."
+    },
+    {
+      "perturbation_id": "P003_S0003",
+      "span_id": "S0003",
+      "error": "numeric_parameter",
+      "original": "$k=10$",
+      "perturbed": "$k=1000$",
+      "why_wrong": "Setting k=1000 for nearest neighbors in a pipeline involving Leiden clustering and UMAP is inconsistent with standard single-cell processing and would likely over-smooth the local manifold structure."
+    },
+    {
+      "perturbation_id": "P004_S0004",
+      "span_id": "S0004",
+      "error": "index_or_subscript",
+      "original": "$_2$",
+      "perturbed": "$_{10}$",
+      "why_wrong": "The term log2FC refers to log base 2 fold change, which is the standard metric for differential expression; changing the base to 10 is inconsistent with the 'log2FC' notation used elsewhere in the paper."
+    },
+    {
+      "perturbation_id": "P005_S0005",
+      "span_id": "S0005",
+      "error": "operator_or_sign",
+      "original": "$p < 0.05$",
+      "perturbed": "$p > 0.05$",
+      "why_wrong": "The text defines these genes as 'significant' DEGs; significance is defined by p-values being less than a threshold, not greater than."
+    },
+    {
+      "perturbation_id": "P006_S0006",
+      "span_id": "S0006",
+      "error": "operator_or_sign",
+      "original": "$\\geq$",
+      "perturbed": "$\\leq$",
+      "why_wrong": "The paper aims to analyze TFs with sufficient data; filtering for TFs with less than or equal to 20 cells would prioritize TFs with low power and high noise, contradicting the goal of a robust analysis."
+    },
+    {
+      "perturbation_id": "P007_S0007",
+      "span_id": "S0007",
+      "error": "numeric_parameter",
+      "original": "$_2$",
+      "perturbed": "$_{10}$",
+      "why_wrong": "The text uses log2FC to describe fold changes; changing the subscript to 10 creates a mismatch between the metric name and the mathematical base used for the threshold."
+    },
+    {
+      "perturbation_id": "P008_S0008",
+      "span_id": "S0008",
+      "error": "operator_or_sign",
+      "original": "$\\geq$",
+      "perturbed": "$\\leq$",
+      "why_wrong": "Background subtraction aims to remove genes common to most TFs (high frequency). Changing the sign to 'less than or equal to' would incorrectly classify rare, TF-specific genes as background noise."
+    },
+    {
+      "perturbation_id": "P009_S0009",
+      "span_id": "S0009",
+      "error": "computation",
+      "original": "$\\lceil 0.70 \\times 61 \\rceil = 43$",
+      "perturbed": "$\\lceil 0.70 \\times 61 \\rceil = 35$",
+      "why_wrong": "The calculation is mathematically incorrect; 70% of 61 is 42.7, which rounds up (ceiling) to 43, not 35."
+    }
+  ]
+}

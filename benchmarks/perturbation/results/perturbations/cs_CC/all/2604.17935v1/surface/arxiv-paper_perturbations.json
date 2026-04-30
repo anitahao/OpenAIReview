@@ -1,0 +1,171 @@
+{
+  "paper_title": "How Much Cache Does Reasoning Need? \\large Depth--Cache Tradeoffs in KV-Compressed Transformers",
+  "paper_slug": "arxiv-paper",
+  "n_candidates": 44,
+  "n_generated": 20,
+  "n_valid": 20,
+  "n_injected": 20,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0021",
+      "span_id": "S0021",
+      "error": "numeric_parameter",
+      "original": "$s \\leq \\sqrt{n}/4$",
+      "perturbed": "$s \\leq n/4$",
+      "why_wrong": "The paper later states that closing the conjecture amounts to upgrading the max-bound to a product in the $s \\leq \\sqrt{n}/4$ regime; changing the square root to a linear factor $n$ creates a contradiction with the stated regime for the product bound's validity."
+    },
+    {
+      "perturbation_id": "P001_S0023",
+      "span_id": "S0023",
+      "error": "computation",
+      "original": "$L = O\\!\\bigl(\\min(k, \\lceil k/s\\rceil \\cdot \\lceil \\log_2(2s)\\rceil) \\cdot \\lceil \\log_2 n / (mp)\\rceil\\bigr)$",
+      "perturbed": "$L = O\\!\\bigl(\\min(k, \\lceil k/s\\rceil + \\lceil \\log_2(2s)\\rceil) \\cdot \\lceil \\log_2 n / (mp)\\rceil\\bigr)$",
+      "why_wrong": "The text explicitly states that the 'product structure' is the central feature where reachability and bandwidth 'multiply, not compete'. Changing the multiplication to addition in the upper bound formula contradicts this qualitative description of the windowed pointer doubling construction."
+    },
+    {
+      "perturbation_id": "P002_S0025",
+      "span_id": "S0025",
+      "error": "operator_or_sign",
+      "original": "$\\max$",
+      "perturbed": "$\\min$",
+      "why_wrong": "The sentence immediately preceding this span defines the lower bound as a 'max-bound' using the $\\max$ operator. Changing the subsequent reference to $\\min$ creates an internal inconsistency regarding which operator is being upgraded to a product."
+    },
+    {
+      "perturbation_id": "P003_S0029",
+      "span_id": "S0029",
+      "error": "operator_or_sign",
+      "original": "$Hmp \\geq \\log_2 n$",
+      "perturbed": "$Hmp \\leq \\log_2 n$",
+      "why_wrong": "The paper defines the 'Bandwidth barrier' as applying when the product bound is NOT binding, which occurs in the high-precision/wide regime. Earlier, it defines the 'narrow or low-precision regime' as $Hmp \\lesssim \\log n$. Flipping the sign to $\\leq$ makes the barrier apply to the low-precision regime instead of the high-precision regime, contradicting the 'Bandwidth barrier' definition."
+    },
+    {
+      "perturbation_id": "P000_S0032",
+      "span_id": "S0032",
+      "error": "index_or_subscript",
+      "original": "$\\Pr[\\mathcal{E}] = s/n$",
+      "perturbed": "$\\Pr[\\mathcal{E}] = (s/n)^T$",
+      "why_wrong": "The text explicitly states that for adaptive caches, the success probability is 'independent of T'. Changing the exponent to T introduces a dependency on the number of stages, contradicting the subsequent sentence."
+    },
+    {
+      "perturbation_id": "P001_S0033",
+      "span_id": "S0033",
+      "error": "computation",
+      "original": "$\\Omega((n/s)^{T-1})$",
+      "perturbed": "$\\Omega((n/s)^{T})$",
+      "why_wrong": "The separation is calculated by dividing the adaptive success probability (s/n) by the oblivious success probability (~(s/n)^T). This results in (s/n) / (s/n)^T = (n/s)^{T-1}. Using T as the exponent is an arithmetic error in the ratio calculation."
+    },
+    {
+      "perturbation_id": "P002_S0036",
+      "span_id": "S0036",
+      "error": "operator_or_sign",
+      "original": "$\\sim \\log n/(Hmp)$",
+      "perturbed": "$\\sim (Hmp) / \\log n$",
+      "why_wrong": "The paper defines this term as 'per-window bandwidth'. Later in the text (S0039), it is stated that in standard configurations where Hmp is very large, the factor 'ceilings at 1'. If the ratio were Hmp/log n, the factor would explode rather than ceiling at 1."
+    },
+    {
+      "perturbation_id": "P003_S0038",
+      "span_id": "S0038",
+      "error": "numeric_parameter",
+      "original": "$s \\cdot 2^{mp} < 8$",
+      "perturbed": "$s \\cdot mp < 8$",
+      "why_wrong": "The context describes this as the 'extreme low-precision subregime' involving bit-complexity. Precision p usually acts as an exponent in state-space size (2^p); changing it to a linear product mp fails to account for the exponential encoding capacity of bits mentioned in the bit-complexity requirements."
+    },
+    {
+      "perturbation_id": "P000_S0040",
+      "span_id": "S0040",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eq:lower}\n  L \\;\\geq\\; c \\cdot \\left\\lceil \\frac{k}{s} \\right\\rceil \\cdot \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:lower}\n  L \\;\\geq\\; c \\cdot \\left\\lceil \\frac{k}{s} \\right\\rceil \\cdot \\left\\lceil \\frac{\\log_2 n}{H^2 mp} \\right\\rceil.\n\\end{equation}",
+      "why_wrong": "The bit-complexity of the pointer chain is distributed across the available attention capacity. Changing H to H^2 incorrectly scales the capacity of the heads, contradicting the standard definition of total capacity Hmp used in the surrounding text to bound the information bottleneck."
+    },
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "computation",
+      "original": "\\[\n  L \\;=\\; O\\!\\left(\\min\\bigl(k,\\, \\lceil k/s \\rceil \\cdot \\lceil \\log_2(2s) \\rceil\\bigr) \\cdot \\lceil \\log_2 n/(mp) \\rceil\\right).\n\\]",
+      "perturbed": "\\[\n  L \\;=\\; O\\!\\left(\\min\\bigl(k,\\, \\lceil k/s \\rceil + \\lceil \\log_2(2s) \\rceil\\bigr) \\cdot \\lceil \\log_2 n/(mp) \\rceil\\right).\n\\]",
+      "why_wrong": "The windowed pointer doubling construction requires a multiplicative factor between the number of windows (k/s) and the depth per window (log s) to reach all elements, not an additive one. The context explicitly mentions the serial cost is O(k), which is only recovered if the terms are multiplied."
+    },
+    {
+      "perturbation_id": "P001_S0004",
+      "span_id": "S0004",
+      "error": "numeric_parameter",
+      "original": "\\[\n  \\Pr[\\mathcal{E}] \\;\\leq\\; \\frac{s}{n}.\n\\]",
+      "perturbed": "\\[\n  \\Pr[\\mathcal{E}] \\;\\leq\\; \\frac{s}{n^T}.\n\\]",
+      "why_wrong": "The theorem states that the adaptive controller success probability is tight at s/n and matches the 'chain-tracking' controller exactly. Changing the denominator to n^T conflates the adaptive success probability with the oblivious case (Theorem 3.2), which exhibits exponential decay."
+    },
+    {
+      "perturbation_id": "P002_S0006",
+      "span_id": "S0006",
+      "error": "operator_or_sign",
+      "original": "\\[\n  D_0(0) = \\{0\\}, \\qquad D_\\ell(0) \\;\\subseteq\\; D_{\\ell-1}(0) \\cup S^{(\\ell)} \\cup \\bigcup_{j \\in S^{(\\ell)}} D_{\\ell-1}(j),\n\\]",
+      "perturbed": "\\[\n  D_0(0) = \\{0\\}, \\qquad D_\\ell(0) \\;\\subseteq\\; D_{\\ell-1}(0) \\cap S^{(\\ell)} \\cup \\bigcup_{j \\in S^{(\\ell)}} D_{\\ell-1}(j),\n\\]",
+      "why_wrong": "The reachability set must be non-decreasing with layers. Replacing the union with an intersection between the previous reachable set and the current cache would incorrectly imply that only elements already reached AND currently in cache can be used, contradicting the subsequent size bound |D_L(0)| <= 1 + L*s."
+    },
+    {
+      "perturbation_id": "P001_S0041",
+      "span_id": "S0041",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:reach-size}\n  |D_L(0)| \\;\\leq\\; 1 + L \\cdot s.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:reach-size}\n  |D_L(0)| \\;\\leq\\; 1 + L + s.\n\\end{equation}",
+      "why_wrong": "The reachability bound is derived from the union of cache-accessible tokens across L layers. Since each layer accesses s tokens, the total reachable set size must be multiplicative (L * s) rather than additive (L + s) to account for the cumulative expansion of the dependency set."
+    },
+    {
+      "perturbation_id": "P002_S0042",
+      "span_id": "S0042",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{eq:reach-union}\n  D_L(0) \\;\\subseteq\\; \\{0\\} \\cup \\bigcup_{\\ell'=1}^{L} N_{\\ell'}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:reach-union}\n  D_L(0) \\;\\subseteq\\; \\{0\\} \\cup \\bigcup_{\\ell'=1}^{L-1} N_{\\ell'}.\n\\end{equation}",
+      "why_wrong": "The dependency set D_L(0) represents the tokens reachable after L layers. By terminating the union at L-1, the perturbation fails to account for the tokens accessed by the cache controller in the final layer L, which is necessary for the induction proof to hold."
+    },
+    {
+      "perturbation_id": "P003_S0043",
+      "span_id": "S0043",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{eq:reach-union-i}\n  D_\\ell(i) \\;\\subseteq\\; \\{i\\} \\cup \\bigcup_{\\ell'=1}^{\\ell} N_{\\ell'}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:reach-union-i}\n  D_\\ell(i) \\;\\subseteq\\; \\{i\\} \\cup \\bigcup_{\\ell'=1}^{\\ell} N_{i}.\n\\end{equation}",
+      "why_wrong": "The index of the cache-accessible set N should be indexed by the layer depth l' to represent the tokens available at each step of the pointer doubling process. Changing the subscript to i incorrectly suggests the set is constant across layers for a specific token, which contradicts the definition of the locality-respecting cache controller."
+    },
+    {
+      "perturbation_id": "P003_S0009",
+      "span_id": "S0009",
+      "error": "index_or_subscript",
+      "original": "\\[\n  \\Sigma_B(x) \\;:=\\; \\bigl\\{ X^{(\\ell_0 + B)}_0(\\pi) \\;:\\; \\pi \\text{ such that } X^{(\\ell_0)}_0(\\pi) = x \\bigr\\}\n\\]",
+      "perturbed": "\\[\n  \\Sigma_B(x) \\;:=\\; \\bigl\\{ X^{(\\ell_0 + B)}_0(\\pi) \\;:\\; \\pi \\text{ such that } X^{(B)}_0(\\pi) = x \\bigr\\}\n\\]",
+      "why_wrong": "The definition of the set Sigma_B(x) is intended to bound the growth of distinguishable states over a window of B layers starting from layer l_0. Changing the condition to X^{(B)}_0(pi) = x breaks the relative indexing, as the starting state must be fixed at the beginning of the window (layer l_0), not at an absolute layer B."
+    },
+    {
+      "perturbation_id": "P000_S0011",
+      "span_id": "S0011",
+      "error": "operator_or_sign",
+      "original": "\\[\n  L \\;\\geq\\; \\max\\!\\left( \\left\\lceil \\frac{k-1}{s} \\right\\rceil,\\; \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\right) \\;\\geq\\; \\max\\!\\left( \\lceil k/s \\rceil - 1,\\; \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\right).\n\\]",
+      "perturbed": "\\[\n  L \\;\\geq\\; \\max\\!\\left( \\left\\lceil \\frac{k-1}{s} \\right\\rceil,\\; \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\right) \\;\\geq\\; \\max\\!\\left( \\lceil k/s \\rceil + 1,\\; \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\right).\n\\]",
+      "why_wrong": "The inequality $\\lceil (k-1)/s \\rceil \\geq \\lceil k/s \\rceil + 1$ is mathematically impossible as the left side is strictly smaller than the right side for any $s \\geq 1$."
+    },
+    {
+      "perturbation_id": "P001_S0013",
+      "span_id": "S0013",
+      "error": "numeric_parameter",
+      "original": "\\[\n  \\text{(\\ensuremath{\\star})} \\qquad \\Pr[z_{\\sigma_j}(\\pi) \\in T(\\pi) \\mid \\mathcal{D}_{\\text{chain}}] \\;\\leq\\; \\frac{\\mathbb{E}[|T(\\pi)|]}{n-1} \\;\\leq\\; \\frac{n/4}{n-1} \\;<\\; 1/3,\n\\]",
+      "perturbed": "\\[\n  \\text{(\\ensuremath{\\star})} \\qquad \\Pr[z_{\\sigma_j}(\\pi) \\in T(\\pi) \\mid \\mathcal{D}_{\\text{chain}}] \\;\\leq\\; \\frac{\\mathbb{E}[|T(\\pi)|]}{n-1} \\;\\leq\\; \\frac{n/2}{n-1} \\;<\\; 1/3,\n\\]",
+      "why_wrong": "The step $n/2 / (n-1) < 1/3$ is arithmetically incorrect for any $n > 1$, as $n/2(n-1)$ is always greater than $1/2$. Furthermore, the context earlier in the paper establishes $|T| \\leq n/4$ for the probabilistic bound to hold."
+    },
+    {
+      "perturbation_id": "P002_S0016",
+      "span_id": "S0016",
+      "error": "index_or_subscript",
+      "original": "\\[\n  B \\;:=\\; \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil\n\\]",
+      "perturbed": "\\[\n  B \\;:=\\; \\left\\lceil \\frac{\\log_2 n}{Hmp^2} \\right\\rceil\n\\]",
+      "why_wrong": "The bit-complexity of the attention output is defined as $Hmp$ (heads $\\times$ dimension $\\times$ precision). Squaring the precision $p$ in the denominator incorrectly scales the bandwidth capacity, contradicting the definition of the quantized attention map $\\mathcal{Q}_p^m$ used in Lemma 4.1."
+    },
+    {
+      "perturbation_id": "P003_S0018",
+      "span_id": "S0018",
+      "error": "computation",
+      "original": "\\[\n  L \\;\\geq\\; \\ell_W \\;=\\; \\sum_{j=1}^W (\\ell_j - \\ell_{j-1}) \\;\\geq\\; W \\cdot (B - 1) \\;\\geq\\; \\left\\lceil \\frac{k}{s} \\right\\rceil \\cdot \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\cdot \\left(1 - \\frac{1}{B}\\right).\n\\]",
+      "perturbed": "\\[\n  L \\;\\geq\\; \\ell_W \\;\\geq\\; W \\cdot (B - 1) \\;\\geq\\; \\left\\lceil \\frac{k}{s} \\right\\rceil \\cdot \\left\\lceil \\frac{\\log_2 n}{Hmp} \\right\\rceil \\cdot \\left(1 + \\frac{1}{B}\\right).\n\\]",
+      "why_wrong": "The term $(B-1)$ is equal to $B(1 - 1/B)$. Changing the sign to $(1 + 1/B)$ suggests that $B-1$ is greater than $B$, which is an arithmetic contradiction for any positive $B$."
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "paper_title": "Deflation-Free Sparse Optimal Scoring",
+  "paper_slug": "main",
+  "n_candidates": 45,
+  "n_generated": 20,
+  "n_valid": 20,
+  "n_injected": 20,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P003_S0008",
+      "span_id": "S0008",
+      "error": "computation",
+      "original": "$\\pi_{i}$",
+      "perturbed": "$\\pi_{i}^2$",
+      "why_wrong": "The discriminant function $\\delta_i(x)$ for LDA is derived from the log of the posterior probability. The term $\\text{log } \\pi_i$ corresponds to the log of the prior probability. Changing the definition of the prior to $\\pi_i^2$ in the text creates a mathematical inconsistency with the standard LDA derivation provided in the preceding equation."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "numeric_parameter",
+      "original": "$\\lambda$",
+      "perturbed": "$\\lambda = 0$",
+      "why_wrong": "The text states that $\\lambda$ and $\\gamma$ are nonnegative tuning parameters used for regularization in a sparse discriminant analysis (SDA) framework. Setting $\\lambda = 0$ would eliminate the elastic net penalty mentioned later in the context, contradicting the description of the subproblem as a 'convex elastic net regression problem'."
+    },
+    {
+      "perturbation_id": "P001_S0013",
+      "span_id": "S0013",
+      "error": "index_or_subscript",
+      "original": "$\\pmb{\\beta}_{i}$",
+      "perturbed": "$\\pmb{\\beta}_{j}$",
+      "why_wrong": "The context describes a block coordinate descent algorithm that alternates between updates of scoring vectors and discriminant vectors for the same component $i$. Changing the subscript to $j$ creates a mismatch in the alternating update logic where the $\\pmb{\\theta}_{i}$ subproblem should depend on its corresponding discriminant vector $\\pmb{\\beta}_{i}$."
+    },
+    {
+      "perturbation_id": "P002_S0016",
+      "span_id": "S0016",
+      "error": "operator_or_sign",
+      "original": "$\\pmb{\\beta}_{i}$",
+      "perturbed": "$\\pmb{\\beta}_{-i}$",
+      "why_wrong": "In the context of block coordinate descent for SDA, the subproblem for $\\pmb{\\theta}_i$ is solved given the specific corresponding discriminant vector $\\pmb{\\beta}_i$. Using the notation $-i$ usually denotes the set of all indices except $i$, which is mathematically inconsistent with the stated closed-form solution for a single scoring vector."
+    },
+    {
+      "perturbation_id": "P003_S0019",
+      "span_id": "S0019",
+      "error": "computation",
+      "original": "$n \\times K$",
+      "perturbed": "$n \\times (K-1)$",
+      "why_wrong": "The text defines $\\pmb{Y}$ as an indicator matrix for $K$ classes where $Y_{ij} = 1$ if the $i$th observation belongs to the $j$th class. For an indicator matrix representing $K$ distinct classes in this framework, the dimensions must be $n \\times K$ to accommodate one column per class."
+    },
+    {
+      "perturbation_id": "P000_S0022",
+      "span_id": "S0022",
+      "error": "index_or_subscript",
+      "original": "$\\pmb{\\theta}_i \\in \\mathbb{R}^K$",
+      "perturbed": "$\\pmb{\\theta}_i \\in \\mathbb{R}^n$",
+      "why_wrong": "The text defines $\\pmb{Y}$ as an $n \\times K$ indicator matrix for $K$ classes. The scoring vector $\\pmb{\\theta}_i$ is used in the term $\\pmb{Y}\\pmb{\\theta}_i$ in the objective function. For matrix multiplication to be well-defined, the dimension of $\\pmb{\\theta}_i$ must match the number of columns in $\\pmb{Y}$, which is $K$, not $n$."
+    },
+    {
+      "perturbation_id": "P001_S0027",
+      "span_id": "S0027",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq: Sparse Optimal Scoring Criterion problem}\n\\begin{array}{cl}\n\\displaystyle{\\min_{\\pmb{\\beta}_i, \\pmb{\\theta}_i}} &\\|\\pmb{Y}\\pmb{\\theta}_i - \\pmb{X}\\pmb{\\beta}_i\\|^2 + \\gamma \\pmb{\\beta}_i^T \\pmb{\\Omega} \\pmb{\\beta}_i + \\lambda \\|\\pmb{\\beta}_i\\|_1\\\\\n\\text{s.t.}\\ &\\frac{1}{n}\\pmb{\\theta}_i^T \\pmb{Y}^T \\pmb{Y}\\pmb{\\theta}_i = 1\\\\\n&\\pmb{\\theta}_i^T\\pmb{Y}^T\\pmb{Y}\\pmb{\\theta}_{\\ell} = 0 \\ \\ \\ \\ \\forall \\ell < i.\\\\\n\\end{array}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: Sparse Optimal Scoring Criterion problem}\n\\begin{array}{cl}\n\\displaystyle{\\min_{\\pmb{\\beta}_i, \\pmb{\\theta}_i}} &\\|\\pmb{Y}\\pmb{\\theta}_i - \\pmb{X}\\pmb{\\beta}_i\\|^2 - \\gamma \\pmb{\\beta}_i^T \\pmb{\\Omega} \\pmb{\\beta}_i + \\lambda \\|\\pmb{\\beta}_i\\|_1\\\\\n\\text{s.t.}\\ &\\frac{1}{n}\\pmb{\\theta}_i^T \\pmb{Y}^T \\pmb{Y}\\pmb{\\theta}_i = 1\\\\\n&\\pmb{\\theta}_i^T\\pmb{Y}^T\\pmb{Y}\\pmb{\\theta}_{\\ell} = 0 \\ \\ \\ \\ \\forall \\ell < i.\\\\\n\\end{array}\n\\end{equation}",
+      "why_wrong": "The text states that the problem utilizes a ridge penalty ($\\ell_2$-norm) to encourage selection of clusters. In a minimization problem, a penalty term must be added ($+$) to the objective function to regularize the solution; subtracting it ($-$) would reward larger coefficients, contradicting the definition of a penalty."
+    },
+    {
+      "perturbation_id": "P002_S0028",
+      "span_id": "S0028",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{theta subproblem}\n\\begin{array}{cl}\n\\min_{\\pmb{\\theta}_i} &\\|\\pmb{Y}\\pmb{\\theta}_i - \\pmb{X}\\pmb{\\beta}_i\\|^2 \\\\\n\\text{s.t.}\\ &\\frac{1}{n}\\pmb{\\theta}_i^T \\pmb{Y}^T\\pmb{Y} \\pmb{\\theta}_i = 1\\\\\n&\\pmb{\\theta}_i^T\\ \\pmb{Y}^T\\pmb{Y} \\pmb{\\theta}_{\\ell} = 0 \\ \\ \\ \\ \\forall \\ell < i.\\\\\n\\end{array}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{theta subproblem}\n\\begin{array}{cl}\n\\min_{\\pmb{\\theta}_i} &\\|\\pmb{Y}\\pmb{\\theta}_i - \\pmb{X}\\pmb{\\beta}_i\\|^2 \\\\\n\\text{s.t.}\\ &\\frac{1}{p}\\pmb{\\theta}_i^T \\pmb{Y}^T\\pmb{Y} \\pmb{\\theta}_i = 1\\\\\n&\\pmb{\\theta}_i^T\\ \\pmb{Y}^T\\pmb{Y} \\pmb{\\theta}_{\\ell} = 0 \\ \\ \\ \\ \\forall \\ell < i.\\\\\n\\end{array}\n\\end{equation}",
+      "why_wrong": "The normalization constraint for the scoring vector is defined relative to the sample size $n$ (as seen in the definition of $\\pmb{D}=\\frac{1}{n}\\pmb{Y}^T\\pmb{Y}$ in Theorem 1). Changing the denominator to $p$ (the dimension of the data vectors) is inconsistent with the statistical scaling of the indicator matrix $\\pmb{Y}$ which has $n$ rows."
+    },
+    {
+      "perturbation_id": "P003_S0029",
+      "span_id": "S0029",
+      "error": "computation",
+      "original": "\\begin{equation}\n\\pmb{\\theta}_i^{\\text{new}} = s (\\pmb{I} - \\pmb{Q}_i \\pmb{Q}_i^T \\pmb{D}) \\pmb{D}^{-1} \\pmb{Y}^T \\pmb{X} \\pmb{\\beta}_i\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\pmb{\\theta}_i^{\\text{new}} = s (\\pmb{I} + \\pmb{Q}_i \\pmb{Q}_i^T \\pmb{D}) \\pmb{D}^{-1} \\pmb{Y}^T \\pmb{X} \\pmb{\\beta}_i\n\\end{equation}",
+      "why_wrong": "The text states that $\\pmb{\\theta}_i$ must be orthogonal to the previous $i-1$ scoring vectors. The term $(\\pmb{I} - \\pmb{Q}_i \\pmb{Q}_i^T \\pmb{D})$ is a projection operator designed to remove the components in the span of previous vectors. Changing the sign to addition fails to perform the required orthogonalization (deflation) described in the context."
+    },
+    {
+      "perturbation_id": "P002_S0003",
+      "span_id": "S0003",
+      "error": "index_or_subscript",
+      "original": "\\[\n          \\bs{w} = \\left(\\I - \\frac{1}{n}\\bs Q_j \\bs Q_j^T \\Y^T\\Y \\right)(\\Y^T \\Y)^{-1} \\Y^T \\bs X {\\bb^i_j}, %\\\\\n          \\hspace{0.25in}\n          \\bt^{i+1} = \\frac{\\sqrt{n}\\bs{w}}{\\|\\Y \\bs{w}\\|};\\;\n          \\]",
+      "perturbed": "\\[\n          \\bs{w} = \\left(\\I - \\frac{1}{n}\\bs Q_j \\bs Q_j^T \\Y^T\\Y \\right)(\\Y^T \\Y)^{-1} \\Y^T \\bs X {\\bb^{i+1}_j}, %\\\\\n          \\hspace{0.25in}\n          \\bt^{i+1} = \\frac{\\sqrt{n}\\bs{w}}{\\|\\Y \\bs{w}\\|};\\;\n          \\]",
+      "why_wrong": "In the context of the block coordinate descent algorithm described, the update for $\\theta^{i+1}$ must depend on the previous iterate of $\\beta$ (which is $\\beta^i$). Using $\\beta^{i+1}$ in the calculation of $w$ creates a causal loop or a mathematical mismatch with the standard alternating update steps defined in the algorithm's structure."
+    },
+    {
+      "perturbation_id": "P000_S0032",
+      "span_id": "S0032",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq: DFSOS splitting}\n    \\begin{array}{cl}\n        \\underset{\\pmb{\\theta}\\in \\mathbb{R}^{K\\times q},\\pmb{\\beta}\\in\\mathbb{R}^{p\\times q}}{\\min} &  J(\\pmb{\\theta}, \\pmb{\\beta}) := \\|\\pmb{Y}\\pmb{\\theta}-\\pmb{X}\\pmb{\\beta}\\|_{F}^{2}+\\gamma\\pmb{\\beta}^{T}\\pmb{\\beta}+\\lambda\\|\\pmb{\\beta}\\|_{1}\\\\\n        \\text{s.t.} & \\frac{1}{n}\\pmb{\\theta}^{T}\\pmb{Y}^{T}\\pmb{Y}\\pmb{\\theta}=\\pmb{I}.\n    \\end{array}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: DFSOS splitting}\n    \\begin{array}{cl}\n        \\underset{\\pmb{\\theta}\\in \\mathbb{R}^{K\\times q},\\pmb{\\beta}\\in\\mathbb{R}^{p\\times q}}{\\min} &  J(\\pmb{\\theta}, \\pmb{\\beta}) := \\|\\pmb{Y}\\pmb{\\theta}-\\pmb{X}\\pmb{\\beta}\\|_{F}^{2}-\\gamma\\pmb{\\beta}^{T}\\pmb{\\beta}+\\lambda\\|\\pmb{\\beta}\\|_{1}\\\\\n        \\text{s.t.} & \\frac{1}{n}\\pmb{\\theta}^{T}\\pmb{Y}^{T}\\pmb{Y}\\pmb{\\theta}=\\pmb{I}.\n    \\end{array}\n\\end{equation}",
+      "why_wrong": "The penalty term for the elastic net regularization should be positive to ensure the objective function is bounded below and to promote shrinkage; changing +\\gamma to -\\gamma makes the problem non-convex and contradicts the standard definition of the sparse optimal scoring objective."
+    },
+    {
+      "perturbation_id": "P001_S0034",
+      "span_id": "S0034",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{eq: theta update equation}\n    \\begin{array}{cl}\n        \\displaystyle\\min_{\\pmb{\\theta}} & \\displaystyle \\sum_{i=1}^{q} \\|\\pmb{Y}\\pmb{\\theta}_{i}-\\pmb{X}\\pmb{\\beta}_{i}\\|^{2}+\\gamma\\|\\pmb{\\beta}_{i}\\|^{2}+\\lambda\\|\\pmb{\\beta}_{i}\\|_{1}+\\frac{\\rho}{2} \\left\\|\\frac{1}{\\sqrt{n}}\\pmb{Y\\theta}_{i}-\\pmb{P}_{i}+\\pmb{B}_{i} \\right\\|^{2}\\\\\n        \\text{s.t.} & \\pmb{\\theta}_{i}^{T}\\pmb{Y}^{T}\\pmb{Y}\\pmb{1}=0.\n    \\end{array}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: theta update equation}\n    \\begin{array}{cl}\n        \\displaystyle\\min_{\\pmb{\\theta}} & \\displaystyle \\sum_{i=1}^{q} \\|\\pmb{Y}\\pmb{\\theta}_{i}-\\pmb{X}\\pmb{\\beta}_{i}\\|^{2}+\\gamma\\|\\pmb{\\beta}_{i}\\|^{2}+\\lambda\\|\\pmb{\\beta}_{i}\\|_{1}+\\frac{\\rho}{2} \\left\\|\\frac{1}{\\sqrt{n}}\\pmb{Y\\theta}_{i}-\\pmb{P}_{i}+\\pmb{B}_{i} \\right\\|^{2}\\\\\n        \\text{s.t.} & \\pmb{\\theta}_{i}^{T}\\pmb{Y}^{T}\\pmb{Y}\\pmb{\\theta}_i=0.\n    \\end{array}\n\\end{equation}",
+      "why_wrong": "The constraint in the original text is intended to enforce orthogonality to the all-ones vector (centering), denoted by \\pmb{1}. Changing \\pmb{1} to \\pmb{\\theta}_i creates a trivial constraint that would imply the variance of the scoring vector is zero, which is inconsistent with the global constraint in equation S0032."
+    },
+    {
+      "perturbation_id": "P002_S0037",
+      "span_id": "S0037",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{eq: theta update linear system}\n   \\begin{pmatrix} 2 \\pmb{I} +\\frac{\\rho}{n}\\pmb{Y}^{T}\\pmb{Y} & \\quad & -\\pmb{Y}^{T}\\pmb{Y}\\pmb{1} \\vspace{0.5cm} \\\\ \\pmb{1}^{T}\\pmb{Y}^{T}\\pmb{Y} & \\quad & 0 \\end{pmatrix} \n\\begin{pmatrix}\n     \\pmb{\\theta}_{i} \\vspace{0.5cm} \\\\  v_{i}\n \\end{pmatrix}\n =\n  \\begin{pmatrix}\n   2\\pmb{Y}^{T}(\\pmb{X\\beta}_{i}+\\frac{\\rho}{2\\sqrt{n}}(\\pmb{P}_{i}-\\pmb{B}_{i})) \\vspace{0.5cm} \\\\  {0}\n   \\end{pmatrix}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: theta update linear system}\n   \\begin{pmatrix} 2 \\pmb{I} +\\frac{\\rho}{n}\\pmb{Y}^{T}\\pmb{Y} & \\quad & -\\pmb{Y}^{T}\\pmb{Y}\\pmb{1} \\vspace{0.5cm} \\\\ \\pmb{1}^{T}\\pmb{Y}^{T}\\pmb{Y} & \\quad & 0 \\end{pmatrix} \n\\begin{pmatrix}\n     \\pmb{\\theta}_{i} \\vspace{0.5cm} \\\\  v_{i}\n \\end{pmatrix}\n =\n  \\begin{pmatrix}\n   \\pmb{Y}^{T}(\\pmb{X\\beta}_{i}+\\frac{\\rho}{2\\sqrt{n}}(\\pmb{P}_{i}-\\pmb{B}_{i})) \\vspace{0.5cm} \\\\  {0}\n   \\end{pmatrix}.\n\\end{equation}",
+      "why_wrong": "The first row of the linear system is derived from the gradient of the objective function in S0036. The gradient of the quadratic term \\pmb{\\theta}_i^T \\pmb{Y}^T \\pmb{Y} \\pmb{\\theta}_i is 2\\pmb{Y}^T \\pmb{Y} \\pmb{\\theta}_i. Removing the factor of 2 from the right-hand side vector creates a mathematical mismatch with the KKT conditions derived from the objective function."
+    },
+    {
+      "perturbation_id": "P003_S0039",
+      "span_id": "S0039",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eqn: closed-form solution}\n\\pmb{Q}^{\\ast} =  \\underset{\\pmb{Q}\\in \\mathbb{R}^{n\\times m}}{\\arg\\min}~ \\frac{1}{2}\\|\\pmb{Q}-\\pmb{Y}\\|_{F}^{2}, \\quad \\text{s.t.} \\quad \\pmb{Q}^{T}\\pmb{Q} = \\pmb{I}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eqn: closed-form solution}\n\\pmb{Q}^{\\ast} =  \\underset{\\pmb{Q}\\in \\mathbb{R}^{n\\times m}}{\\arg\\min}~ \\|\\pmb{Q}-\\pmb{Y}\\|_{F}^{2}, \\quad \\text{s.t.} \\quad \\pmb{Q}^{T}\\pmb{Q} = \\pmb{I}\n\\end{equation}",
+      "why_wrong": "The theorem references the solution to the Procrustes problem. While the argmin is invariant to the 1/2 scaling, the subsequent derivation of the Bregman update steps in the paper (e.g., S0034) relies on the specific coefficient of the quadratic penalty \\rho/2. Removing the 1/2 here creates an inconsistency with the standard augmented Lagrangian form used throughout the paper."
+    },
+    {
+      "perturbation_id": "P000_S0040",
+      "span_id": "S0040",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation} \\label{eq: P update}\n    \\P^{\\text{new}} = \\pmb{U} \\pmb{I}_{k\\times q} \\pmb{V}^T.\n\\end{equation}",
+      "perturbed": "\\begin{equation} \\label{eq: P update}\n    \\P^{\\text{new}} = \\pmb{U} \\pmb{I}_{q\\times k} \\pmb{V}^T.\n\\end{equation}",
+      "why_wrong": "The dimensions of the identity matrix in the projection update are swapped. Given that the SVD is performed on a matrix of size $k \\times q$, the truncation matrix must match the dimensions of the singular value matrix to be conformable for multiplication with U and V^T."
+    },
+    {
+      "perturbation_id": "P001_S0041",
+      "span_id": "S0041",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq: lambda range}\n    \\underset{\\pmb{\\beta}}{\\min}\\sum_{i=1}^{q} \\|\\pmb{Y}\\pmb{\\theta}_{i}-\\pmb{X}\\pmb{\\beta}_{i}\\|^{2}+\\gamma\\|\\pmb{\\beta}_{i}\\|^{2},\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: lambda range}\n    \\underset{\\pmb{\\beta}}{\\min}\\sum_{i=1}^{q} \\|\\pmb{Y}\\pmb{\\theta}_{i}-\\pmb{X}\\pmb{\\beta}_{i}\\|^{2}-\\gamma\\|\\pmb{\\beta}_{i}\\|^{2},\n\\end{equation}",
+      "why_wrong": "The sign of the Tikhonov regularization term (L2 penalty) is flipped to negative. This changes the objective from a convex minimization problem to an ill-posed one, contradicting the subsequent derivation of the ridge-style estimator."
+    },
+    {
+      "perturbation_id": "P002_S0043",
+      "span_id": "S0043",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\n2\\left( \\pmb{X}^{T}\\pmb{X}+\\gamma\\pmb{I}\\right)\\pmb{\\beta}^{\\ast}= 2\\pmb{X}^{T}\\pmb{Y}\\pmb{\\theta}\n    \\end{equation}",
+      "perturbed": "\\begin{equation}\n\\left( \\pmb{X}^{T}\\pmb{X}+\\gamma\\pmb{I}\\right)\\pmb{\\beta}^{\\ast}= 2\\pmb{X}^{T}\\pmb{Y}\\pmb{\\theta}\n    \\end{equation}",
+      "why_wrong": "The constant factor 2 is removed from the left side of the normal equation but retained on the right side. This is mathematically inconsistent with the derivative of the quadratic objective function shown in the preceding step."
+    },
+    {
+      "perturbation_id": "P003_S0044",
+      "span_id": "S0044",
+      "error": "computation",
+      "original": "\\begin{equation}\\label{eq: optimal beta}\n   \\pmb{\\beta}^{\\ast} =  \\left(\\pmb{X}^{T}\\pmb{X} +\\gamma\\pmb{I}\\right)^{-1}\\pmb{X}^{T}\\pmb{Y}\\pmb{\\theta}_{i}. \n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq: optimal beta}\n   \\pmb{\\beta}^{\\ast} =  \\left(\\pmb{X}^{T}\\pmb{X} +\\gamma\\pmb{I}\\right)^{-1}\\pmb{X}^{T}\\pmb{Y}^T\\pmb{\\theta}_{i}. \n\\end{equation}",
+      "why_wrong": "The matrix Y is incorrectly transposed in the closed-form solution. Based on the dimensions required for matrix multiplication and the original objective function ||Y theta - X beta||^2, Y must remain untransposed to multiply with the vector theta."
+    },
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "operator_or_sign",
+      "original": "$$\n\\lambda_i \\le \\frac{\\pmb{\\beta}_{i}^{T}(\\pmb{X}^{T}\\pmb{X} + \\gamma \\pmb{I})\\pmb{\\beta}_{i}-2\\pmb{\\beta}_{i}^{T}\\pmb{X}^{T}\\pmb{Y\\theta}_{i}}{\\|\\pmb{\\beta}_i\\|_{1}}\n$$",
+      "perturbed": "$$\n\\lambda_i \\ge \\frac{\\pmb{\\beta}_{i}^{T}(\\pmb{X}^{T}\\pmb{X} + \\gamma \\pmb{I})\\pmb{\\beta}_{i}-2\\pmb{\\beta}_{i}^{T}\\pmb{X}^{T}\\pmb{Y\\theta}_{i}}{\\|\\pmb{\\beta}_i\\|_{1}}\n$$",
+      "why_wrong": "The paper states this condition is to ensure a non-trivial solution for the elastic net subproblem. Flipping the inequality to 'greater than or equal to' would allow $\\lambda_i$ to exceed the threshold where the soft-thresholding operator sets the entire vector $\\beta_i$ to zero, contradicting the goal of finding a non-trivial solution."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "numeric_parameter",
+      "original": "$$\\{2^{-4}, 2^{-3}, 2^{-2}, 2^{-1}, 1\\} \\times \\lambda_{\\max}$$",
+      "perturbed": "$$\\{2^{-10}, 2^{-8}, 2^{-6}, 2^{-4}, 2^{-2}\\} \\times \\lambda_{\\max}$$",
+      "why_wrong": "The paper describes a comparative performance analysis using cross-validation for tuning parameters. Changing the grid values creates an inconsistency with the standard exponential grids typically used in sparse learning benchmarks mentioned in the text, and would lead to a mismatch if the results section refers to the original range of $\\lambda$ values."
+    }
+  ]
+}

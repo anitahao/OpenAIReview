@@ -1,0 +1,131 @@
+{
+  "paper_title": "\\bf Kernelization Bounds for Constrained Coloring",
+  "paper_slug": "rainbow",
+  "n_candidates": 36,
+  "n_generated": 15,
+  "n_valid": 15,
+  "n_injected": 15,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P002_S0014",
+      "span_id": "S0014",
+      "error": "operator_or_sign",
+      "original": "$q \\geq d$",
+      "perturbed": "$q < d$",
+      "why_wrong": "The problem definition involves coloring sets of size d. If the number of available colors q is strictly less than d, a proper coloring of a d-subset is impossible by the pigeonhole principle, making the 'uniformly rainbow' condition (having d distinct colors) impossible to satisfy or the problem trivial."
+    },
+    {
+      "perturbation_id": "P003_S0017",
+      "span_id": "S0017",
+      "error": "index_or_subscript",
+      "original": "$\\ell$",
+      "perturbed": "$\\ell+1$",
+      "why_wrong": "The problem is defined for tuples of size l. Changing this to l+1 in the description of the infimum determination creates a mismatch with the problem definition provided earlier in the same paragraph, which specifies l-tuples."
+    },
+    {
+      "perturbation_id": "P004_S0019",
+      "span_id": "S0019",
+      "error": "numeric_parameter",
+      "original": "$\\ell$",
+      "perturbed": "$k$",
+      "why_wrong": "In parameterized complexity, kernel sizes are expressed in terms of the parameter (usually k), not the total number of vertices n. The text claims to determine the infimum for a kernel of size O(n^eta), which is a contradiction to the standard definition of a kernel where the size must be independent of n."
+    },
+    {
+      "perturbation_id": "P000_S0021",
+      "span_id": "S0021",
+      "error": "index_or_subscript",
+      "original": "$O(n^\\eta)$",
+      "perturbed": "$O(n^{\\eta+1})$",
+      "why_wrong": "The paper defines $\\eta$ as the infimum value for which the problem admits a kernel of size $O(n^\\eta)$. Changing the exponent to $\\eta+1$ contradicts the definition of $\\eta$ as the tightest possible exponent for the kernel size bound."
+    },
+    {
+      "perturbation_id": "P001_S0022",
+      "span_id": "S0022",
+      "error": "operator_or_sign",
+      "original": "$\\NP \\nsubseteq \\coNPpoly$",
+      "perturbed": "$\\NP \\subseteq \\coNPpoly$",
+      "why_wrong": "The paper derives kernel lower bounds based on the standard complexity-theoretic assumption that the polynomial hierarchy does not collapse. Changing $\\nsubseteq$ to $\\subseteq$ would mean the results are derived under the assumption that the hierarchy collapses, which contradicts the standard framework of kernelization lower bounds used throughout the text."
+    },
+    {
+      "perturbation_id": "P002_S0023",
+      "span_id": "S0023",
+      "error": "index_or_subscript",
+      "original": "$R \\subseteq D^r$",
+      "perturbed": "$R \\subseteq D^{r-1}$",
+      "why_wrong": "The text explicitly defines $r$ as the arity of the relation $R$. If $R$ is a subset of $D^{r-1}$, the arity would be $r-1$, creating a contradiction with the subsequent definition of constraints as $r$-tuples in $\\calF \\subseteq V^r$."
+    },
+    {
+      "perturbation_id": "P003_S0024",
+      "span_id": "S0024",
+      "error": "index_or_subscript",
+      "original": "$\\calF \\subseteq V^r$",
+      "perturbed": "$\\calF \\subseteq V^{r+1}$",
+      "why_wrong": "The problem is defined over a relation $R$ of arity $r$. If the constraints $\\calF$ consist of $(r+1)$-tuples, the assignment $c$ cannot be evaluated against the relation $R \\subseteq D^r$, as the dimensions would not match."
+    },
+    {
+      "perturbation_id": "P004_S0029",
+      "span_id": "S0029",
+      "error": "operator_or_sign",
+      "original": "$\\NP$",
+      "perturbed": "$\\text{P}$",
+      "why_wrong": "The dichotomy theorem classifies CSPs as either solvable in polynomial time or NP-hard. Replacing NP-hard with P-hard (or simply P) would incorrectly state that every CSP is in P, which contradicts the mention of the dichotomy theorem and the hardness results discussed in the paper."
+    },
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "numeric_parameter",
+      "original": "\\[\n\\eta(d,\\ell,q) =\n\\begin{cases}\nd\\ell, & \\text{if } \\ell \\geq 2 \\text{ and } q \\geq d + 2, \\\\\nd\\ell - 1, & \\text{if } \\ell \\geq 2,~ q=d+1, \\text{ and } (d,\\ell) \\neq (1,2), \\\\\n(d - 1)\\ell, & \\text{if } (\\ell \\geq 2 \\text{ and } q = d \\geq 2) \\text{ or } (\\ell = 1 \\text{ and } d \\geq 3), \\\\\n2, & \\text{if } \\ell = 1,~d \\leq 2, \\text{ and } q \\geq 3, \\\\\n0, & \\text{if } (q=2 \\text{ and } d\\ell \\leq 2) \\text{ or } q=1.\n\\end{cases}\n\\]",
+      "perturbed": "\\[\n\\eta(d,\\ell,q) =\n\\begin{cases}\nd\\ell, & \\text{if } \\ell \\geq 2 \\text{ and } q \\geq d + 2, \\\\\nd\\ell - 1, & \\text{if } \\ell \\geq 2,~ q=d+1, \\text{ and } (d,\\ell) \\neq (1,2), \\\\\n(d - 1)\\ell, & \\text{if } (\\ell \\geq 2 \\text{ and } q = d \\geq 2) \\text{ or } (\\ell = 1 \\text{ and } d \\geq 3), \\\\\n3, & \\text{if } \\ell = 1,~d \\leq 2, \\text{ and } q \\geq 3, \\\\\n0, & \\text{if } (q=2 \\text{ and } d\\ell \\leq 2) \\text{ or } q=1.\n\\end{cases}\n\\]",
+      "why_wrong": "The value for the fourth case is changed from 2 to 3. This is inconsistent with the subsequent claim that the five cases cover all triples $(d,\\ell,q)$ with $q \\geq d$ and the specific arity calculations for OR-relations used in the lower bound proofs for small $d$."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "index_or_subscript",
+      "original": "\\[\n\\beta_{i,j} =\n    \\begin{cases}\n        d+1, & \\text{if } j = 1,\\\\\n        d+2, & \\text{if } j \\ge 2.\n    \\end{cases}\n\\]",
+      "perturbed": "\\[\n\\beta_{i,j} =\n    \\begin{cases}\n        d+1, & \\text{if } i = 1,\\\\\n        d+2, & \\text{if } i \\ge 2.\n    \\end{cases}\n\\]",
+      "why_wrong": "The condition for $\\beta_{i,j}$ is changed from being based on the column index $j$ to the row index $i$. This breaks the construction for the case $\\ell \\geq 2$ and $q \\geq d+2$, as the definition of $J = [d] \\times [\\ell]$ and the subsequent matrix $M$ rely on column-wise properties to define an OR-relation of arity $d\\ell$."
+    },
+    {
+      "perturbation_id": "P002_S0002",
+      "span_id": "S0002",
+      "error": "operator_or_sign",
+      "original": "\\[\n\\beta_{i,j} =\n    \\begin{cases}\n        d+1, & \\text{if } i = 1,\\\\\n        1, & \\text{otherwise.}\n    \\end{cases}\n\\]",
+      "perturbed": "\\[\n\\beta_{i,j} =\n    \\begin{cases}\n        d+1, & \\text{if } i = 1,\\\\\n        2, & \\text{otherwise.}\n    \\end{cases}\n\\]",
+      "why_wrong": "Changing the 'otherwise' value from 1 to 2 creates a conflict with the definition of $\\alpha_{i,j}$ (which is $i$ for all $j$). If $i=2$, then $\\alpha_{2,j}=2$ and $\\beta_{2,j}=2$, violating the requirement stated in the text that $\\alpha_{i,j} \\neq \\beta_{i,j}$ for all $(i,j) \\in J$."
+    },
+    {
+      "perturbation_id": "P003_S0007",
+      "span_id": "S0007",
+      "error": "computation",
+      "original": "\\[F_j = \\{a_i \\mid (j-1)d < i \\leq jd\\},~~~j \\in [\\ell],\\]",
+      "perturbed": "\\[F_j = \\{a_i \\mid (j-1)d < i \\leq j(d+1)\\},~~~j \\in [\\ell],\\]",
+      "why_wrong": "The upper bound of the index range is changed to $j(d+1)$. Since there are $\\ell$ disjoint blocks, this would imply a total of $\\ell(d+1)$ columns, which contradicts the definition of $M$ having $d\\ell$ columns and the requirement that the blocks are of size $d$."
+    },
+    {
+      "perturbation_id": "P004_S0008",
+      "span_id": "S0008",
+      "error": "computation",
+      "original": "\\[p_{q,d}(M_1) \\cdot \\prod_{i=2}^{\\ell}{p_{q,q}(M_i,a-y)}.\\]",
+      "perturbed": "\\[p_{q,d}(M_1) \\cdot \\prod_{i=2}^{\\ell}{p_{q,q}(M_i,a-y)}.\\] Substitutions of linear terms in a polynomial do not increase its degree, hence the degree of $p$ is at most $(d-1) + (q-1)(\\ell-1) = (d-1) + d(\\ell-1) = d \\ell + 1.",
+      "why_wrong": "The arithmetic result of the degree calculation $(d-1) + d(\\ell-1)$ is simplified to $d\\ell + 1$ instead of $d\\ell - 1$. This error contradicts the subsequent upper bound results which rely on the degree being exactly $d\\ell - 1$ to achieve the stated kernel size."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "operator_or_sign",
+      "original": "\\[E' = E \\cup \\{ \\cup_{j \\in [\\ell]}{F_j} \\mid (F_1, \\ldots, F_\\ell) \\in \\calF\\}.\\]",
+      "perturbed": "\\[E' = E \\cap \\{ \\cup_{j \\in [\\ell]}{F_j} \\mid (F_1, \\ldots, F_\\ell) \\in \\calF\\}.\\]",
+      "why_wrong": "The edge set of the new hypergraph H should be the union of the original edges and the new sets derived from F, not the intersection. The context explicitly states 'the edge set of H consists of the edges of G as well as the sets of vertices...', which implies a union operation."
+    },
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "computation",
+      "original": "\\[\nr = r(q,t) =\n\\begin{cases}\nq - 1, & t = 1, \\\\[1mm]\n2q - 3, & t = 2 \\text{~~~or~~~}t=q=3, \\\\[1mm]\n\\displaystyle (q - t + 1)t, & 3 \\le t < \\frac{q+1}{2}, \\\\[1mm]\n\\displaystyle \\left\\lfloor (q + 1)^2/4 \\right\\rfloor, & \\text{otherwise.}\n\\end{cases}\n\\]",
+      "perturbed": "\\[\nr = r(q,t) =\n\\begin{cases}\nq - 1, & t = 1, \\\\[1mm]\n2q - 3, & t = 2 \\text{~~~or~~~}t=q=3, \\\\[1mm]\n\\displaystyle (q - t + 1)t, & 3 \\le t < \\frac{q+1}{2}, \\\\[1mm]\n\\displaystyle \\left\\lfloor (q + 1)^2/2 \\right\\rfloor, & \\text{otherwise.}\n\\end{cases}\n\\]",
+      "why_wrong": "The 'otherwise' case for the exponent r is derived from the maximum value of the quadratic function (q-t+1)t. The maximum occurs at t=(q+1)/2, yielding (q+1)^2/4. Changing the denominator to 2 creates a mathematical inconsistency with the preceding case."
+    }
+  ]
+}

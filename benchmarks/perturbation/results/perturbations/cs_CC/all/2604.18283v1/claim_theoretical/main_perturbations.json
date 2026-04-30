@@ -1,0 +1,115 @@
+{
+  "paper_title": "On quantum functionals for higher-order tensors",
+  "paper_slug": "main",
+  "n_candidates": 33,
+  "n_generated": 15,
+  "n_valid": 13,
+  "n_injected": 13,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P001_S0023",
+      "span_id": "S0023",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem*}[\\cref{thm:upper lower separation general k}]\n    For every $\\theta\\in\\distsnc\\setminus\\distssing$ there exists a tensor $\\psi$ for which the upper and lower quantum functionals of $\\theta$ disagree: $F_\\theta(\\psi)< F^\\theta(\\psi)$.\n\\end{theorem*}",
+      "perturbed": "\\begin{theorem*}[\\cref{thm:upper lower separation general k}]\n    For every $\\theta\\in\\distsnc$ there exists a tensor $\\psi$ for which the upper and lower quantum functionals of $\\theta$ disagree: $F_\\theta(\\psi)< F^\\theta(\\psi)$.\n\\end{theorem*}",
+      "why_wrong": "The perturbation removes the exclusion of singleton-supported distributions (\\distssing). However, Corollary 3.31 (referenced in S0027) explicitly states that for $\\theta \\in \\distssing$, the upper and lower functionals agree ($F^\\theta = F_\\theta$), contradicting the claim that they disagree for every $\\theta \\in \\distsnc$."
+    },
+    {
+      "perturbation_id": "P002_S0024",
+      "span_id": "S0024",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem*}[\\cref{prop:general-lower-func-not-spectral}]\n    For every $\\theta\\in\\dists\\setminus\\distssing$, the lower quantum functional~$F_\\theta$ is not a universal spectral point: $F_\\theta\\notin\\asympspec(\\T^k)$.\n\\end{theorem*}",
+      "perturbed": "\\begin{theorem*}[\\cref{prop:general-lower-func-not-spectral}]\n    For every $\\theta\\in\\dists$, the lower quantum functional~$F_\\theta$ is not a universal spectral point: $F_\\theta\\notin\\asympspec(\\T^k)$.\n\\end{theorem*}",
+      "why_wrong": "The perturbation removes the exclusion of singleton-supported distributions (\\distssing). This contradicts Corollary 3.31 in the same paper, which states that for $\\theta \\in \\distssing$, $F_\\theta$ is indeed a point in the asymptotic spectrum (a universal spectral point)."
+    },
+    {
+      "perturbation_id": "P003_S0026",
+      "span_id": "S0026",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem*}\n    For every~$\\theta \\in \\distsnc$ there exists~$F \\in \\asympspec(\\T^k)$, such that~$F(\\psi) = F^\\theta(\\psi) = F_\\theta(\\psi)$ for all~$\\psi \\in \\Tnc^k$.\n    Moreover, if~$\\theta \\in \\distsnc \\setminus \\distssing$ then $ F \\neq F_\\theta$.\n\\end{theorem*}",
+      "perturbed": "\\begin{theorem*}\n    For every~$\\theta \\in \\distsnc$ there exists~$F \\in \\asympspec(\\T^k)$, such that~$F(\\psi) = F^\\theta(\\psi) = F_\\theta(\\psi)$ for all~$\\psi \\in \\T^k$.\n    Moreover, if~$\\theta \\in \\distsnc \\setminus \\distssing$ then $ F \\neq F_\\theta$.\n\\end{theorem*}",
+      "why_wrong": "The perturbation claims the functionals agree on all tensors in $\\T^k$. However, the paper's main theme (and Theorem 1.5/S0023) is that for non-singleton distributions, there exist tensors where the upper and lower functionals disagree. Thus, an extension $F$ cannot equal both on the entire set $\\T^k$."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}[Lower quantum functional]\n  \\label{def:lower qfunc}\n  Let~$0 \\neq \\psi \\in V_1 \\ot \\dotsb \\ot V_k$ and~$\\theta \\in \\dists$. Define\n  \\[\n    E_\\theta(\\psi) = \\sup_{\\substack{A_1, \\dotsc, A_k \\\\ A_j \\in \\GL(V_j)}} H_\\theta ((A_1 \\ot \\dotsb \\ot A_k) \\psi)\n  \\]\n  Then the lower quantum functional~$F_\\theta$ is defined by~$F_\\theta(\\psi) = 2^{E_\\theta}$.\n  We additionally define~$F_\\theta(0) = 0$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}[Lower quantum functional]\n  \\label{def:lower qfunc}\n  Let~$0 \\neq \\psi \\in V_1 \\ot \\dotsb \\ot V_k$ and~$\\theta \\in \\dists$. Define\n  \\[\n    E_\\theta(\\psi) = \\inf_{\\substack{A_1, \\dotsc, A_k \\\\ A_j \\in \\GL(V_j)}} H_\\theta ((A_1 \\ot \\dotsb \\ot A_k) \\psi)\n  \\]\n  Then the lower quantum functional~$F_\\theta$ is defined by~$F_\\theta(\\psi) = 2^{E_\\theta}$.\n  We additionally define~$F_\\theta(0) = 0$.\n\\end{definition}",
+      "why_wrong": "The lower quantum functional is defined as a supremum over the group action to maximize entropy (related to the capacity of the tensor), whereas the upper quantum functional (implied by the duality context in the paper) involves an infimum. Swapping 'sup' for 'inf' contradicts the standard definition of lower functionals in algebraic complexity and the subsequent Theorem 3.16 which shows E_theta < E^theta."
+    },
+    {
+      "perturbation_id": "P002_S0015",
+      "span_id": "S0015",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}[{\\cite[Thm.~3.30]{cvz23universal}}]\n  \\label{thm:sing-qfunc-agree}\n  Let~$\\theta \\in \\distssing$. Then~$E_\\theta(\\psi) = E^\\theta(\\psi)$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}[{\\cite[Thm.~3.30]{cvz23universal}}]\n  \\label{thm:sing-qfunc-agree}\n  Let~$\\theta \\in \\distsnc$. Then~$E_\\theta(\\psi) = E^\\theta(\\psi)$.\n\\end{theorem}",
+      "why_wrong": "The paper explicitly states in Theorem 3.16 and Theorem 3.20 that for laminar (non-crossing) distributions that are NOT singletons, there exists a tensor where the functionals strictly disagree (E_theta < E^theta). Claiming they agree for all theta in distsnc contradicts the main qualitative separation results of the paper."
+    },
+    {
+      "perturbation_id": "P003_S0016",
+      "span_id": "S0016",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\n    \\label{thm:upper lower separation general k}\n    Let $k \\geq 4$ and let $\\theta \\in \\distsnc^k \\setminus \\distssing^k$ be a distribution on bipartitions of $[k]$ such that $\\theta$ is laminar and also non-singleton-supported.\n    Then there exists a $k$-tensor $\\psi$ such that\n    \\begin{equation}\n        E_{\\theta}(\\psi)<E^{\\theta}(\\psi).\n    \\end{equation}\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\n    \\label{thm:upper lower separation general k}\n    Let $k \\geq 3$ and let $\\theta \\in \\distsnc^k \\setminus \\distssing^k$ be a distribution on bipartitions of $[k]$ such that $\\theta$ is laminar and also non-singleton-supported.\n    Then there exists a $k$-tensor $\\psi$ such that\n    \\begin{equation}\n        E_{\\theta}(\\psi)<E^{\\theta}(\\psi).\n    \\end{equation}\n\\end{theorem}",
+      "why_wrong": "The theorem specifically requires k >= 4. For k=3, all laminar distributions are singleton-supported (as there are no non-trivial non-crossing bipartitions that aren't singletons in the 3-case context of this theory), making the set distsnc \\ distssing empty or the claim vacuously false/invalid for k=3."
+    },
+    {
+      "perturbation_id": "P004_S0029",
+      "span_id": "S0029",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\n    \\label{cor:separations}\n    Let $\\psi$ be a $k$-tensor satisfying the assumptions of \\cref{prop:HEM_collapse}, and $\\theta\\in \\distsnc$ be a laminarly-supported distribution such that~$H_\\theta(\\psi) < M^{\\theta}(\\psi)$ and also $E^{\\theta}(\\psi) = M^{\\theta}(\\psi)$.\n    Then\n    \\begin{equation*}\n        E_{\\theta}(\\psi) < E^{\\theta}(\\psi).\n    \\end{equation*}\n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\n    \\label{cor:separations}\n    Let $\\psi$ be a $k$-tensor satisfying the assumptions of \\cref{prop:HEM_collapse}, and $\\theta\\in \\distsnc$ be a laminarly-supported distribution such that~$H_\\theta(\\psi) < M^{\\theta}(\\psi)$ and also $E^{\\theta}(\\psi) = M^{\\theta}(\\psi)$.\n    Then\n    \\begin{equation*}\n        E_{\\theta}(\\psi) = E^{\\theta}(\\psi).\n    \\end{equation*}\n\\end{corollary}",
+      "why_wrong": "The proof provided immediately below the corollary in the text states that $H_\\theta(\\psi) \\neq M^\\theta(\\psi)$ implies $E_\\theta(\\psi) < M^\\theta(\\psi)$. Since the assumption is $M^\\theta(\\psi) = E^\\theta(\\psi)$, the conclusion must be a strict inequality $E_\\theta(\\psi) < E^\\theta(\\psi)$, not equality."
+    },
+    {
+      "perturbation_id": "P000_S0030",
+      "span_id": "S0030",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\n  \\label{cor:Edetab bound}\nFor semistable~$\\psi$, let ~$c_\\psi = \\frac{\\abs{\\det(\\psi_{AB|CD})}^2}{\\capa(\\psi)^{2d}}$. Then $E_{AB}(\\psi) \\leq \\tilde E^{\\det}_{AB}(c_\\psi)$ where\n\\begin{equation}\n     \\tilde E^{\\det}_{AB}(c) \\coloneq\\max\\{ H_{AB}(\\eta) \\,|\\, \\eta \\in \\C^{d_A} \\ot \\C^{d_B} \\ot \\C^{d_C} \\ot \\C^{d_D}, \\, \\norm{\\eta}=1, \\abs{\\det(\\eta_{AB|CD})}^2 \\leq c \\}.\n\\end{equation}\n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\n  \\label{cor:Edetab bound}\nFor semistable~$\\psi$, let ~$c_\\psi = \\frac{\\abs{\\det(\\psi_{AB|CD})}^2}{\\capa(\\psi)^{2d}}$. Then $E_{AB}(\\psi) \\geq \\tilde E^{\\det}_{AB}(c_\\psi)$ where\n\\begin{equation}\n     \\tilde E^{\\det}_{AB}(c) \\coloneq\\max\\{ H_{AB}(\\eta) \\,|\\, \\eta \\in \\C^{d_A} \\ot \\C^{d_B} \\ot \\C^{d_C} \\ot \\C^{d_D}, \\, \\norm{\\eta}=1, \\abs{\\det(\\eta_{AB|CD})}^2 \\leq c \\}.\n\\end{equation}\n\\end{corollary}",
+      "why_wrong": "The corollary attempts to provide an upper bound on the quantum functional $E_{AB}(\\psi)$ by relaxing the orbit-membership constraint to a simpler determinant bound. Changing the inequality from $\\leq$ to $\\geq$ contradicts the logic of relaxation: since the maximum is taken over a larger set (all tensors satisfying the determinant bound, rather than just those in the orbit closure), the resulting value must be an upper bound, not a lower bound."
+    },
+    {
+      "perturbation_id": "P001_S0031",
+      "span_id": "S0031",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\n\\label{cor:generic-separation}\n    Let~$d_A = d_B = d_C = d_D \\geq 2$.\n    Then the set of all~$\\psi \\in V$ with~$F_\\theta(\\psi) < F^\\theta(\\psi)$ for all~$\\theta \\in \\distsnc^4 \\setminus \\distssing^4$ contains a Euclidean-open and dense subset of~$V$.\n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\n\\label{cor:generic-separation}\n    Let~$d_A = d_B = d_C = d_D \\geq 2$.\n    Then the set of all~$\\psi \\in V$ with~$F_\\theta(\\psi) = F^\\theta(\\psi)$ for all~$\\theta \\in \\distsnc^4 \\setminus \\distssing^4$ contains a Euclidean-open and dense subset of~$V$.\n\\end{corollary}",
+      "why_wrong": "The context states that this lemma helps establish the 'separation' between upper and lower quantum functionals. Claiming that they coincide ($F_\\theta = F^\\theta$) on a dense subset contradicts the definition of separation and the subsequent proof logic which aims to show that the functionals are distinct for non-singular weightings."
+    },
+    {
+      "perturbation_id": "P004_S0018",
+      "span_id": "S0018",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\n    \\label{prop:general-lower-func-not-spectral}\n    For all~$k \\geq 4$ and~$\\theta \\in \\dists^k \\setminus \\distssing^k$, the lower quantum functional~$F_\\theta$ is not a spectral point for~$k$-tensors, i.e., $F_\\theta \\not\\in \\asympspec(\\T^k)$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\n    \\label{prop:general-lower-func-not-spectral}\n    For all~$k \\geq 4$ and~$\\theta \\in \\distsnc^k$, the lower quantum functional~$F_\\theta$ is not a spectral point for~$k$-tensors, i.e., $F_\\theta \\not\\in \\asympspec(\\T^k)$.\n\\end{theorem}",
+      "why_wrong": "This perturbation incorrectly claims that NO laminar distribution yields a spectral point. However, the paper (and Corollary 3.10) explicitly states that for singleton-supported distributions (which are a subset of distsnc), F_theta IS a spectral point. The error fails to exclude the singleton case."
+    },
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{definition}\n    \\label{def:Tnck}\n    A tensor $\\psi \\in \\T^k$ is said to be laminar-quantum-robust if for all~$\\theta \\in \\distsnc$, $F^\\theta(\\psi) = F_\\theta(\\psi)$.\n    The set of laminar-quantum-robust tensors is denoted by $\\Tnc^k$.\n\\end{definition}",
+      "perturbed": "\\begin{definition}\n    \\label{def:Tnck}\n    A tensor $\\psi \\in \\T^k$ is said to be laminar-quantum-robust if there exists~$\\theta \\in \\distsnc$ such that $F^\\theta(\\psi) = F_\\theta(\\psi)$.\n    The set of laminar-quantum-robust tensors is denoted by $\\Tnc^k$.\n\\end{definition}",
+      "why_wrong": "The definition of the sub-semiring Tnc^k requires the equality of upper and lower functionals to hold for ALL laminar distributions theta, not just for one. If it only required existence, the set would not necessarily form a sub-semiring as claimed in Proposition 3.11."
+    },
+    {
+      "perturbation_id": "P002_S0032",
+      "span_id": "S0032",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{corollary}\n    \\label{cor:ncfunc on all but one}\n    For~$\\theta \\in \\distsnc$, $E^\\theta(\\unitk{2}{[k] \\setminus \\{i\\}}) = 1 - \\theta_{\\{\\{i\\}, [k] \\setminus \\{i\\}\\}}$.\n\\end{corollary}",
+      "perturbed": "\\begin{corollary}\n    \\label{cor:ncfunc on all but one}\n    For~$\\theta \\in \\distsnc$, $E^\\theta(\\unitk{2}{[k] \\setminus \\{i\\}}) = 1 + \\theta_{\\{\\{i\\}, [k] \\setminus \\{i\\}\\}}$.\n\\end{corollary}",
+      "why_wrong": "The upper quantum functionals $E^\\theta$ are related to entropy-like quantities which are bounded by the log-dimension (here $\\log 2 = 1$). Given that $\\theta$ represents a probability distribution or weighting where components are non-negative, the value $1 + \\theta$ would exceed the maximum possible value for such a functional on a qubit-based tensor, violating the normalization properties established in the paper's definitions."
+    },
+    {
+      "perturbation_id": "P000_S0020",
+      "span_id": "S0020",
+      "error": "incorrect_claim_theoretical",
+      "original": "\\begin{theorem}\\label{thm:W4-non-crossing-agree}\n        For any $\\theta=(\\theta_{AB},\\theta_A,\\theta_B,\\theta_C,\\theta_D)$, $E^\\theta(\\W_4)= E_\\theta(\\W_4)$.\n\\end{theorem}",
+      "perturbed": "\\begin{theorem}\\label{thm:W4-non-crossing-agree}\n        For any $\\theta=(\\theta_{AB},\\theta_A,\\theta_B,\\theta_C,\\theta_D)$, $E^\\theta(\\W_4) > E_\\theta(\\W_4)$.\n\\end{theorem}",
+      "why_wrong": "The theorem immediately precedes a corollary stating that $\\W_4 \\in \\Tnc^4$. The definition of the set $\\Tnc^k$ (laminar-quantum-robust tensors) requires the upper and lower functionals to agree. If the functionals were strictly unequal as perturbed, $\\W_4$ would not belong to $\\Tnc^4$."
+    }
+  ]
+}

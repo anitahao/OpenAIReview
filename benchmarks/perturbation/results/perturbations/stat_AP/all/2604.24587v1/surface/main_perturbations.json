@@ -1,0 +1,147 @@
+{
+  "paper_title": "\\textbfBayesian inference for hidden Markov models under genuine multimodality with application to ecological time series",
+  "paper_slug": "main",
+  "n_candidates": 54,
+  "n_generated": 18,
+  "n_valid": 17,
+  "n_injected": 17,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P002_S0017",
+      "span_id": "S0017",
+      "error": "operator_or_sign",
+      "original": "$\\beta \\rightarrow 0$",
+      "perturbed": "$\\beta \\rightarrow 1$",
+      "why_wrong": "In parallel tempering, 'hotter' replicas are those where the distribution is flattened to facilitate exploration, which corresponds to the inverse temperature parameter beta approaching 0. Setting beta to approach 1 refers to the 'cold' target distribution, contradicting the description of 'hotter replicas' and the goal of moving toward a prior-like state for better mixing."
+    },
+    {
+      "perturbation_id": "P000_S0023",
+      "span_id": "S0023",
+      "error": "numeric_parameter",
+      "original": "$N \\in \\mathbb{Z}^+$",
+      "perturbed": "$N \\in \\mathbb{Z}^- $",
+      "why_wrong": "The parameter $N$ represents the number of states in a Hidden Markov Model, which must be a positive integer. Defining $N$ as a negative integer is inconsistent with its use as the upper bound for the state-dependent distributions index $n=1, \\ldots, N$ and the dimensions of the $N \\times N$ transition matrix."
+    },
+    {
+      "perturbation_id": "P001_S0026",
+      "span_id": "S0026",
+      "error": "index_or_subscript",
+      "original": "$\\gamma_{ij} = \\Pr(S_t=j|S_{t-1}=i)$",
+      "perturbed": "$\\gamma_{ij} = \\Pr(S_t=i|S_{t-1}=j)$",
+      "why_wrong": "The transition probability $\\gamma_{ij}$ is conventionally defined as the probability of moving from state $i$ at time $t-1$ to state $j$ at time $t$. Swapping the indices in the conditional probability makes the notation inconsistent with the standard definition of a transition matrix where rows represent the current state and columns represent the next state."
+    },
+    {
+      "perturbation_id": "P002_S0029",
+      "span_id": "S0029",
+      "error": "index_or_subscript",
+      "original": "$\\delta_n = \\Pr(S_1 = n)$",
+      "perturbed": "$\\delta_n = \\Pr(S_T = n)$",
+      "why_wrong": "The vector $\\boldsymbol{\\delta}$ is explicitly defined in the text as the 'initial state distribution'. Therefore, it must correspond to the probability distribution of the state at the first time step ($S_1$), not the final time step ($S_T$)."
+    },
+    {
+      "perturbation_id": "P000_S0035",
+      "span_id": "S0035",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation} \\label{eq:tpm_cov}\n    \\gamma_{ij}(z_t) = \\dfrac{\\exp\\left(\\eta_{ij}(z_t)\\right)}{\\sum_{l=1}^n\\exp(\\eta_{il}(z_t))} \\quad \\quad \\quad \\eta_{ij}(z_t) = \n    \\begin{cases}\n        0 & \\text{if } i=j\\\\\n        \\alpha_0^{(ij)} + \\alpha_1^{(ij)}z_t & \\text{if } i\\neq j\n    \\end{cases}.\n\\end{equation}",
+      "perturbed": "\\begin{equation} \\label{eq:tpm_cov}\n    \\gamma_{ij}(z_t) = \\dfrac{\\exp\\left(\\eta_{ij}(z_t)\\right)}{\\sum_{l=1}^N\\exp(\\eta_{il}(z_t))} \\quad \\quad \\quad \\eta_{ij}(z_t) = \n    \\begin{cases}\n        0 & \\text{if } i=j\\\\\n        \\alpha_0^{(ij)} + \\alpha_1^{(ij)}z_t & \\text{if } i\\neq j\n    \\end{cases}.\n\\end{equation}",
+      "why_wrong": "The summation index in the denominator uses 'n' as the upper limit, but the context of the Hidden Markov Model defines the state space size as 'N' (as seen in S0030 and the definition of the transition matrix Gamma). Changing the index to N is correct, but the original text likely contained a typo or inconsistent notation; however, if the paper defines the number of states as N, using a different variable like 'n' in the summation limit without definition is an indexing error."
+    },
+    {
+      "perturbation_id": "P001_S0036",
+      "span_id": "S0036",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\pi_{\\beta}(\\boldsymbol{x})\\propto [\\pi(\\boldsymbol{x})]^{\\beta}.\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\pi_{\\beta}(\\boldsymbol{x})\\propto [\\pi(\\boldsymbol{x})]^{1/\\beta}.\n\\end{equation}",
+      "why_wrong": "The text states that power transformations make the modes less separated as the power values decrease. If the power is 1/beta, then as beta decreases toward 0, the exponent increases, which would make the modes more separated (sharper), contradicting the description of the tempering process."
+    },
+    {
+      "perturbation_id": "P000_S0002",
+      "span_id": "S0002",
+      "error": "operator_or_sign",
+      "original": "\\[\nA_{k}= 1\\wedge \\dfrac{\\pi_{\\beta_{k+1}}(\\boldsymbol{x_k}) \\pi_{\\beta_{k}}(\\boldsymbol{x_{k+1}}) }{\\pi_{\\beta_k}(\\boldsymbol{x_k}) \\pi_{\\beta_{k+1}}(\\boldsymbol{x_{k+1}})}.\n\\]",
+      "perturbed": "\\[\nA_{k}= 1\\vee \\dfrac{\\pi_{\\beta_{k+1}}(\\boldsymbol{x_k}) \\pi_{\\beta_{k}}(\\boldsymbol{x_{k+1}}) }{\\pi_{\\beta_k}(\\boldsymbol{x_k}) \\pi_{\\beta_{k+1}}(\\boldsymbol{x_{k+1}})}.\n\\]",
+      "why_wrong": "The Metropolis-Hastings acceptance probability must use the minimum operator (\\wedge) to ensure the probability is capped at 1. Using the maximum operator (\\vee) would result in an acceptance probability greater than or equal to 1, which is mathematically invalid for a probability and would not satisfy the detailed balance condition required for the PT algorithm described in the context."
+    },
+    {
+      "perturbation_id": "P001_S0005",
+      "span_id": "S0005",
+      "error": "index_or_subscript",
+      "original": "\\[\n\\hat{w}_{h,K} = \\dfrac{1}{N-B + 1}\\sum_{i=B}^{N} \\boldsymbol{1}_{\\{\\boldsymbol{\\theta^{(i)}} \\in \\hat{\\Theta}_h \\}}(\\boldsymbol{\\theta^{(i)}}).\n\\]",
+      "perturbed": "\\[\n\\hat{w}_{h,K} = \\dfrac{1}{N-B + 1}\\sum_{i=1}^{N} \\boldsymbol{1}_{\\{\\boldsymbol{\\theta^{(i)}} \\in \\hat{\\Theta}_h \\}}(\\boldsymbol{\\theta^{(i)}}).\n\\]",
+      "why_wrong": "The context states that the estimate is computed using samples from iteration B to K (the post-burn-in samples). Changing the summation index to start from i=1 includes the burn-in period, which contradicts the denominator (N-B+1) and the standard MCMC practice of discarding initial samples described in the surrounding text."
+    },
+    {
+      "perturbation_id": "P002_S0039",
+      "span_id": "S0039",
+      "error": "computation",
+      "original": "\\begin{equation}\n\\pi_{\\beta}(\\boldsymbol{x}|\\boldsymbol{y}) \\propto [p(\\boldsymbol{y}\\mid \\boldsymbol{x})]^{\\beta} p(\\boldsymbol{x}).\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\pi_{\\beta}(\\boldsymbol{x}|\\boldsymbol{y}) \\propto [p(\\boldsymbol{y}\\mid \\boldsymbol{x}) p(\\boldsymbol{x})]^{\\beta}.\n\\end{equation}",
+      "why_wrong": "The text specifically distinguishes 'power-posteriors' from 'power-tempered versions of pi' by stating that power-posteriors are constructed by tempering the likelihood component only. The perturbed version tempers the entire joint distribution (likelihood times prior), which contradicts the explicit definition provided in the preceding sentence."
+    },
+    {
+      "perturbation_id": "P000_S0041",
+      "span_id": "S0041",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:ordering_constraint}\n\\mu_{41} < \\mu_{42} < \\mu_{43}.    \n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:ordering_constraint}\n\\mu_{41} > \\mu_{42} > \\mu_{43}.    \n\\end{equation}",
+      "why_wrong": "The paper states that the ordering constraint is placed on the estimated mean maximum depth for each hidden state to address label switching. Flipping the inequality signs to 'greater than' contradicts the standard practice of ordering states by increasing depth (e.g., surface to deep) and would conflict with the subsequent analysis of state-dependent distributions where state 1 is typically the shallowest."
+    },
+    {
+      "perturbation_id": "P001_S0042",
+      "span_id": "S0042",
+      "error": "computation",
+      "original": "\\begin{equation}\n    \\log\\left(\\dfrac{\\gamma_{ij}}{\\gamma_{ii}}\\right) = \\zeta_{ij} - \\zeta_{ii}, \\quad i\\neq j.    \n\\end{equation}",
+      "perturbed": "\\begin{equation}\n    \\log\\left(\\dfrac{\\gamma_{ij}}{\\gamma_{ii}}\\right) = \\zeta_{ij} + \\zeta_{ii}, \\quad i\\neq j.    \n\\end{equation}",
+      "why_wrong": "The derivation immediately following this equation in the paper defines the baseline components as alpha_{0}^{(ij)} = zeta_{ij} - zeta_{ii}. Changing the minus to a plus in the log-ratio expression creates a mathematical inconsistency with the reparameterization of the transition probabilities described in the text."
+    },
+    {
+      "perturbation_id": "P002_S0009",
+      "span_id": "S0009",
+      "error": "operator_or_sign",
+      "original": "\\[\n    A = \\log p(\\theta^* \\mid \\boldsymbol{y_{1:T}}) - \\log p(\\theta \\mid \\boldsymbol{y_{1:T}})\n    + \\log q\\left(\\left(\\alpha_{0}^{(ij)}\\right)^{*}_j , \\left(\\alpha_{0}^{(ij)}\\right)_j \\right) - \\log q\\left(\\left(\\alpha_{0}^{(ij)}\\right)_j , \\left(\\alpha_{0}^{(ij)}\\right)^{*}_j \\right) \n    \\]",
+      "perturbed": "\\[\n    A = \\log p(\\theta^* \\mid \\boldsymbol{y_{1:T}}) - \\log p(\\theta \\mid \\boldsymbol{y_{1:T}})\n    - \\log q\\left(\\left(\\alpha_{0}^{(ij)}\\right)^{*}_j , \\left(\\alpha_{0}^{(ij)}\\right)_j \\right) + \\log q\\left(\\left(\\alpha_{0}^{(ij)}\\right)_j , \\left(\\alpha_{0}^{(ij)}\\right)^{*}_j \\right) \n    \\]",
+      "why_wrong": "In the Metropolis-Hastings log-acceptance ratio, the proposal ratio (Hastings ratio) should be log q(old|new) - log q(new|old). Flipping the signs of the proposal terms results in an incorrect acceptance probability that violates the reversible jump or standard MH logic used to update the transition probability parameters."
+    },
+    {
+      "perturbation_id": "P000_S0011",
+      "span_id": "S0011",
+      "error": "operator_or_sign",
+      "original": "\\[\n            A = \\log p(\\boldsymbol{\\theta}^{*} \\mid \\boldsymbol{y_{1:T}}) - \\log p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y_{1:T}})\n            + \\log \\frac{q\\left(\\left(\\alpha_{1}^{(ij)}\\right)^{*}_j , \\left(\\alpha_{0}^{(ij)}\\right)_j \\right)}{q\\left(\\left(\\alpha_{1}^{(ij)}\\right)_j , \\left(\\alpha_{1}^{(ij)}\\right)^{*}_j \\right)}\n            \\]",
+      "perturbed": "\\[\n            A = \\log p(\\boldsymbol{\\theta}^{*} \\mid \\boldsymbol{y_{1:T}}) - \\log p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y_{1:T}})\n            + \\log \\frac{q\\left(\\left(\\alpha_{1}^{(ij)}\\right)^{*}_j , \\left(\\alpha_{0}^{(ij)}\\right)_j \\right)}{q\\left(\\left(\\alpha_{1}^{(ij)}\\right)_j , \\left(\\alpha_{1}^{(ij)}\\right)^{*}_j \\right)}\n            \\]\n                \\vspace{0.2cm}\n              \\State $U \\sim \\text{Unif}(0,1)$\n              \\If{$\\log(U) < A$}",
+      "why_wrong": "The Metropolis-Hastings acceptance criterion requires accepting the proposal if the log of a uniform random variable is less than the log-acceptance ratio (log U < A). Flipping the sign to 'log(U) > A' would result in rejecting moves that increase the posterior density and accepting those that decrease it, violating the detailed balance condition."
+    },
+    {
+      "perturbation_id": "P001_S0013",
+      "span_id": "S0013",
+      "error": "numeric_parameter",
+      "original": "\\[\n\\lambda_{n} \\sim  \\text{Gamma}(1.5,0.5) \\quad n = 1, 2, 3\n\\]",
+      "perturbed": "\\[\n\\lambda_{n} \\sim  \\text{Gamma}(0.5,0.5) \\quad n = 1, 2, 3\n\\]",
+      "why_wrong": "In the context of Bayesian HMMs for animal movement (lunges), a Gamma(0.5, 0.5) prior is highly concentrated near zero and potentially improper or non-informative in a way that conflicts with the expected positive count of lunges. If the paper later references a mean lunge rate or prior strength based on the shape parameter 1.5, this change creates a mathematical inconsistency in the model specification."
+    },
+    {
+      "perturbation_id": "P002_S0049",
+      "span_id": "S0049",
+      "error": "numeric_parameter",
+      "original": "\\begin{align*}\n    \\mu_{4n} \\sim  \\text{Gamma}(3,.01) \\quad n = 1, 2, 3\\\\\n    \\sigma_{4n} \\sim \\text{Gamma}(3,.01) \\quad n = 1, 2, 3\n\\end{align*}",
+      "perturbed": "\\begin{align*}\n    \\mu_{4n} \\sim  \\text{Gamma}(0.3,.01) \\quad n = 1, 2, 3\\\\\n    \\sigma_{4n} \\sim \\text{Gamma}(0.3,.01) \\quad n = 1, 2, 3\n\\end{align*}",
+      "why_wrong": "The paper describes these as non-informative or weakly informative priors for the state-dependent parameters. Changing the shape parameter from 3 to 0.3 significantly alters the prior density near zero, potentially leading to an improper posterior or numerical instability in the MCMC convergence, especially given the scale of dive depth data."
+    },
+    {
+      "perturbation_id": "P000_S0050",
+      "span_id": "S0050",
+      "error": "index_or_subscript",
+      "original": "\\begin{align*}\n    \\mu_{5n} \\sim  \\text{Gamma}(3,.01) \\quad  n = 1, 2, 3\\\\\n    \\sigma_{5n} \\sim \\text{Gamma}(3,.01) \\quad n = 1, 2, 3\n\\end{align*}",
+      "perturbed": "\\begin{align*}\n    \\mu_{5n} \\sim  \\text{Gamma}(3,.01) \\quad  n = 1, 2, 3\\\\\n    \\sigma_{4n} \\sim \\text{Gamma}(3,.01) \\quad n = 1, 2, 3\n\\end{align*}",
+      "why_wrong": "The perturbation changes the subscript of the scale parameter from sigma_{5n} to sigma_{4n} within the 'Step length' section. This creates a conflict with the preceding 'Maximum depth' section which already defines parameters for index 4, and breaks the consistent indexing where index 5 is reserved for step length parameters."
+    },
+    {
+      "perturbation_id": "P001_S0051",
+      "span_id": "S0051",
+      "error": "numeric_parameter",
+      "original": "\\begin{align*}\n    -\\alpha_{0}^{(ij)} \\mid \\zeta_i &\\sim \\text{Gumbel}(\\zeta_i, 1) \\quad i,j \\in \\{1,2,3\\}, \\, i\\neq j,\n\\end{align*}",
+      "perturbed": "\\begin{align*}\n    -\\alpha_{0}^{(ij)} \\mid \\zeta_i &\\sim \\text{Gumbel}(\\zeta_i, 1) \\quad i,j \\in \\{1,2,4\\}, \\, i\\neq j,\n\\end{align*}",
+      "why_wrong": "The perturbation changes the set of indices from {1,2,3} to {1,2,4}. This is inconsistent with the subsequent line which defines zeta_i for i in {1,2,3} and the section header 'Posterior estimates for the 3-state HMM', as a 3-state model should only have indices 1, 2, and 3."
+    }
+  ]
+}

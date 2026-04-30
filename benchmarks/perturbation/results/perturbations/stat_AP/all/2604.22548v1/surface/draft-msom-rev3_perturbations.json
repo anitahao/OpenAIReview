@@ -1,0 +1,171 @@
+{
+  "paper_title": "%\\documentclass[ijoc,blindrev]{informs3}",
+  "paper_slug": "draft-msom-rev3",
+  "n_candidates": 44,
+  "n_generated": 20,
+  "n_valid": 20,
+  "n_injected": 20,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "operator_or_sign",
+      "original": "$\\le20$",
+      "perturbed": "$\\ge20$",
+      "why_wrong": "The context describes 'low-dimensional' problems, but the operator was changed to 'greater than or equal to', which contradicts the description of the dimensionality as low."
+    },
+    {
+      "perturbation_id": "P001_S0012",
+      "span_id": "S0012",
+      "error": "index_or_subscript",
+      "original": "$[J]=\\{1,\\ldots, J\\}$",
+      "perturbed": "$[J]=\\{1,\\ldots, J-1\\}$",
+      "why_wrong": "The notation $[J]$ is standardly defined in the context of set indices to include all elements up to $J$. Ending the set at $J-1$ creates a mismatch between the symbol $[J]$ and its explicit set definition."
+    },
+    {
+      "perturbation_id": "P002_S0013",
+      "span_id": "S0013",
+      "error": "computation",
+      "original": "$=\\lceil L/T\\rceil)$",
+      "perturbed": "$=\\lfloor L/T\\rfloor)$",
+      "why_wrong": "In block maxima methods, the number of blocks $B$ for a total length $L$ and block size $T$ is calculated using the ceiling function to account for the final partial block, not the floor function."
+    },
+    {
+      "perturbation_id": "P003_S0015",
+      "span_id": "S0015",
+      "error": "index_or_subscript",
+      "original": "$\\kappa_j$",
+      "perturbed": "$\\kappa_{j+1}$",
+      "why_wrong": "The table entry defines the threshold for the $j$-th critical point. Changing the subscript to $j+1$ creates an internal inconsistency between the mathematical symbol and its textual description in the same row."
+    },
+    {
+      "perturbation_id": "P000_S0020",
+      "span_id": "S0020",
+      "error": "index_or_subscript",
+      "original": "$u_j$",
+      "perturbed": "$u_i$",
+      "why_wrong": "The context description explicitly defines the variable as the 'coordination of $j$-th critical point', making the subscript 'i' inconsistent with the definition provided in the same table row."
+    },
+    {
+      "perturbation_id": "P001_S0026",
+      "span_id": "S0026",
+      "error": "index_or_subscript",
+      "original": "$\\mathcal{G}_H$",
+      "perturbed": "$\\mathcal{G}_n$",
+      "why_wrong": "The description in the table defines the symbol as a 'graph with order $H$'. Changing the subscript to 'n' creates a mismatch between the symbol and its textual definition."
+    },
+    {
+      "perturbation_id": "P002_S0028",
+      "span_id": "S0028",
+      "error": "index_or_subscript",
+      "original": "$q_G$",
+      "perturbed": "$q_H$",
+      "why_wrong": "The table defines this symbol as the 'quantile for graph'. In the context of the paper's notation where G typically represents the graph, changing the subscript to H (the order) contradicts the standard mapping established in the surrounding nomenclature."
+    },
+    {
+      "perturbation_id": "P003_S0029",
+      "span_id": "S0029",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:gev_family}\n    F_Y(y) = \n        \\exp\\left[-\\left\\{1 +\\xi \\left(\\frac{y-\\mu}{\\sigma}\\right) \\right\\}^{-1/\\xi}\\right],\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:gev_family}\n    F_Y(y) = \n        \\exp\\left[+\\left\\{1 +\\xi \\left(\\frac{y-\\mu}{\\sigma}\\right) \\right\\}^{-1/\\xi}\\right],\n\\end{equation}",
+      "why_wrong": "The GEV distribution function must result in a value between 0 and 1. Changing the negative sign to a positive sign inside the exponential function would cause the function to diverge as the term in braces increases, which is inconsistent with the definition of a cumulative distribution function."
+    },
+    {
+      "perturbation_id": "P000_S0001",
+      "span_id": "S0001",
+      "error": "operator_or_sign",
+      "original": "$$\n    F^n_Y(a_ny + b_n) = \n        F^{}_Y(y),\n$$",
+      "perturbed": "$$\n    F^n_Y(a_ny + b_n) \\neq \n        F^{}_Y(y),\n$$",
+      "why_wrong": "The text explicitly defines max-stability as the property where there exist constants such that the equality holds. Changing the equality to an inequality contradicts the definition of max-stability provided in the preceding sentence."
+    },
+    {
+      "perturbation_id": "P001_S0002",
+      "span_id": "S0002",
+      "error": "numeric_parameter",
+      "original": "$$\n    Z = \n        \\left\\{1 + \\xi\\left(\\frac{Y-\\mu}{\\sigma}\\right)\\right\\}^{1/\\xi}\\sim\\mathrm{GEV}(1, 1, 1).\n$$",
+      "perturbed": "$$\n    Z = \n        \\left\\{1 + \\xi\\left(\\frac{Y-\\mu}{\\sigma}\\right)\\right\\}^{1/\\xi}\\sim\\mathrm{GEV}(0, 1, 1).\n$$",
+      "why_wrong": "The text states that the transformation is used to convert a distribution into a 'unit Fr\\'echet'. In the GEV family context established in the paper, a unit Fr\\'echet corresponds to a shape parameter $\\xi=1$ (as seen in the original GEV(1,1,1)), whereas 0 would correspond to a Gumbel distribution."
+    },
+    {
+      "perturbation_id": "P000_S0030",
+      "span_id": "S0030",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:multivariate_cdf}\n    F_Z(Z_1\\le z_1, \\ldots, Z_J\\le z_J) = \n        \\exp\\left\\{-V(z_1, \\ldots, z_J)\\right\\},\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:multivariate_cdf}\n    F_Z(Z_1\\le z_1, \\ldots, Z_J\\le z_J) = \n        \\exp\\left\\{+V(z_1, \\ldots, z_J)\\right\\},\n\\end{equation}",
+      "why_wrong": "The exponent measure V in a multivariate extreme value distribution must be preceded by a negative sign to ensure the CDF values are between 0 and 1; a positive exponent would cause the function to diverge as V increases."
+    },
+    {
+      "perturbation_id": "P002_S0003",
+      "span_id": "S0003",
+      "error": "index_or_subscript",
+      "original": "$$\n    V(\\infty,\\ldots,z_j,\\ldots,\\infty) =  \n        1/z_j, \\qquad \n    V(tz_1,\\ldots, tz_J) = \n        t^{-1}V(z_1,\\ldots, z_J),\n$$",
+      "perturbed": "$$\n    V(\\infty,\\ldots,z_j,\\ldots,\\infty) =  \n        1/z_j, \\qquad \n    V(tz_1,\\ldots, tz_J) = \n        t^{1}V(z_1,\\ldots, z_J),\n$$",
+      "why_wrong": "The exponent measure $V$ for multivariate extreme value distributions must be homogeneous of order -1. Changing the exponent of $t$ from -1 to 1 violates the mathematical requirement for the exponent measure mentioned in the context of multivariate extreme modeling."
+    },
+    {
+      "perturbation_id": "P001_S0033",
+      "span_id": "S0033",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:criterion}\n    X_j(s) < \\kappa_j, \\quad \\forall j\\in[J],\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:criterion}\n    X_j(s) > \\kappa_j, \\quad \\forall j\\in[J],\n\\end{equation}",
+      "why_wrong": "The context states that kappa_j is a tolerance for 'acceptable product quality' and is set 'large enough' to sustain production. Flipping the inequality to 'greater than' contradicts the goal of staying within a tolerance limit."
+    },
+    {
+      "perturbation_id": "P003_S0043",
+      "span_id": "S0043",
+      "error": "computation",
+      "original": "\\begin{align}\n    \\chi &= \\lim_{t\\to 1}\\pr{F_{Z_i}(z_i) > t|F_{Z_j}(z_j) > t}\\label{eq:tail_coef1}\\\\\n         &= 2 - V(1, 1),\\label{eq:tail_coef2}\n\\end{align}",
+      "perturbed": "\\begin{align}\n    \\chi &= \\lim_{t\\to 1}\\pr{F_{Z_i}(z_i) > t|F_{Z_j}(z_j) > t}\\label{eq:tail_coef1}\\\\\n         &= 1 - V(1, 1),\\label{eq:tail_coef2}\n\\end{align}",
+      "why_wrong": "The derivation step from the limit definition to the exponent measure $V$ is mathematically inconsistent; for unit Fr\u00e9chet margins, the relation is $\\chi = 2 - V(1,1)$."
+    },
+    {
+      "perturbation_id": "P002_S0037",
+      "span_id": "S0037",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\\label{eq:f_madogram}\n    \\eta(h) = \n        \\ex{|F_{Z}(Z_j(s+h)) - F_{Z}(Z_{j'}(s))|} / 2,\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:f_madogram}\n    \\eta(h) = \n        \\ex{|F_{Z}(Z_j(s+h)) - F_{Z}(Z_{j'}(s))|} / 4,\n\\end{equation}",
+      "why_wrong": "The F-madogram is a standard spatial dependence measure defined as half the mean absolute difference of the transformed variables; changing the divisor from 2 to 4 is a numeric inconsistency with the definition of a madogram."
+    },
+    {
+      "perturbation_id": "P003_S0039",
+      "span_id": "S0039",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{eq:tcl}\n    \\mathrm{TCL}_H(\\tau|\\boldsymbol{Z}, G_H) \n        = \\prod_{b=1}^B \\prod_{\\mathbf{z}_{[H]}\\in G_H} f(\\mathbf{z}_{[H]}^{(b)};\\tau),\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:tcl}\n    \\mathrm{TCL}_H(\\tau|\\boldsymbol{Z}, G_H) \n        = \\prod_{b=1}^B \\prod_{\\mathbf{z}_{[H]}\\in \\mathcal{G}_H} f(\\mathbf{z}_{[H]}^{(b)};\\tau),\n\\end{equation}",
+      "why_wrong": "The text defines the Truncated Composite Likelihood (TCL) as using a 'subset G_H' of the full set 'G_H_cal'. By changing the inner product index back to the full set 'G_H_cal', the equation becomes identical to the conventional composite likelihood (CL) in S0038, failing to represent a 'truncated' version."
+    },
+    {
+      "perturbation_id": "P000_S0040",
+      "span_id": "S0040",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\\label{eq:distance}\n    \\delta(g) = \n        \\frac{\\sum_{u,u'\\in g} d_{\\mathcal{U}}(u, u')}{\\mathrm{C}_2^H},\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:distance}\n    \\delta(g) = \n        \\frac{\\sum_{u,u'\\in g} d_{\\mathcal{U}}(u, u')}{\\mathrm{C}_2^{|g|}},\n\\end{equation}",
+      "why_wrong": "The denominator uses the subscript $|g|$ (the size of the group), but the context defines the group as an element of $\\mathcal{G}_H$, implying the normalization constant should be related to the fixed dimension $H$ as seen in the original $\\mathrm{C}_2^H$."
+    },
+    {
+      "perturbation_id": "P002_S0042",
+      "span_id": "S0042",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation*}\n    \\text{Score}=\n        \\|\\tau - \\tilde{\\tau}\\|_1,\n\\end{equation*}",
+      "perturbed": "\\begin{equation*}\n    \\text{Score}=\n        \\|\\tau - \\tilde{\\tau}\\|_2,\n\\end{equation*}",
+      "why_wrong": "The LaTeX code uses an $L_2$-norm (subscript 2), but the preceding sentence explicitly states 'we consider $L_1$-distance'."
+    },
+    {
+      "perturbation_id": "P003_S0007",
+      "span_id": "S0007",
+      "error": "computation",
+      "original": "$$\n    \\mathrm{PMD}(Y_1, Y_2) = \n        \\frac{|\\bar{Y_1} - \\bar{Y_2}|}{|\\bar{Y_1}|},\n$$",
+      "perturbed": "$$\n    \\mathrm{PMD}(Y_1, Y_2) = \n        \\frac{|\\bar{Y_1} + \\bar{Y_2}|}{|\\bar{Y_1}|},\n$$",
+      "why_wrong": "The text defines the metric as the 'percentage mean distance', which represents the difference (distance) between two means. Using an addition operator in the numerator calculates a sum rather than a distance, making it inconsistent with the definition of a distance metric."
+    },
+    {
+      "perturbation_id": "P001_S0041",
+      "span_id": "S0041",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\\label{eq:return_level}\n    \\mathrm{RL}_j(s;R) =\n        \\mu_j + \\frac{\\sigma_j}{\\xi_j}\\{(-\\log p)^{-\\xi_j} - 1\\}, \\quad p\\in(0, 1),\n\\end{equation}",
+      "perturbed": "\\begin{equation}\\label{eq:return_level}\n    \\mathrm{RL}_j(s;R) =\n        \\mu_j - \\frac{\\sigma_j}{\\xi_j}\\{(-\\log p)^{-\\xi_j} - 1\\}, \\quad p\\in(0, 1),\n\\end{equation}",
+      "why_wrong": "The sign before the fraction is changed to minus. This is inconsistent with standard GEV return level formulations where the location parameter $\\mu$ is shifted upwards by the scale and shape components to represent an exceedance value."
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "paper_title": "\\vspace-1ex",
+  "paper_slug": "manuscript",
+  "n_candidates": 15,
+  "n_generated": 20,
+  "n_valid": 15,
+  "n_injected": 15,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "missing_case",
+      "original": "\\begin{proof}\nFor every cycle $C$ we have\n\\[\n\\ell_\\lambda(C)=\\bigl(\\ell_{\\lambda_1}(C),\\dots,\\ell_{\\lambda_r}(C)\\bigr).\n\\]\nHence $\\ell_\\lambda(C)=0$ exactly when every scalar coordinate vanishes.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nFor every cycle $C$ we have\n\\[\n\\ell_\\lambda(C)=\\bigl(\\ell_{\\lambda_1}(C),\\dots,\\ell_{\\lambda_r}(C)\\bigr).\n\\]\nHence if every scalar coordinate vanishes, $\\ell_\\lambda(C)=0$.\n\\end{proof}",
+      "why_wrong": "The proof only shows one direction of the implication (sufficiency). It fails to prove the 'only if' part of the lemma, which requires showing that $\\ell_\\lambda(C)=0$ implies every coordinate vanishes."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}\nThe cycle space $\\mathcal{C}(H)$ is spanned by the incidence vectors of simple cycles of $H$.\nSince $L_\\Gamma$ is linear, it vanishes on all of $\\mathcal{C}(H)$ if and only if it vanishes on\nevery cycle vector, which is exactly the definition of balancedness.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nThe cycle space $\\mathcal{C}(H)$ is spanned by the incidence vectors of simple cycles of $H$.\nSince $L_\\Gamma$ is linear, it vanishes on every cycle vector if and only if the graph $H$ contains no cycles, which is exactly the definition of balancedness.\n\\end{proof}",
+      "why_wrong": "The definition of balancedness in a biased graph (as implied by the context) is that the labels on cycles sum to zero, not that the graph is acyclic (a forest)."
+    },
+    {
+      "perturbation_id": "P002_S0002",
+      "span_id": "S0002",
+      "error": "missing_case",
+      "original": "\\begin{proof}\nAssume first that $H$ is balanced. Fix a root $r\\in V(H)$ and, for each vertex $v$, choose any\npath $P_{r,v}$ in $H$. Define\n\\[\np(v):=\\sum_{e\\in E(P_{r,v})}\\lambda(e).\n\\]\nThis is well defined because if $P$ and $P'$ are two $r$--$v$ paths, then their symmetric\ndifference is a cycle decomposition; balancedness forces the total label on each cycle, hence on\n$P\\triangle P'$, to vanish. For an edge $uv$, concatenating an $r$--$u$ path, the edge $uv$, and\na $v$--$r$ path shows that $\\lambda(uv)=p(u)+p(v)$.\n\nConversely, if such a potential exists, then for every cycle $v_0v_1\\cdots v_{t-1}v_0$ we have\n\\[\n\\sum_{i=0}^{t-1}\\lambda(v_iv_{i+1})\n=\n\\sum_{i=0}^{t-1}\\bigl(p(v_i)+p(v_{i+1})\\bigr)=0,\n\\]\nbecause every vertex potential appears exactly twice. Hence every cycle is balanced. The\nuniqueness claim follows because the difference of two valid potentials is constant on every edge\nand therefore constant on the connected component.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nAssume first that $H$ is balanced. Fix a root $r\\in V(H)$ and, for each vertex $v$, choose any\npath $P_{r,v}$ in $H$. Define\n\\[\np(v):=\\sum_{e\\in E(P_{r,v})}\\lambda(e).\n\\]\nThis is well defined because if $P$ and $P'$ are two $r$--$v$ paths, then their symmetric\ndifference is a cycle decomposition; balancedness forces the total label on each cycle to vanish.\nFor an edge $uv$, concatenating an $r$--$u$ path, the edge $uv$, and\na $v$--$r$ path shows that $\\lambda(uv)=p(u)+p(v)$.\nConversely, if such a potential exists, then for every cycle $v_0v_1\\cdots v_{t-1}v_0$ we have\n\\[\n\\sum_{i=0}^{t-1}\\lambda(v_iv_{i+1})\n=\n\\sum_{i=0}^{t-1}\\bigl(p(v_i)+p(v_{i+1})\\bigr)=0.\n\\]\n\\end{proof}",
+      "why_wrong": "The proof omits the uniqueness claim stated in the proposition ('Moreover, if such a potential exists, it is unique up to adding the same vector...')."
+    },
+    {
+      "perturbation_id": "P003_S0003",
+      "span_id": "S0003",
+      "error": "circular_reasoning",
+      "original": "\\begin{proof}\nThe equivalence of (i) and (ii) is just Proposition~\\ref{prop:potential} written simultaneously\nfor all $r$ coordinates: put the vertex potentials in the rows of $P$. The equivalence of (ii) and\n(iii) is immediate because the row space of $P B_H$ is contained in the row space of $B_H$, while\nif every row of $\\Lambda_H$ belongs to the row space of $B_H$, one may choose one row of $P$ for\neach row of $\\Lambda_H$ and stack them.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nThe equivalence of (i) and (ii) follows from the fact that $\\Lambda_H = P B_H$ is the matrix form of the potential characterization. The equivalence of (ii) and (iii) is immediate because if every row of $\\Lambda_H$ belongs to the row space of $B_H$, then by Proposition~\\ref{prop:potential-matrix-form} there exists a matrix $P$ such that $\\Lambda_H = P B_H$.\n\\end{proof}",
+      "why_wrong": "The proof uses the existence of the matrix $P$ (part ii) to prove the equivalence between (ii) and (iii), which is the very statement being proved."
+    },
+    {
+      "perturbation_id": "P004_S0004",
+      "span_id": "S0004",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}\nThe quotient space $\\F_2^E/\\row(B_G)$ is canonically dual to $\\Ker(B_G)=\\mathcal{C}(G)$, and the\nrestriction of the rows of $\\Lambda_\\Gamma$ to $\\mathcal{C}(G)$ is precisely the cycle-label map.\nThus the image dimension of $L_\\Gamma$ equals the dimension added when the rows of\n$\\Lambda_\\Gamma$ are adjoined to the row space of $B_G$. This proves the formula.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nThe quotient space $\\F_2^E/\\row(B_G)$ is canonically dual to $\\Ker(B_G)=\\mathcal{C}(G)$. Thus the image dimension of $L_\\Gamma$ is equal to the dimension of the row space of $B_G$ divided by the dimension of the row space of $\\Lambda_\\Gamma$. This proves the formula.\n\\end{proof}",
+      "why_wrong": "The rank identity formula in the proposition is additive/subtractive (rank of augmented matrix minus rank of $B_G$), but the proof claims it is a division of dimensions, which is algebraically incorrect for vector space dimensions."
+    },
+    {
+      "perturbation_id": "P005_S0005",
+      "span_id": "S0005",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}\nBalanced subgraphs are determined by the kernel of the cycle-label map. If the two labelings induce\nexactly the same balanced subgraphs, then their cycle-label maps have the same kernel on\n$\\mathcal{C}(G)$; therefore the quotient $\\mathcal{C}(G)/\\Ker(L_\\Gamma)$ injects into $\\F_2^q$.\nBut this quotient has dimension $\\rho(\\Gamma)$.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nBalanced subgraphs are determined by the kernel of the cycle-label map. If the two labelings induce\nexactly the same balanced subgraphs, then their cycle-label maps have the same kernel on\n$\\mathcal{C}(G)$; therefore the dimension of the image of $L_\\Gamma$ must be equal to $q$.\nBut this image has dimension $\\rho(\\Gamma)$.\n\\end{proof}",
+      "why_wrong": "The proof incorrectly concludes that the dimension of the image must equal $q$, whereas the corollary correctly states $q \\ge \\rho(\\Gamma)$. An injection into $\\F_2^q$ only implies the dimension is at most $q$."
+    },
+    {
+      "perturbation_id": "P006_S0006",
+      "span_id": "S0006",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}[Proof of Theorem~\\ref{thm:coordcover}]\nWrite $\\lambda=(\\lambda_1,\\dots,\\lambda_r)$ with each $\\lambda_i:E(G)\\to\\F_2$. For each\n$i\\in[r]$, let $\\Gamma_i=(G,\\lambda_i)$ be the scalar-labeled biased graph obtained by projecting\nto coordinate $i$. Apply Theorem~\\ref{thm:onecoord} independently to every $\\Gamma_i$ with the\nsame parameter $k$, obtaining pairs $(S_i,F_i)$. Define\n\\[\nS:=\\bigcap_{i=1}^r S_i,\n\\qquad\nF:=\\bigcup_{i=1}^r F_i.\n\\]\n\nWe verify the required properties.\n\n\\smallskip\n\\noindent\\emph{Property (i).}\nLet $e=uv\\in\\delta_G(S)$, where $u\\in S$ and $v\\notin S$. Since $u\\in S_i$ for all $i$, but\n$v\\notin S$, there exists some coordinate $j$ with $v\\notin S_j$. Therefore\n$e\\in\\delta_G(S_j)\\subseteq F_j\\subseteq F$.\n\n\\smallskip\n\\noindent\\emph{Property (ii).}\nFix a coordinate $i$. Since $S\\subseteq S_i$ and $F_i\\subseteq F$, the graph $(G-F)[S]$ is a\nsubgraph of $(G-F_i)[S_i]$, hence it is balanced in coordinate $i$ by Theorem~\\ref{thm:onecoord}.\nAs this holds for every $i$, Lemma~\\ref{lem:coordinatewise} implies that $(G-F)[S]$ is balanced\nunder the full vector labeling.\n\n\\smallskip\n\\noindent\\emph{Property (iii).}\nLet $H$ be a balanced subgraph with $\\cost(H)\\le k$. If coordinate $i$ succeeds, then\n$V(H)\\subseteq S_i$ and at most $k$ edges of $F_i$ are incident with $V(H)$. Therefore, if all\ncoordinates succeed simultaneously, then\n\\[\nV(H)\\subseteq \\bigcap_{i=1}^r S_i=S\n\\]\nand\n\\[\n\\abs{\\set{e\\in F : e\\text{ has an endpoint in }V(H)}}\n\\le\n\\sum_{i=1}^r \\abs{\\set{e\\in F_i : e\\text{ has an endpoint in }V(H)}}\n\\le rk.\n\\]\nThe success probability is the product of the coordinatewise success probabilities, hence at least\n$2^{-O(k^2r)}$.\n\\end{proof}",
+      "perturbed": "\\begin{proof}[Proof of Theorem~\\ref{thm:coordcover}]\nWrite $\\lambda=(\\lambda_1,\\dots,\\lambda_r)$. For each $i\\in[r]$, let $\\Gamma_i=(G,\\lambda_i)$. Apply Theorem~\\ref{thm:onecoord} to every $\\Gamma_i$ obtaining $(S_i,F_i)$. Define $S:=\\bigcup_{i=1}^r S_i$ and $F:=\\bigcap_{i=1}^r F_i$.\n\\noindent\\emph{Property (ii).}\nFix a coordinate $i$. Since $S_i \\subseteq S$ and $F \\subseteq F_i$, the graph $(G-F)[S]$ is balanced in coordinate $i$ because it contains $(G-F_i)[S_i]$. By Lemma~\\ref{lem:coordinatewise}, $(G-F)[S]$ is balanced.\n\\end{proof}",
+      "why_wrong": "The logic for Property (ii) is reversed. To inherit balancedness from $(G-F_i)[S_i]$, the new graph $(G-F)[S]$ must be a subgraph of the balanced one. By defining $S$ as the union and $F$ as the intersection, $(G-F)[S]$ becomes a supergraph, which does not necessarily preserve balancedness."
+    },
+    {
+      "perturbation_id": "P007_S0007",
+      "span_id": "S0007",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}\nEvery cycle label belongs to $U$. Hence for any cycle $C$,\n\\[\n\\ell_\\lambda(C)=0\n\\iff\n\\pi(\\ell_\\lambda(C))=0\n\\iff\n\\ell_{\\pi\\circ\\lambda}(C)=0.\n\\]\nNow apply this equivalence to all cycles in the subgraph.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nEvery cycle label belongs to $U$. Since $\\pi$ is a linear map, for any cycle $C$, if $\\ell_\\lambda(C)=0$ then $\\pi(\\ell_\\lambda(C))=0$. This shows that if a subgraph is balanced under $\\lambda$, it is balanced under $\\pi\\circ\\lambda$.\n\\end{proof}",
+      "why_wrong": "The proof only addresses one direction of the 'if and only if' statement. It fails to use the injectivity of $\\pi$ to prove that balancedness under $\\pi\\circ\\lambda$ implies balancedness under $\\lambda$."
+    },
+    {
+      "perturbation_id": "P008_S0008",
+      "span_id": "S0008",
+      "error": "circular_reasoning",
+      "original": "\\begin{proof}\nBecause the columns of $Q$ are linearly independent, they admit a left inverse $P$. If\n$u\\in\\im(M_\\Gamma)$ and $Pu=0$, write $u=Q\\alpha$; then\n$0=Pu=P Q\\alpha=\\alpha$, hence $u=0$. Thus $P$ is injective on the cycle-label image, and the\nclaim follows from Lemma~\\ref{lem:projection}.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nBy Proposition~\\ref{prop:basis-projection}, the labeling $\\widehat\\lambda(e):=P\\lambda(e)$ preserves balancedness exactly. Since $P$ is the left inverse of $Q$, it follows that $P$ is injective on the image of $M_\\Gamma$, which satisfies the conditions of Lemma~\\ref{lem:projection}.\n\\end{proof}",
+      "why_wrong": "The proof uses the statement of the proposition itself (that the labeling preserves balancedness) to justify the conditions required to prove the proposition."
+    },
+    {
+      "perturbation_id": "P009_S0009",
+      "span_id": "S0009",
+      "error": "missing_case",
+      "original": "\\begin{proof}[Proof of Theorem~\\ref{thm:rankcompression}]\nConstruct a spanning forest $T$ of $G$ and compute all fundamental cycle labels, obtaining the\nmatrix $M_\\Gamma$. This takes $\\widetilde{O}(mR)$ time by the prefix-sum formula above.\nThen compute a column basis of $M_\\Gamma$ of size $\\rho$ together with a left inverse on that\nbasis in time $\\widetilde{O}(\\rho^\\omega)$ using standard fast rank and basis extraction routines\n\\cite{cheung2013}; one may view the span-computation perspective of \\cite{terao2026faster} as a\nconceptual explanation for why the running time depends on $\\rho$ rather than on the full number\nof candidate cycle labels. Set $\\widehat\\lambda(e)=P\\lambda(e)$ for each edge $e$. By\nProposition~\\ref{prop:basis-projection}, the new labeling preserves balancedness exactly.\n\\end{proof}",
+      "perturbed": "\\begin{proof}[Proof of Theorem~\\ref{thm:rankcompression}]\nConstruct a spanning forest $T$ of $G$ and compute all fundamental cycle labels, obtaining the\nmatrix $M_\\Gamma$. Then compute a column basis of $M_\\Gamma$ of size $\\rho$ together with a left inverse on that\nbasis in time $\\widetilde{O}(\\rho^\\omega)$. Set $\\widehat\\lambda(e)=P\\lambda(e)$ for each edge $e$. By\nProposition~\\ref{prop:basis-projection}, the new labeling preserves balancedness exactly.\n\\end{proof}",
+      "why_wrong": "The proof omits the complexity analysis for computing the fundamental cycle labels, which is a key part of the theorem's claim regarding the $\\widetilde{O}(mR)$ time complexity."
+    },
+    {
+      "perturbation_id": "P000_S0010",
+      "span_id": "S0010",
+      "error": "missing_case",
+      "original": "\\begin{proof}\nAssume first that $J$ is satisfiable. Traversing a path in the constraint graph propagates the\nunresolved bits of a root variable to every other vertex. Along any closed walk, the propagated\nbits must return unchanged, so the sum of the parity defects around every cycle is zero.\nCompatibility of anchors is immediate.\n\nConversely, assume that all lifted cycle labels vanish and the surviving anchors are compatible.\nFix a root variable $r$ in the connected component and choose any value of $x_r$ consistent with\nits list and any anchor on $r$ if present. Propagate values along a spanning tree using the edge\nrelations. If two different root-to-$v$ paths are used, their symmetric difference is a cycle, and\nvanishing of the cycle label implies that the induced propagated values agree at every active bit.\nHence the propagation is well defined. The anchor-compatibility assumption then guarantees that\nall unary constraints are satisfied.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nAssume first that $J$ is satisfiable. Traversing a path in the constraint graph propagates the\nunresolved bits of a root variable to every other vertex. Along any closed walk, the propagated\nbits must return unchanged, so the sum of the parity defects around every cycle is zero.\nCompatibility of anchors is immediate.\n\nConversely, assume that all lifted cycle labels vanish. Fix a root variable $r$ in the connected component and choose any value of $x_r$ consistent with its list. Propagate values along a spanning tree using the edge relations. If two different root-to-$v$ paths are used, their symmetric difference is a cycle, and vanishing of the cycle label implies that the induced propagated values agree at every active bit. Hence the propagation is well defined.\n\\end{proof}",
+      "why_wrong": "The proof for the converse direction completely omits the case of unary constraints (anchors). Proposition 2.1 explicitly lists anchor compatibility as a necessary condition for satisfiability, but the perturbed proof fails to show that the propagated values satisfy these constraints."
+    },
+    {
+      "perturbation_id": "P001_S0011",
+      "span_id": "S0011",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}\nBuild the lifted graph $\\Gamma(I)-D$. For each connected component, compute a spanning tree and\nrecover a tentative potential by propagation from an arbitrary root as in the proof of\nProposition~\\ref{prop:potential}. Every non-tree edge can then be checked against the induced\npotential in constant time per lifted coordinate; equivalently, one may verify that every\nfundamental cycle has zero label. If the component is balanced, the same propagation certifies all\nsurviving anchor edges. Thus satisfiability is testable in polynomial time.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nBuild the lifted graph $\\Gamma(I)-D$. For each connected component, compute a spanning tree and\nrecover a tentative potential by propagation from an arbitrary root as in the proof of\nProposition~\\ref{prop:potential}. Every non-tree edge can then be checked against the induced\npotential in constant time per lifted coordinate. If the component is balanced, the same propagation certifies all\nsurviving anchor edges. Since the number of edges is at most $m$, and the number of coordinates is $\\rho$, the total time to verify all cycles and anchors is $O(m + \\rho)$, which is independent of the modulus depth $d$. Thus satisfiability is testable in polynomial time.\n\\end{proof}",
+      "why_wrong": "The perturbation claims the verification time is independent of the modulus depth $d$. However, the paper's parameterization and Step 1 of the main theorem explicitly state that the lifting process and coordinate-wise operations depend on $d$ (e.g., $\\widetilde{O}(md)$), making the claim of $d$-independence invalid."
+    },
+    {
+      "perturbation_id": "P002_S0012",
+      "span_id": "S0012",
+      "error": "circular_reasoning",
+      "original": "\\begin{proof}\nLet $H$ be the balanced graph that remains after deleting $D^\\star$. Since the covering succeeds,\nwe have $V(H)\\subseteq S$ and every deleted edge incident with $V(H)$ belongs to $F$.\nFurthermore, $\\delta_G(S)\\subseteq F$, so every edge removed to isolate $H$ is also in $F$.\nHence all edges of $D^\\star$ belong to $F$, proving the claim.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nLet $H$ be the balanced graph that remains after deleting $D^\\star$. By Lemma~\\ref{lem:enumeration}, there exists an optimal deletion set $D \\subseteq F$ with $|D| \\le k$. Since $D^\\star$ is such an optimal deletion set, and the covering succeeds, we have $V(H)\\subseteq S$ and every deleted edge incident with $V(H)$ belongs to $F$. Furthermore, $\\delta_G(S)\\subseteq F$, so every edge removed to isolate $H$ is also in $F$. Hence all edges of $D^\\star$ belong to $F$, proving the claim.\n\\end{proof}",
+      "why_wrong": "The proof of Lemma 3.3 (the enumeration lemma) now uses Lemma 3.3 itself to assume the existence of the deletion set $D$ in $F$, creating a circular dependency where the conclusion is used as a premise."
+    },
+    {
+      "perturbation_id": "P003_S0013",
+      "span_id": "S0013",
+      "error": "invalid_implication",
+      "original": "\\begin{proof}[Proof of Theorem~\\ref{thm:main}]\nLet $I$ be an instance with deletion budget $k$.\n\n\\paragraph{Step 1: lift.}\nConstruct the lifted graph $\\Gamma(I)$ by list normalization, parity-defect extraction, and anchor\nencoding. This takes $\\widetilde{O}(md)$ time.\n\n\\paragraph{Step 2: compress.}\nApply Theorem~\\ref{thm:rankcompression} to obtain an equivalent labeling into $\\F_2^\\rho$.\nThe running time is $\\widetilde{O}(md+\\rho^\\omega)$.\n\n\\paragraph{Step 3: cover.}\nApply Theorem~\\ref{thm:coordcover} to the compressed graph with parameter $k$. This takes\n$2^{O(k^2\\rho)}\\cdot n^{O(1)}$ time and, with probability at least $2^{-O(k^2\\rho)}$, succeeds on\nsome optimal balanced subgraph.\n\n\\paragraph{Step 4: enumerate.}\nEnumerate all subsets $D\\subseteq F$ with $\\abs{D}\\le k$. By the bound above, this requires\n$2^{O(k\\log(k\\rho+2))}$ iterations. For each candidate, test satisfiability of $I-D$ using\nLemma~\\ref{lem:zerocheck}. Return the feasible subset of minimum cardinality, or of minimum\nweight among those of cardinality at most $k$ in the weighted variant.\n\n\\paragraph{Correctness.}\nIf the algorithm returns a deletion set, it is feasible by Lemma~\\ref{lem:zerocheck}. Conversely,\nif $\\OPT(I)\\le k$, then on the success event of Theorem~\\ref{thm:coordcover},\nLemma~\\ref{lem:enumeration} guarantees that an optimal solution appears among the enumerated\nsubsets. The algorithm therefore has one-sided error.\n\n\\paragraph{Running time.}\nCombining the three stages gives\n\\[\n2^{O(k^2\\rho+k\\log(k\\rho+2))}\\cdot n^{O(1)}+\\widetilde{O}(md+\\rho^\\omega),\n\\]\nas claimed.\n\\end{proof}",
+      "perturbed": "\\begin{proof}[Proof of Theorem~\\ref{thm:main}]\nLet $I$ be an instance with deletion budget $k$.\n\n\\paragraph{Step 1: lift.}\nConstruct the lifted graph $\\Gamma(I)$. This takes $\\widetilde{O}(md)$ time.\n\n\\paragraph{Step 2: compress.}\nApply Theorem~\\ref{thm:rankcompression} to obtain an equivalent labeling into $\\F_2^\\rho$. This reduction is valid for any modulus $M$, including non-prime powers, by treating the rank over the integers.\n\n\\paragraph{Step 3: cover.}\nApply Theorem~\\ref{thm:coordcover} to the compressed graph. This takes $2^{O(k^2\\rho)}\\cdot n^{O(1)}$ time.\n\n\\paragraph{Step 4: enumerate.}\nEnumerate all subsets $D\\subseteq F$ with $\\abs{D}\\le k$. Test satisfiability of $I-D$ using Lemma~\\ref{lem:zerocheck}.\n\n\\paragraph{Correctness.}\nIf $\\OPT(I)\\le k$, then an optimal solution appears among the enumerated subsets. The algorithm has one-sided error.\n\n\\paragraph{Running time.}\nCombining the stages gives $2^{O(k^2\\rho+k\\log(k\\rho+2))}\\cdot n^{O(1)}+\\widetilde{O}(md+\\rho^\\omega)$.\n\\end{proof}",
+      "why_wrong": "The perturbation claims the rank-compression reduction is valid for non-prime power moduli by treating rank over the integers. This contradicts the paper's framework which relies on $\\F_2$ linear algebra and the specific properties of dyadic coset constraints."
+    },
+    {
+      "perturbation_id": "P004_S0014",
+      "span_id": "S0014",
+      "error": "missing_case",
+      "original": "\\begin{proof}\nOn each connected component, Proposition~\\ref{prop:potential} gives one potential, and any two\nsuch potentials differ by an additive constant in $\\F_2^r$. Distinct components contribute\nindependently, so the total solution space is the direct product of $c(H)$ copies of $\\F_2^r$.\n\\end{proof}",
+      "perturbed": "\\begin{proof}\nOn each connected component, Proposition~\\ref{prop:potential} gives one potential, and any two\nsuch potentials differ by an additive constant in $\\F_2^r$. Since the graph $H$ is connected, the total solution space is an affine space of dimension $r$ over $\\F_2$.\n\\end{proof}",
+      "why_wrong": "The proof fails to consider the case where the graph $H$ has multiple connected components ($c(H) > 1$). The proposition statement explicitly mentions $c(H)$ components and a dimension of $r \\cdot c(H)$, but the proof only addresses the single-component case."
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "paper_title": "FED-FSTQ: Fisher-Guided Token Quantization for Communication-Efficient Federated Fine-Tuning of LLMs on Edge Devices",
+  "paper_slug": "main",
+  "n_candidates": 40,
+  "n_generated": 15,
+  "n_valid": 15,
+  "n_injected": 15,
+  "model": "google/gemini-3-flash-preview",
+  "perturbations": [
+    {
+      "perturbation_id": "P000_S0000",
+      "span_id": "S0000",
+      "error": "index_or_subscript",
+      "original": "$^{1}$",
+      "perturbed": "$^{2}$",
+      "why_wrong": "The author Changyu Li is listed as the first author, but changing the affiliation index to 2 creates a mismatch with the first footnote which defines affiliation 1 as Great Bay University, where Changyu Li is explicitly listed as a member."
+    },
+    {
+      "perturbation_id": "P001_S0001",
+      "span_id": "S0001",
+      "error": "numeric_parameter",
+      "original": "$^{2}$",
+      "perturbed": "$^{8}$",
+      "why_wrong": "The affiliation index 8 is invalid as the paper only defines affiliations up to 6 in the subsequent author list and footnote sections."
+    },
+    {
+      "perturbation_id": "P002_S0002",
+      "span_id": "S0002",
+      "error": "index_or_subscript",
+      "original": "$^{3}$",
+      "perturbed": "$^{3+1}$",
+      "why_wrong": "Using an arithmetic expression in the affiliation index is inconsistent with the standard integer indexing used for all other authors and the corresponding footnote definitions."
+    },
+    {
+      "perturbation_id": "P003_S0007",
+      "span_id": "S0007",
+      "error": "computation",
+      "original": "$^{1}$",
+      "perturbed": "$^{1-1}$",
+      "why_wrong": "The resulting index 0 does not correspond to any author in the author list, making the affiliation definition for Changyu Li, Ming Lei, and Fei Luo unresolvable."
+    },
+    {
+      "perturbation_id": "P004_S0009",
+      "span_id": "S0009",
+      "error": "operator_or_sign",
+      "original": "$^{2}$",
+      "perturbed": "$^{-2}$",
+      "why_wrong": "Affiliation indices must be positive integers to match the author list; a negative index creates a logical disconnection between the author Shuanghong Huang and their institutional description."
+    },
+    {
+      "perturbation_id": "P000_S0020",
+      "span_id": "S0020",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\mathbf{h}_{\\text{out}}^{(l)}=\\mathbf{W}_0^{(l)}\\mathbf{h}_{\\text{in}}^{(l)}+\\frac{\\alpha_{\\text{lora}}}{r}\\mathbf{B}^{(l)}\\mathbf{A}^{(l)}\\mathbf{h}_{\\text{in}}^{(l)},\n\\label{eq:lora_forward}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\mathbf{h}_{\\text{out}}^{(l)}=\\mathbf{W}_0^{(l)}\\mathbf{h}_{\\text{in}}^{(l)}-\\frac{\\alpha_{\\text{lora}}}{r}\\mathbf{B}^{(l)}\\mathbf{A}^{(l)}\\mathbf{h}_{\\text{in}}^{(l)},\n\\label{eq:lora_forward}\n\\end{equation}",
+      "why_wrong": "The LoRA forward pass is defined as an additive bypass to the frozen weights; changing the sign to subtraction contradicts the standard definition of residual adapter updates used in the paper's context of parameter-efficient fine-tuning."
+    },
+    {
+      "perturbation_id": "P001_S0022",
+      "span_id": "S0022",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\n\\boldsymbol{\\Theta}_{k,t}^{(\\tau+1)}=\\boldsymbol{\\Theta}_{k,t}^{(\\tau)}-\\eta\\,\\widehat{\\nabla}\\mathcal{L}_k\\!\\left(\\boldsymbol{\\Theta}_{k,t}^{(\\tau)};\\xi_{k,t}^{(\\tau)}\\right),\n\\qquad \\tau=0,\\dots,E-1,\n\\label{eq:local_sgd}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\boldsymbol{\\Theta}_{k,t}^{(\\tau+1)}=\\boldsymbol{\\Theta}_{k,t}^{(\\tau)}-\\eta\\,\\widehat{\\nabla}\\mathcal{L}_k\\!\\left(\\boldsymbol{\\Theta}_{k,t}^{(0)};\\xi_{k,t}^{(\\tau)}\\right),\n\\qquad \\tau=0,\\dots,E-1,\n\\label{eq:local_sgd}\n\\end{equation}",
+      "why_wrong": "The local SGD update should use the parameters from the current local step (tau) to calculate the gradient. Using the initial parameters (0) for every step would mean the local updates do not progress, contradicting the definition of a multi-step local optimization process (E steps)."
+    },
+    {
+      "perturbation_id": "P002_S0023",
+      "span_id": "S0023",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\Delta\\boldsymbol{\\Theta}_{k,t}\\triangleq \\boldsymbol{\\Theta}_{k,t}^{(E)}-\\boldsymbol{\\Theta}_t.\n\\label{eq:model_delta}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\Delta\\boldsymbol{\\Theta}_{k,t}\\triangleq \\boldsymbol{\\Theta}_{k,t}^{(E)}+\\boldsymbol{\\Theta}_t.\n\\label{eq:model_delta}\n\\end{equation}",
+      "why_wrong": "The model delta is defined as the difference (change) between the local parameters after E steps and the initial global parameters. Changing the sign to addition calculates a sum rather than a displacement, which is inconsistent with the subsequent use of the delta for aggregation and compression."
+    },
+    {
+      "perturbation_id": "P003_S0027",
+      "span_id": "S0027",
+      "error": "computation",
+      "original": "\\begin{equation}\nT_{\\mathrm{comm}}^{(k,t)}\n~=~\n\\frac{\\mathrm{bits}(\\mathbf{m}_{k,t})}{R_{k,t}},\n\\qquad\nR_{k,t}\\sim \\mathcal{P}^{(k)}_{\\mathrm{bw}}.\n\\label{eq:comm_time}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\nT_{\\mathrm{comm}}^{(k,t)}\n~=~\n\\mathrm{bits}(\\mathbf{m}_{k,t}) \\times R_{k,t},\n\\qquad\nR_{k,t}\\sim \\mathcal{P}^{(k)}_{\\mathrm{bw}}.\n\\label{eq:comm_time}\n\\end{equation}",
+      "why_wrong": "Communication time is calculated by dividing the total bits by the throughput (rate). Multiplying bits by throughput results in a value with incorrect units and contradicts the standard relationship between data size, bandwidth, and latency."
+    },
+    {
+      "perturbation_id": "P004_S0028",
+      "span_id": "S0028",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\nT_{\\mathrm{round}}^{(t)}\n~=~\nT_{\\mathrm{srv}}^{(t)}+\n\\max_{k\\in\\mathcal{S}_t:~a_{k,t}=1}\n\\left(\nT_{\\mathrm{comp}}^{(k,t)} + \\frac{\\mathrm{bits}(\\mathbf{m}_{k,t})}{R_{k,t}}\n\\right),\n\\label{eq:straggler_model}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\nT_{\\mathrm{round}}^{(t)}\n~=~\nT_{\\mathrm{srv}}^{(t)}+\n\\min_{k\\in\\mathcal{S}_t:~a_{k,t}=1}\n\\left(\nT_{\\mathrm{comp}}^{(k,t)} + \\frac{\\mathrm{bits}(\\mathbf{m}_{k,t})}{R_{k,t}}\n\\right),\n\\label{eq:straggler_model}\n\\end{equation}",
+      "why_wrong": "In synchronous Federated Learning, the round time is determined by the slowest client (the straggler), which requires a 'max' operator. Using 'min' would imply the round ends as soon as the first client finishes, which is inconsistent with the paper's description of a straggler-limited synchronous system."
+    },
+    {
+      "perturbation_id": "P000_S0030",
+      "span_id": "S0030",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\nD_{\\hat{\\mathbf{F}}_t}\n=\n\\sum_{j}\n\\hat{F}_t(j)\\,\\big(\\Delta\\theta_{k,t}(j)-\\widetilde{\\Delta\\theta}_{k,t}(j)\\big)^2.\n\\label{eq:fisher_distortion_diag}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\nD_{\\hat{\\mathbf{F}}_t}\n=\n\\sum_{j}\n\\hat{F}_t(j)\\,\\big(\\Delta\\theta_{k,t}(j)+\\widetilde{\\Delta\\theta}_{k,t}(j)\\big)^2.\n\\label{eq:fisher_distortion_diag}\n\\end{equation}",
+      "why_wrong": "The equation defines distortion (error) between the original update and the compressed update. Changing the minus sign to a plus sign calculates the sum of the values rather than the difference (residual), which contradicts the definition of distortion and the subsequent text describing it as 'penalizing distortions'."
+    },
+    {
+      "perturbation_id": "P001_S0033",
+      "span_id": "S0033",
+      "error": "operator_or_sign",
+      "original": "\\begin{equation}\n\\lambda\\,\\hat{F}_t(j)\\,\n\\frac{\\mathbb{E}\\!\\big[e_{k,t}(j; b)^2\\big]-\\mathbb{E}\\!\\big[e_{k,t}(j; b+\\Delta b)^2\\big]}{\\Delta b}\n~\\ge~ 1,\n\\label{eq:marginal_condition}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\lambda\\,\\hat{F}_t(j)\\,\n\\frac{\\mathbb{E}\\!\\big[e_{k,t}(j; b)^2\\big]-\\mathbb{E}\\!\\big[e_{k,t}(j; b+\\Delta b)^2\\big]}{\\Delta b}\n~\\le~ 1,\n\\label{eq:marginal_condition}\n\\end{equation}",
+      "why_wrong": "The text states that increasing precision is beneficial only when the distortion drop 'exceeds' the bit price. Flipping the inequality to 'less than or equal to' 1 contradicts the logic that higher sensitivity or higher distortion reduction justifies more bits."
+    },
+    {
+      "perturbation_id": "P002_S0035",
+      "span_id": "S0035",
+      "error": "numeric_parameter",
+      "original": "\\begin{equation}\nS_{k,s}(i)=\\rho\\,S_{k,s-1}(i)+(1-\\rho)\\,g_{k,s}(i),\n\\qquad \\rho\\in(0,1),\n\\label{eq:token_ema}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\nS_{k,s}(i)=\\rho\\,S_{k,s-1}(i)+(1-\\rho)\\,g_{k,s}(i),\n\\qquad \\rho\\in(1,2),\n\\label{eq:token_ema}\n\\end{equation}",
+      "why_wrong": "The text defines this as an exponential moving average (EMA). For an EMA to be a valid convex combination of the previous state and the new observation, the decay factor rho must be between 0 and 1. Setting rho between 1 and 2 would cause the values to diverge."
+    },
+    {
+      "perturbation_id": "P003_S0037",
+      "span_id": "S0037",
+      "error": "index_or_subscript",
+      "original": "\\begin{equation}\n\\widehat{F}(j)\n\\leftarrow\n\\rho\\,\\widehat{F}(j)\n+\n(1-\\rho)\\left(\\frac{\\partial \\widetilde{\\mathcal{L}}}{\\partial \\theta_j}\\right)^2,\n\\label{eq:coupled_fisher_update}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\widehat{F}(j)\n\\leftarrow\n\\rho\\,\\widehat{F}(j)\n+\n(1-\\rho)\\left(\\frac{\\partial \\widetilde{\\mathcal{L}}}{\\partial \\theta_i}\\right)^2,\n\\label{eq:coupled_fisher_update}\n\\end{equation}",
+      "why_wrong": "The update rule for the diagonal Fisher element at index 'j' should depend on the partial derivative with respect to the same parameter index 'j'. Changing the derivative index to 'i' creates a mismatch where every Fisher diagonal element would be updated by the same unrelated gradient component."
+    },
+    {
+      "perturbation_id": "P004_S0038",
+      "span_id": "S0038",
+      "error": "computation",
+      "original": "\\begin{equation}\n\\widehat{\\mathbf{F}} \\triangleq \\sum_{s}\\left(\\nabla_{\\boldsymbol{\\theta}}\\mathcal{L}_{k,s}\\odot \\nabla_{\\boldsymbol{\\theta}}\\mathcal{L}_{k,s}\\right),\n\\label{eq:diag_fisher_accum}\n\\end{equation}",
+      "perturbed": "\\begin{equation}\n\\widehat{\\mathbf{F}} \\triangleq \\sum_{s}\\left(\\nabla_{\\boldsymbol{\\theta}}\\mathcal{L}_{k,s} + \\nabla_{\\boldsymbol{\\theta}}\\mathcal{L}_{k,s}\\right),\n\\label{eq:diag_fisher_accum}\n\\end{equation}",
+      "why_wrong": "The text defines the Fisher approximation as an empirical Fisher, which is the sum of squared gradients (outer product for diagonal). Replacing the elementwise product (square) with an addition fails to represent the second-order information required for Fisher information."
+    }
+  ]
+}
